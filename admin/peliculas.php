@@ -5,9 +5,17 @@ error_reporting(E_ALL);
 
 require_once "./includes/crudPeliculas.php";
 require_once "./includes/crudDirectores.php";
+require_once "./includes/crudGeneros.php";
+require_once "./includes/crudPlataformas.php";
+
 $peliculasObj = new Peliculas();
 $directoresObj = new Directores();
+$generosObj = new Generos();
+$plataformasObj = new Plataformas();
+
 $listaPeliculas = $peliculasObj->getAll();
+$listaGeneros = $generosObj->getAll();
+$listaPlataformas = $plataformasObj->getAll();
 
 require_once "./includes/sessions.php";
 $sesion = new Sessions();
@@ -27,15 +35,19 @@ $datosFormulario = [
     'anio' => '',
     'duracion' => '',
     'director_id' => '',
-    'imagen_id' => '',
+    'plataforma_id' => '',
+    'imagen' => '',
     'fecha_estreno' => '',
 ];
+
+$generosSeleccionados = [];
 
 // Si acción editar, carga datos
 if ($accion === "editar" && $id) {
     $peliculaAEditar = $peliculasObj->getPeliculaById($id);
     if ($peliculaAEditar) {
         $datosFormulario = $peliculaAEditar;
+        $generosSeleccionados = $peliculasObj->getGenerosByPelicula($id); // array de ids
     }
 }
 
@@ -46,17 +58,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $anio = $_POST['anio'] ?? '';
     $duracion = $_POST['duracion'] ?? '';
     $director_id = $_POST['director_id'] ?? '';
-    $imagen_id = $_POST['imagen_id'] ?? '';
+    $plataforma_id = $_POST['plataforma_id'] ?? '';
+    $imagen = $_POST['imagen'] ?? '';
     $fecha_estreno = $_POST['fecha_estreno'] ?? '';
+    $generos = $_POST['generos'] ?? [];
 
+    // Ahora solo aquí se llaman los métodos
     if ($accion === "crear") {
-        $peliculasObj->insertarPelicula($titulo, $descripcion, $anio, $duracion, $director_id, $imagen_id, $fecha_estreno, '');
-        header("Location: peliculas.php");
-        exit();
+        $nuevoId = $peliculasObj->insertarPelicula($titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $imagen, $fecha_estreno);
+        if ($nuevoId) {
+            $peliculasObj->asociarGeneros($nuevoId, $generos);
+            header("Location: peliculas.php");
+            exit();
+        } else {
+            $mensaje = "Error al insertar la película. Verifica los datos.";
+        }
     } elseif ($accion === "editar" && $id) {
-        $peliculasObj->actualizarPelicula($id, $titulo, $descripcion, $anio, $duracion, $director_id, $imagen_id, $fecha_estreno, '');
-        header("Location: peliculas.php");
-        exit();
+        $exito = $peliculasObj->actualizarPelicula($id, $titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $imagen, $fecha_estreno);
+        if ($exito) {
+            $peliculasObj->asociarGeneros($id, $generos);
+            header("Location: peliculas.php");
+            exit();
+        } else {
+            $mensaje = "Error al actualizar la película. Verifica los datos.";
+        }
     }
 }
 
@@ -100,6 +125,9 @@ if ($accion == "eliminar" && $id) {
                                     <th>Año</th>
                                     <th>Duración</th>
                                     <th>Director</th>
+                                    <th>Género</th>
+                                    <th>Plataforma</th>
+                                    <th>Imagen</th>
                                     <th>Fecha Estreno</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -112,6 +140,16 @@ if ($accion == "eliminar" && $id) {
                                     <td><?= htmlspecialchars($peli['anio'] ?? '') ?></td>
                                     <td><?= htmlspecialchars($peli['duracion'] ?? '') ?> min</td>
                                     <td><?= htmlspecialchars($peli['director'] ?? '') ?></td>
+                                    <td>
+                                    <?php
+                                        $nombresGeneros = $peliculasObj->getNombresGenerosByPelicula($peli['id']);
+                                        echo htmlspecialchars(implode(', ', $nombresGeneros));
+                                    ?>
+                                    </td>
+                                    <td><?= htmlspecialchars($peli['plataforma'] ?? '') ?></td>
+                                    <td>
+                                        <img src="../imagenes/portadas_pelis/<?= htmlspecialchars($peli['imagen'] ?? '') ?>" alt="Portada película" width="60">
+                                    </td>
                                     <td><?= htmlspecialchars($peli['fecha_estreno'] ?? '') ?></td>
                                     <td>
                                         <a href="peliculas.php?accion=editar&id=<?= $peli['id'] ?>" class="btn btn-sm btn-info">Editar</a>
@@ -157,14 +195,37 @@ if ($accion == "eliminar" && $id) {
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label class="form-label">Imagen ID:</label>
-                                    <input type="number" name="imagen_id" class="form-control"
-                                    value="<?= htmlspecialchars($datosFormulario['imagen_id'] ?? '') ?>">
+                                    <label class="form-label">Géneros:</label>
+                                    <select name="generos[]" class="form-select" multiple required>
+                                        <?php foreach($listaGeneros as $g): ?>
+                                            <option value="<?= $g['id'] ?>" <?= in_array($g['id'], $generosSeleccionados ?? []) ? "selected" : "" ?>>
+                                                <?= htmlspecialchars($g['nombre']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <small class="text-muted">Pulsa Ctrl (o Cmd en Mac) para seleccionar varios.</small>
+                                <div class="mb-2">
+                                    <label class="form-label">Plataforma:</label>
+                                    <select name="plataforma_id" class="form-select" required>
+                                        <option value="">Seleccionar plataforma</option>
+                                        <?php foreach($listaPlataformas as $plat): ?>
+                                            <option value="<?= $plat['id'] ?>" <?= ($datosFormulario['plataforma_id'] ?? '') == $plat['id'] ? "selected" : "" ?>>
+                                                <?= htmlspecialchars($plat['nombre']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Imagen:</label>
+                                    <input type="text" name="imagen" class="form-control"
+                                    value="<?= htmlspecialchars($datosFormulario['imagen'] ?? '') ?>">
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label">Fecha de Estreno:</label>
                                     <input type="date" name="fecha_estreno" class="form-control"
                                     value="<?= htmlspecialchars($datosFormulario['fecha_estreno'] ?? '') ?>" required>
+                                </div>
+
                                 </div>
                                 <button type="submit" class="btn btn-danger">Guardar</button>
                                 <a href="peliculas.php" class="btn btn-secondary ms-2">Cancelar</a>

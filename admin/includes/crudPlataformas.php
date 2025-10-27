@@ -1,19 +1,21 @@
 <?php
 require_once("database.php");
-class Actores {
+
+class Plataformas {
+
     public function getAll() {
         $db = new Connection();
         $conn = $db->getConnection();
-        $sql = "SELECT * FROM actores ORDER BY nombre ASC";
+        $sql = "SELECT * FROM plataformas ORDER BY nombre ASC";
         $result = $conn->query($sql);
         $db->closeConnection($conn);
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
-    public function getActorById($id) {
+    public function getPlataformaById($id) {
         $db = new Connection();
         $conn = $db->getConnection();
-        $sql = "SELECT * FROM actores WHERE id = ?";
+        $sql = "SELECT * FROM plataformas WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -22,35 +24,32 @@ class Actores {
         return $result ? $result->fetch_assoc() : null;
     }
 
-    public function insertarActor($nombre, $fecha_nacimiento, $biografia, $imagen) {
+    public function insertarPlataforma($nombre, $descripcion, $url) {
         $db = new Connection();
         $conn = $db->getConnection();
-        $sql = "INSERT INTO actores (nombre, fecha_nacimiento, biografia, imagen)
-                VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO plataformas (nombre, descripcion, url) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $nombre, $fecha_nacimiento, $biografia, $imagen);
+        $stmt->bind_param("sss", $nombre, $descripcion, $url);
         $exito = $stmt->execute();
         $db->closeConnection($conn);
         return $exito;
     }
 
-    public function actualizarActor($id, $nombre, $fecha_nacimiento, $biografia, $imagen) {
+    public function actualizarPlataforma($id, $nombre, $descripcion, $url) {
         $db = new Connection();
         $conn = $db->getConnection();
-        $sql = "UPDATE actores
-                SET nombre=?, fecha_nacimiento=?, biografia=?, imagen=?
-                WHERE id=?";
+        $sql = "UPDATE plataformas SET nombre=?, descripcion=?, url=? WHERE id=?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssi", $nombre, $fecha_nacimiento, $biografia, $imagen, $id);
+        $stmt->bind_param("sssi", $nombre, $descripcion, $url, $id);
         $exito = $stmt->execute();
         $db->closeConnection($conn);
         return $exito;
     }
 
-    public function eliminarActor($id) {
+    public function eliminarPlataforma($id) {
         $db = new Connection();
         $conn = $db->getConnection();
-        $sql = "DELETE FROM actores WHERE id = ?";
+        $sql = "DELETE FROM plataformas WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $exito = $stmt->execute();

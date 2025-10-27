@@ -34,8 +34,8 @@
                             <li><a class="dropdown-item" href="#">Actores</a></li>
                             <li><a class="dropdown-item" href="#">Comentarios</a></li>
                         </ul>
-                        <input class="form-control" type="search" placeholder="Buscar en La Butaca" aria-label="Search">
-                        <button class="btn btn-danger" type="submit">🔍</button>
+                            <input class="form-control" type="search" name="q" placeholder="Buscar en La Butaca" aria-label="Search">
+                            <button class="btn btn-danger" type="submit">🔍</button>
                     </div>
                 </form>
 
