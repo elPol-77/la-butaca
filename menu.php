@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Butaca - Plataforma de Cine</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/estilos.css">
+    
 
 </head>
-<body class="bg-dark text-white"> <header>
+<body class="bg-white text-white"> <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-black shadow-lg"> 
             <div class="container-fluid container-xl px-4">
                 
@@ -16,14 +18,14 @@
                     <span class="visually-hidden">La Butaca</span>
                 </a>
                 
-                <button class="btn btn-dark text-white me-2" type="button" 
+                <button class="btn btn-red text-white me-2" type="button" 
                         data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon"></span> Menú
                 </button>
                 
-                <form class="d-none d-lg-flex flex-grow-1 mx-3" role="search">
+                <form class="d-none d-lg-flex flex-grow-1 mx-3" role="search" method="GET" action="buscar.php">
                     <div class="input-group">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" 
+                        <button class="btn btn-outline-light dropdown-tog   gle" type="button" 
                                 data-bs-toggle="dropdown" aria-expanded="false">
                             Todo
                         </button>
@@ -82,6 +84,5 @@
         </div>
         
     </header>
-
-    <main class="container my-5 p-4 rounded bg-white text-dark shadow-lg"> 
+    
     

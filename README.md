@@ -1,2 +1,2 @@
-# la-butaca
-repositorio clonado en Pol's-Room
+# La Butaca
+Proyecto web de películas estilo IMDb.
