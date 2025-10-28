@@ -6,10 +6,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $usuario = $_POST['username'];
     $clave = $_POST['password'];
     $datos = $sesion->comprobarCredenciales($usuario, $clave);
-    
+
     if ($datos) {
         $sesion->crearSesion($datos);
-        header("Location: admin/index.php");
+
+        // Suponemos que $datos['rol'] contiene el tipo de usuario
+        if (isset($datos['rol']) && $datos['rol'] == 'admin') {
+            header("Location: admin/index.php");
+        } else {
+            header("Location: index.php"); // Zona pública
+        }
         exit();
     } else {
         $error = "Usuario o contraseña incorrectos";

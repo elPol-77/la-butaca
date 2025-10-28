@@ -6,7 +6,7 @@ class Sessions {
         $db = new Connection();
         $conn = $db->getConnection();
         
-        $sql = "SELECT id, username, password FROM usuarios WHERE username = ?";
+        $sql = "SELECT id, username, password, rol FROM usuarios WHERE username = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -16,16 +16,16 @@ class Sessions {
         $db->closeConnection($conn);
         
         if ($usuario && password_verify($password, $usuario['password'])) {
-            return $usuario;
+            return $usuario; 
         }
-
         return null;
     }
     
     public function crearSesion($usuario) {
         $this->startSession();
         $_SESSION['usuario'] = $usuario['username']; 
-        $_SESSION['id'] = $usuario['id'];           
+        $_SESSION['id'] = $usuario['id'];
+        $_SESSION['rol'] = $usuario['rol'];
     }
     
     public function comprobarSesion() {
@@ -38,7 +38,8 @@ class Sessions {
         session_unset();
         session_destroy();
     }
-        private function startSession() {
+
+    private function startSession() {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
@@ -49,6 +50,8 @@ class Sessions {
         return $_SESSION['id'] ?? null; 
     }
 
-
+    public function getUserRol() {
+        $this->startSession();
+        return $_SESSION['rol'] ?? null;
+    }
 }
-
