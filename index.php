@@ -1,10 +1,10 @@
 <?php
 include 'menu.php';
-include 'admin/includes/database.php'; // Aquí va tu conexión a la base de datos
-require_once 'admin/includes/crudPeliculas.php'; // Tu clase modelo de películas
+include 'admin/includes/database.php'; 
+require_once 'admin/includes/crudPeliculas.php'; 
 
 $peliculaObj = new Peliculas();
-$peliculasPopulares = $peliculaObj->getPopulares(4); // Obtiene las 4 más populares
+$peliculasPopulares = $peliculaObj->getPopulares(4);
 ?>
 
 <div class="container-fluid bg-dark text-light py-4 min-vh-100">
