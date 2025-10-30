@@ -1,131 +1,297 @@
-<html lang="es" class=" js-inlinesvg"><head>
+<?php
+session_start();
+include 'admin/includes/database.php'; 
+require_once 'admin/includes/crudPeliculas.php'; 
+
+$peliculaObj = new Peliculas();
+$peliculasPopulares = $peliculaObj->getPopulares(8); // Aumentamos para llenar mejor las secciones
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Anime Wave - Plantilla HTML para sitio web de películas de anime, manga y K-Pop#468586</title>
-<meta property="og:title" content="Anime Wave - Plantilla HTML para sitio web de películas de anime, manga y K-Pop#468586">
-<meta name="twitter:title" content="Anime Wave - Plantilla HTML para sitio web de películas de anime, manga y K-Pop#468586">
-<meta name="og:image:alt" content="Anime Wave - Plantilla HTML para sitio web de películas de anime, manga y K-Pop#468586">
-      <meta name="robots" content="noindex,nofollow">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
-  <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png" sizes="180x180">
-  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
-  <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-  <meta http-equiv="x-dns-prefetch-control" content="on">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="msapplication-TileImage" content="/mstile-144x144.png">
-  <meta name="msapplication-config" content="/browserconfig.xml">
-  <meta name="pinterest-logo" content="https://s3sf.tmimgcdn.com/pinterest-logo.png">
-  <meta name="theme-color" content="#2196f3">
-  <meta property="og:site_name" content="TemplateMonster">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@templatemonster">
-  <meta name="twitter:creator" content="@templatemonster">
-  <meta property="og:type" content="page">
-  <meta property="og:image" content="https://s.tmimgcdn.com/scr/1200x627/468500/anime-wave-plantilla-html-para-sitio-web-de-peliculas-de-anime-manga-y-k-pop_468586-2-original.jpg">
-  <meta property="twitter:image" content="https://s.tmimgcdn.com/scr/1200x627/468500/anime-wave-plantilla-html-para-sitio-web-de-peliculas-de-anime-manga-y-k-pop_468586-2-original.jpg">
-  <link property="image_src" href="https://s.tmimgcdn.com/scr/1200x627/468500/anime-wave-plantilla-html-para-sitio-web-de-peliculas-de-anime-manga-y-k-pop_468586-2-original.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="627">
-  <meta property="fb:app_id" content="128293383907353">
-    <style>html{-webkit-text-size-adjust:100%;line-height:1.15}body{margin:0}a{background-color:initial}img{border-style:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}html{box-sizing:border-box}html *,html :after,html :before{box-sizing:inherit}img{vertical-align:middle}a{touch-action:manipulation}.content{display:flex}.inline-svg{opacity:0}body{font-family:system-ui}html body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#243238;font-size:16px;line-height:1.5}a{text-decoration:none}.header{align-items:center;background:#2d394b;display:flex;height:60px;left:0;padding:10px 70px 10px 30px;position:-webkit-sticky;position:sticky;right:0;top:0}.back-to-product-icon{border-color:#0000 #9cc8f5 #0000 #0000;border-style:solid;border-width:5px 5px 5px 0;display:inline-block;height:0;margin-right:10px;width:0}.back-to-product{align-items:baseline;color:#9cc9f5;display:inline-block;font-size:14px;line-height:28px;margin-right:20px;max-width:45%;min-width:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media (max-width:719px){.back-to-product{margin-right:0}}.header-buttons{margin-left:auto}.header-btn,.header-buttons{align-items:center;display:flex}.header-btn{border-radius:3px;font-size:14px;line-height:18px;margin-left:30px;padding:11px 20px;white-space:nowrap}.header-btn-icon{height:18px;margin-right:8px;width:18px}.header-btn_membership{background:#fff;color:#243238}.header-btn_membership .header-btn-icon{fill:#00a3ff;display:none}@media (max-width:959px){.header-btn_membership{font-size:0}.header-btn_membership .header-btn-icon{display:block;margin-right:0}}@media (max-width:679px){.header-btn_membership{display:none}}.devices{display:flex;left:50%;position:absolute;transform:translateX(-50%)}@media (max-width:719px){.devices{display:none}}@media (max-width:1649px){.devices-static{position:static;transform:none}}@media (max-width:959px){.devices-static{position:absolute;transform:translateX(-50%)}}.add-to-cart{display:flex;justify-content:center;position:relative}@media (max-width:959px){.add-to-cart{min-width:auto}}.frame{border:none;display:block;min-height:calc(100vh - 60px)}.frame-wrapper{width:100%}.header-button{fill:#b3c8e7;align-items:center;background-color:initial;border:0;color:#b0bec5;display:flex;font-size:14px;padding:20px 15px;text-decoration:none}.header-button-icon{display:inline-block;height:22px;width:22px}.header_cart-demo{margin-left:15px;position:relative}.product-cart-modal-wrapper{display:none;position:relative;z-index:100}</style>
-    
-<script src="https://ct.pinterest.com/static/ct/token_create.js"></script><script async="" src="https://s.pinimg.com/ct/lib/main.817db39b.js"></script><script async="" src="https://s.pinimg.com/ct/core.js"></script><script type="text/javascript" async="" src="https://static.ads-twitter.com/uwt.js"></script><script src="https://connect.facebook.net/signals/config/838473489555909?v=2.9.239&amp;r=stable&amp;domain=demo.templatemonster.com&amp;hme=0e765f8c1c15e34523a2a1dcfb1e6658bdc64adfdb8a2b463c34752b789aa615&amp;ex_m=90%2C152%2C132%2C19%2C66%2C67%2C125%2C62%2C42%2C126%2C71%2C61%2C139%2C79%2C13%2C89%2C27%2C120%2C111%2C69%2C72%2C119%2C136%2C98%2C141%2C7%2C3%2C4%2C6%2C5%2C2%2C80%2C88%2C142%2C219%2C163%2C56%2C224%2C221%2C222%2C49%2C178%2C26%2C68%2C228%2C227%2C166%2C29%2C55%2C8%2C58%2C84%2C85%2C86%2C91%2C115%2C28%2C25%2C118%2C114%2C113%2C133%2C70%2C135%2C134%2C44%2C116%2C54%2C108%2C12%2C138%2C39%2C208%2C210%2C173%2C22%2C23%2C24%2C16%2C17%2C38%2C34%2C36%2C35%2C75%2C81%2C83%2C96%2C124%2C127%2C40%2C97%2C20%2C18%2C102%2C63%2C32%2C129%2C128%2C130%2C121%2C21%2C31%2C53%2C95%2C137%2C64%2C15%2C131%2C30%2C188%2C159%2C270%2C206%2C150%2C191%2C184%2C160%2C93%2C117%2C74%2C106%2C48%2C41%2C104%2C105%2C110%2C52%2C14%2C112%2C103%2C59%2C43%2C99%2C47%2C50%2C46%2C87%2C140%2C0%2C109%2C11%2C107%2C9%2C1%2C51%2C82%2C57%2C60%2C101%2C78%2C77%2C45%2C122%2C76%2C73%2C65%2C100%2C92%2C37%2C123%2C33%2C94%2C10%2C143" async=""></script><script type="text/javascript" async="" src="https://connect.facebook.net/en_US/fbevents.js"></script><script type="text/javascript" async="" src="https://bat.bing.com/bat.js"></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-384919758&amp;cx=c&amp;gtm=4e5ar0h1"></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/destination?id=AW-990429972&amp;cx=c&amp;gtm=4e5ar0h1"></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/destination?id=G-FTPYEGT5LY&amp;cx=c&amp;gtm=4e5ar0h1"></script><script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-MS2BNB"></script><script>
-  document.addEventListener(
-    "InitGTM",
-    (e) => {
-      <!-- Google Tag Manager -->
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-MS2BNB');
-      <!-- End Google Tag Manager -->
+    <meta name="description" content="Plataforma de películas">
+    <meta name="keywords" content="Películas, cine, streaming">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>La Butaca - Home</title>
 
-      window.dataLayer.push({ event: "consent_updated" })
-    },
-    true,
-  );
-</script>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<script src="https://account.templatemonster.com/cp/default.js" async="" type="text/javascript"></script>
-    <link href="https://www.templatemonster.com/assets/css/demo-c6eb40ec6bd900712226.css" rel="preload" as="style">
-<link href="//www.templatemonster.com/assets/css/demo-c6eb40ec6bd900712226.css" rel="stylesheet">  <link rel="preload" as="style" href="https://demo.templatemonster.com/assets/css/228-be7af77db6b2fe94c31d.css"><link rel="stylesheet" type="text/css" href="/assets/css/228-be7af77db6b2fe94c31d.css"><link rel="preload" as="style" href="https://demo.templatemonster.com/assets/css/4-4f393d5cb64c36c3bf9f.css"><link rel="stylesheet" type="text/css" href="/assets/css/4-4f393d5cb64c36c3bf9f.css"><script type="text/javascript" async="" src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/990429972/?random=1761736654144&amp;cv=11&amp;fst=1761736654144&amp;bg=ffffff&amp;guid=ON&amp;async=1&amp;en=view_item&amp;gtm=45be5ar0h1v9211550987z86456999za200zb6456999zd6456999xea&amp;gcd=13t3t3t2t5l1&amp;dma_cps=syphamo&amp;dma=1&amp;tag_exp=101509157~103116026~103200004~103233427~104527907~104528501~104684208~104684211~104948813~115480709~115583767~115616985~115938465~115938468~116194001~116217636~116217638&amp;u_w=1920&amp;u_h=1080&amp;url=https%3A%2F%2Fdemo.templatemonster.com%2Fes%2Fdemo%2F468586.html%3F_gl%3D1*1hky8o1*_ga*MzY3OTI3OTk0LjE3NjE1NTU4ODA.*_ga_FTPYEGT5LY*czE3NjE3MzY2MTckbzIkZzEkdDE3NjE3MzY2NDEkajM2JGwwJGgw&amp;frm=0&amp;tiba=Anime%20Wave%20-%20Plantilla%20HTML%20para%20sitio%20web%20de%20pel%C3%ADculas%20de%20anime%2C%20manga%20y%20K-Pop%23468586&amp;value=21&amp;hn=www.googleadservices.com&amp;npa=0&amp;auid=1309434246.1761555891&amp;uaa=x86&amp;uab=64&amp;uafvl=Chromium%3B140.0.7339.80%7CNot%253DA%253FBrand%3B24.0.0.0%7CGoogle%2520Chrome%3B140.0.7339.80&amp;uamb=0&amp;uam=&amp;uap=Linux&amp;uapv=6.14.0&amp;uaw=0&amp;_tu=CA&amp;data=event%3Dview_item%3Bdynx_itemid%3D468586%3Bdynx_pagetype%3Dother%3Bdynx_totalvalue%3D21%3Bgoogle_business_vertical%3Dretail%3Bid%3D468586&amp;rfmt=3&amp;fmt=4"></script><script type="text/javascript" async="" src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/990429972/?random=1761736656788&amp;cv=11&amp;fst=1761736656788&amp;bg=ffffff&amp;guid=ON&amp;async=1&amp;gtm=45be5ar0h1v9211550987z86456999za200zb6456999zd6456999xea&amp;gcd=13t3t3t2t5l1&amp;dma_cps=syphamo&amp;dma=1&amp;tag_exp=101509157~103116026~103200004~103233427~104527907~104528501~104684208~104684211~104948813~115480709~115583767~115616985~115938465~115938468~116194001~116217636~116217638&amp;u_w=1920&amp;u_h=1080&amp;url=https%3A%2F%2Fdemo.templatemonster.com%2Fes%2Fdemo%2F468586.html%3F_gl%3D1*1hky8o1*_ga*MzY3OTI3OTk0LjE3NjE1NTU4ODA.*_ga_FTPYEGT5LY*czE3NjE3MzY2MTckbzIkZzEkdDE3NjE3MzY2NDEkajM2JGwwJGgw&amp;frm=0&amp;tiba=Anime%20Wave%20-%20Plantilla%20HTML%20para%20sitio%20web%20de%20pel%C3%ADculas%20de%20anime%2C%20manga%20y%20K-Pop%23468586&amp;hn=www.googleadservices.com&amp;npa=0&amp;auid=1309434246.1761555891&amp;uaa=x86&amp;uab=64&amp;uafvl=Chromium%3B140.0.7339.80%7CNot%253DA%253FBrand%3B24.0.0.0%7CGoogle%2520Chrome%3B140.0.7339.80&amp;uamb=0&amp;uam=&amp;uap=Linux&amp;uapv=6.14.0&amp;uaw=0&amp;_tu=CA&amp;data=dynx_pagetype%3Dother&amp;rfmt=3&amp;fmt=4"></script><meta http-equiv="origin-trial" content="A7JYkbIvWKmS8mWYjXO12SIIsfPdI7twY91Y3LWOV/YbZmN1ZhYv8O+Zs6/IPCfBE99aV9tIC8sWZSCN09vf7gkAAACWeyJvcmlnaW4iOiJodHRwczovL2N0LnBpbnRlcmVzdC5jb206NDQzIiwiZmVhdHVyZSI6IkRpc2FibGVUaGlyZFBhcnR5U3RvcmFnZVBhcnRpdGlvbmluZzIiLCJleHBpcnkiOjE3NDIzNDIzOTksImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><script async="" type="text/javascript" src="https://cdn.livechatinc.com/tracking.js"></script></head>
-  <body cz-shortcut-listen="true">
-    <!-- Google Tag Manager (noscript) -->
-<noscript>  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MS2BNB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-  <div class="wrap">
-    <header class="header" id="frame-panel">
-  <a href="https://www.templatemonster.com/es/plantillas-web-tipo-468586.html" class="back-to-product">
-    <span class="back-to-product-icon"></span>
-      Anime Wave - Plantilla HTML para sitio web de películas de anime, manga y K-Pop  </a>
-  <div class="devices devices-static" id="devices" data-translations="{&quot;desktop&quot;:&quot;Desktop&quot;,&quot;tablet&quot;:&quot;Tableta&quot;,&quot;smartphone&quot;:&quot;M\u00f3vil&quot;}"><button type="button" class="device-btn device-btn_smartphone" title="Móvil"><svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="device-btn-icon"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.667 6.667H14a.667.667 0 010-1.334h2.667a.667.667 0 010 1.334zm0 18.666H14A.667.667 0 0114 24h2.667a.667.667 0 010 1.333zM10 4c-.367 0-.667.3-.667.667V26c0 .367.3.667.667.667h10.667c.366 0 .666-.3.666-.667V4.667c0-.367-.3-.667-.666-.667H10zm10.667 24H10c-1.103 0-2-.897-2-2V4.667c0-1.103.897-2 2-2h10.667c1.102 0 2 .897 2 2V26c0 1.103-.898 2-2 2z"></path></svg> </button><button type="button" class="device-btn device-btn_tablet" title="Tableta"><svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="device-btn-icon"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.667 6.667H14a.667.667 0 010-1.334h2.667a.667.667 0 010 1.334zm0 18.666H14A.667.667 0 0114 24h2.667a.667.667 0 010 1.333zM7.333 4c-.366 0-.666.3-.666.667V26c0 .367.3.667.667.667h16c.366 0 .666-.3.666-.667V4.667C24 4.3 23.7 4 23.334 4h-16zm16 24h-16c-1.102 0-2-.897-2-2V4.667c0-1.103.898-2 2-2h16c1.103 0 2 .897 2 2V26c0 1.103-.897 2-2 2z"></path></svg> </button><button type="button" class="device-btn device-btn_desktop device-btn_active" title="Desktop"><svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="device-btn-icon"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.389 20.176H28V4.78a.701.701 0 00-.694-.704H5.083a.701.701 0 00-.694.704v15.395zm0 1.407v.704c0 .387.312.703.694.703h22.223a.701.701 0 00.694-.703v-.704H4.389zm8.53 5.01h6.552l-1.042-2.195h-4.47l-1.04 2.195zM20.36 28h-8.333a.695.695 0 01-.549-.27.715.715 0 01-.125-.604l1.172-2.728H5.083C3.935 24.398 3 23.45 3 22.287V4.78c0-1.164.935-2.111 2.083-2.111h22.223c1.148 0 2.083.947 2.083 2.11v17.507c0 1.164-.935 2.11-2.083 2.11h-7.444l1.173 2.73a.715.715 0 01-.125.603.695.695 0 01-.549.27z"></path></svg> </button></div>
-  <div class="header-buttons">
-    <div class="add-to-cart" id="add-to-cart" data-translations="{&quot;label&quot;:&quot;Comprar Ahora&quot;,&quot;modalLabel&quot;:&quot;A\u00f1adir al Carrito&quot;,&quot;download&quot;:&quot;Descargue&quot;,&quot;servicesTitle&quot;:&quot;Servicios recomendados disponibles para este art\u00edculo&quot;,&quot;freeTitle&quot;:&quot;Producto libre&quot;}" data-product-id="468586" data-product-title="Anime Wave - Plantilla HTML para sitio web de películas de anime, manga y K-Pop" data-type-id="50108" data-licenses="[{&quot;type&quot;:&quot;regular&quot;,&quot;modifier&quot;:{&quot;type&quot;:&quot;amount&quot;,&quot;value&quot;:0,&quot;operation&quot;:&quot;addition&quot;},&quot;id&quot;:46,&quot;items&quot;:[],&quot;isDefault&quot;:1,&quot;translates&quot;:{&quot;title&quot;:&quot;Licencia personal&quot;,&quot;description&quot;:&quot;Esta licencia solo se puede usar para un sitio web personal. Con esta licencia, no puede revender o redistribuir la plantilla o el producto final basado en ella&quot;},&quot;prices&quot;:{&quot;regular&quot;:18,&quot;regularLabel&quot;:&quot;18\u00a0\u20ac&quot;,&quot;discount&quot;:18,&quot;discountLabel&quot;:&quot;18\u00a0\u20ac&quot;},&quot;gee&quot;:{&quot;variant&quot;:&quot;regular + 46&quot;}},{&quot;type&quot;:&quot;commercial&quot;,&quot;modifier&quot;:{&quot;type&quot;:&quot;percent&quot;,&quot;value&quot;:45,&quot;operation&quot;:&quot;addition&quot;},&quot;id&quot;:47,&quot;items&quot;:[],&quot;isDefault&quot;:0,&quot;translates&quot;:{&quot;title&quot;:&quot;Licencia comercial&quot;,&quot;description&quot;:&quot;Con esta licencia, usted y sus clientes pueden crear hasta cinco sitios web diferentes. La licencia le permite transferir o revender los productos finales (sitios web basados \u200b\u200ben esta plantilla)&quot;},&quot;prices&quot;:{&quot;regular&quot;:26,&quot;regularLabel&quot;:&quot;26\u00a0\u20ac&quot;,&quot;discount&quot;:26,&quot;discountLabel&quot;:&quot;26\u00a0\u20ac&quot;},&quot;gee&quot;:{&quot;variant&quot;:&quot;regular + 47&quot;}}]" data-services="[{&quot;id&quot;:772,&quot;translates&quot;:{&quot;title&quot;:&quot;Pack Esencial de Lanzamiento&quot;},&quot;prices&quot;:{&quot;regular&quot;:77,&quot;regularLabel&quot;:&quot;77\u00a0\u20ac&quot;,&quot;discount&quot;:43,&quot;discountLabel&quot;:&quot;43\u00a0\u20ac&quot;},&quot;gee&quot;:{&quot;item_id&quot;:&quot;772&quot;,&quot;item_name&quot;:&quot;Offer&quot;,&quot;affiliation&quot;:&quot;TT&quot;,&quot;discount&quot;:0.4,&quot;item_brand&quot;:&quot;Pack Esencial de Lanzamiento&quot;,&quot;item_category&quot;:&quot;TT: Website Templates: Must-Have Pack&quot;,&quot;item_category2&quot;:&quot;channel - tm2-preview&quot;,&quot;item_category3&quot;:&quot;ontemplate&quot;,&quot;item_variant&quot;:&quot;premium&quot;,&quot;price&quot;:0.49,&quot;quantity&quot;:1,&quot;item_list_name&quot;:&quot;Demo&quot;,&quot;index&quot;:1}},{&quot;id&quot;:370,&quot;translates&quot;:{&quot;title&quot;:&quot;Conversi\u00f3n a WordPress con Constructor de P\u00e1ginas&quot;},&quot;prices&quot;:{&quot;regular&quot;:347,&quot;regularLabel&quot;:&quot;347\u00a0\u20ac&quot;,&quot;discount&quot;:321,&quot;discountLabel&quot;:&quot;321\u00a0\u20ac&quot;},&quot;gee&quot;:{&quot;item_id&quot;:&quot;370&quot;,&quot;item_name&quot;:&quot;Offer&quot;,&quot;affiliation&quot;:&quot;TT&quot;,&quot;discount&quot;:0.3,&quot;item_brand&quot;:&quot;Conversi\u00f3n a WordPress con Constructor de P\u00e1ginas&quot;,&quot;item_category&quot;:&quot;TT: Converting to WordPress&quot;,&quot;item_category2&quot;:&quot;channel - tm2-preview&quot;,&quot;item_category3&quot;:&quot;ontemplate&quot;,&quot;item_variant&quot;:&quot;premium&quot;,&quot;price&quot;:3.69,&quot;quantity&quot;:1,&quot;item_list_name&quot;:&quot;Demo&quot;,&quot;index&quot;:2}},{&quot;id&quot;:888,&quot;translates&quot;:{&quot;title&quot;:&quot;Paquete de Instalaci\u00f3n y Personalizaci\u00f3n&quot;},&quot;prices&quot;:{&quot;regular&quot;:278,&quot;regularLabel&quot;:&quot;278\u00a0\u20ac&quot;,&quot;discount&quot;:173,&quot;discountLabel&quot;:&quot;173\u00a0\u20ac&quot;},&quot;gee&quot;:{&quot;item_id&quot;:&quot;888&quot;,&quot;item_name&quot;:&quot;Offer&quot;,&quot;affiliation&quot;:&quot;TT&quot;,&quot;discount&quot;:1.2,&quot;item_brand&quot;:&quot;Paquete de Instalaci\u00f3n y Personalizaci\u00f3n&quot;,&quot;item_category&quot;:&quot;TT: Website Templates: Installation &amp; Customization Package (renamed)&quot;,&quot;item_category2&quot;:&quot;channel - tm2-preview&quot;,&quot;item_category3&quot;:&quot;ontemplate&quot;,&quot;item_variant&quot;:&quot;premium&quot;,&quot;price&quot;:1.99,&quot;quantity&quot;:1,&quot;item_list_name&quot;:&quot;Demo&quot;,&quot;index&quot;:3}},{&quot;id&quot;:1517,&quot;translates&quot;:{&quot;title&quot;:&quot;Sitio Web Todo en Uno&quot;},&quot;prices&quot;:{&quot;regular&quot;:782,&quot;regularLabel&quot;:&quot;782\u00a0\u20ac&quot;,&quot;discount&quot;:608,&quot;discountLabel&quot;:&quot;608\u00a0\u20ac&quot;},&quot;gee&quot;:{&quot;item_id&quot;:&quot;1517&quot;,&quot;item_name&quot;:&quot;Offer&quot;,&quot;affiliation&quot;:&quot;TT&quot;,&quot;discount&quot;:2,&quot;item_brand&quot;:&quot;Sitio Web Todo en Uno&quot;,&quot;item_category&quot;:&quot;TT: All-in-One Website (HTML) (0.42 - moto; 0.58 - tt)&quot;,&quot;item_category2&quot;:&quot;channel - tm2-preview&quot;,&quot;item_category3&quot;:&quot;ontemplate&quot;,&quot;item_variant&quot;:&quot;premium&quot;,&quot;price&quot;:6.99,&quot;quantity&quot;:1,&quot;item_list_name&quot;:&quot;Demo&quot;,&quot;index&quot;:4}},{&quot;id&quot;:1025,&quot;translates&quot;:{&quot;title&quot;:&quot;Optimizaci\u00f3n SEO Para Sitios Web&quot;},&quot;prices&quot;:{&quot;regular&quot;:286,&quot;regularLabel&quot;:&quot;286\u00a0\u20ac&quot;,&quot;discount&quot;:260,&quot;discountLabel&quot;:&quot;260\u00a0\u20ac&quot;},&quot;gee&quot;:{&quot;item_id&quot;:&quot;1025&quot;,&quot;item_name&quot;:&quot;Offer&quot;,&quot;affiliation&quot;:&quot;TT&quot;,&quot;discount&quot;:0.3,&quot;item_brand&quot;:&quot;Optimizaci\u00f3n SEO Para Sitios Web&quot;,&quot;item_category&quot;:&quot;TT: All types: Extended On-Page SEO Optimization&quot;,&quot;item_category2&quot;:&quot;channel - tm2-preview&quot;,&quot;item_category3&quot;:&quot;ontemplate&quot;,&quot;item_variant&quot;:&quot;premium&quot;,&quot;price&quot;:2.99,&quot;quantity&quot;:1,&quot;item_list_name&quot;:&quot;Demo&quot;,&quot;index&quot;:5}}]" data-paid-supports="{&quot;isIncludeBasicSupport&quot;:true,&quot;items&quot;:[{&quot;id&quot;:433375,&quot;translates&quot;:{&quot;title&quot;:&quot;Obtenga 6 meses m\u00e1s de soporte y ahorre 9\u00a0\u20ac&quot;,&quot;description&quot;:&quot;Con el producto, obtendr\u00e1 6 meses de soporte del autor. Para m\u00e1s info, por favor, consulte la &lt;a href=\&quot;https:\/\/www.templatemonster.com\/support-policy\/\&quot; target=\&quot;_blank\&quot;&gt;pol\u00edtica de soporte&lt;\/a&gt;.&quot;},&quot;prices&quot;:{&quot;regular&quot;:14,&quot;regularLabel&quot;:&quot;14\u00a0\u20ac&quot;,&quot;discount&quot;:5,&quot;discountLabel&quot;:&quot;5\u00a0\u20ac&quot;},&quot;gee&quot;:{&quot;item_id&quot;:&quot;433375&quot;,&quot;item_name&quot;:&quot;Paid support&quot;,&quot;affiliation&quot;:&quot;TM&quot;,&quot;discount&quot;:0.1,&quot;item_variant&quot;:&quot;premium&quot;,&quot;price&quot;:0.06,&quot;quantity&quot;:1}}]}" data-free="{&quot;enable&quot;:false}" data-is-state-sale="true" data-is-default-paid-support-on="true" data-product-gee="{&quot;item_id&quot;:&quot;468586&quot;,&quot;item_name&quot;:&quot;1&quot;,&quot;affiliation&quot;:&quot;uiparadox&quot;,&quot;discount&quot;:0,&quot;item_brand&quot;:&quot;Website templates&quot;,&quot;item_category&quot;:&quot;Website&quot;,&quot;item_category2&quot;:&quot;in_one - true&quot;,&quot;item_category3&quot;:&quot;updated - true&quot;,&quot;item_category4&quot;:&quot;booster - 125&quot;,&quot;item_variant&quot;:&quot;premium + 46&quot;,&quot;price&quot;:0.21,&quot;quantity&quot;:1,&quot;item_list_name&quot;:&quot;&quot;,&quot;index&quot;:1}" data-is-media-product="false" data-types="{&quot;HTML_ID&quot;:50108,&quot;WORDPRESS_ID&quot;:50125,&quot;JOOMLA_ID&quot;:50126,&quot;OPENCART_ID&quot;:50122,&quot;WOOCOMMERCE_ID&quot;:61529,&quot;SHOPIFY_ID&quot;:67280,&quot;LOGO_TEMPLATES_ID&quot;:50133,&quot;LANDING_PAGE_ID&quot;:168633,&quot;NEWSLETTER_ID&quot;:109856,&quot;ADMIN_TEMPLATES_ID&quot;:207799,&quot;BIGCOMMERCE_ID&quot;:845761,&quot;PRESTASHOP_ID&quot;:50116,&quot;MOTO_CMS3_ID&quot;:168158,&quot;MOTOCMS_ECOMMERCE_ID&quot;:208727,&quot;DRUPAL_ID&quot;:50127}">
-    <button type="button" class="header-btn header-btn_cart "><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20" class="btn-icon"><use xlink:href="#cart_svg__a" opacity=".01"></use><use xlink:href="#cart_svg__b" transform="translate(14.043 15.043)"></use><use xlink:href="#cart_svg__b" transform="translate(4.956 15.043)"></use><use xlink:href="#cart_svg__c" transform="translate(0 1)"></use><use xlink:href="#cart_svg__d" transform="translate(4.058 5.956)"></use><defs><path id="cart_svg__a" fill-rule="evenodd" d="M0 0h20v20H0z"></path><path id="cart_svg__b" fill-rule="evenodd" d="M0 1.74a1.74 1.74 0 113.48 0 1.74 1.74 0 01-3.48 0M1.74 1a.74.74 0 100 1.48.74.74 0 000-1.48"></path><path id="cart_svg__c" fill-rule="evenodd" d="M0 .5A.5.5 0 01.5 0h2.891a.5.5 0 01.487.385l3.214 13.658h8.69a.5.5 0 110 1H6.696a.5.5 0 01-.487-.385L2.995 1H.5A.5.5 0 010 .5"></path><path id="cart_svg__d" fill-rule="evenodd" d="M0 .5A.5.5 0 01.5 0h14.942a.5.5 0 01.474.658l-2.478 7.435a.5.5 0 01-.474.342H2.249a.5.5 0 010-1h10.355L14.748 1H.5A.5.5 0 010 .5"></path></defs></svg> Añadir al Carrito</button></div>
-              <a href="https://www.templatemonster.com/monsterone/tm-membership/?id=468586" target="" rel="nofollow" class="header-btn header-btn_membership">
-          <svg xmlns="http://www.w3.org/2000/svg" class="header-btn-icon inline-svg inlined-svg" data-src="/assets/icons/monsterEye.svg" role="img" aria-labelledby="title"><title>monsterEye</title><path fill-rule="evenodd" clip-rule="evenodd" d="M18 9A9 9 0 1 1 .352 6.5 11.87 11.87 0 0 1 0 3.652c0-.759.095-1.518.238-2.277v-.047C.333.854.428.427.57 0l2.824 1.958A8.962 8.962 0 0 1 9 0c2.12 0 4.067.732 5.605 1.958L17.43 0c.142.427.237.854.332 1.328v.047c.143.76.238 1.518.238 2.277 0 .98-.127 1.938-.352 2.848.23.794.352 1.633.352 2.5zm-9 4.304a4.304 4.304 0 1 0 0-8.608 4.304 4.304 0 0 0 0 8.608z"></path><path d="m9.747 9.747.934 5.23 2.801-1.196v-2.39L9.747 9.746zm6.297-4.66c0 1.729-3.154 3.13-7.044 3.13-3.89 0-7.043-1.401-7.043-3.13 0-1.729 3.153-3.13 7.043-3.13s7.044 1.401 7.044 3.13z"></path></svg>
-            Obtener descargas ilimitadas        </a>
-      
-    <div id="cart" class="header-button header_cart-demo cart-button" data-cart-translations="{&quot;cartTitle&quot;:&quot;Carrito de la compra&quot;,&quot;titleServices&quot;:&quot;Servicios de personalizaci\u00f3n recomendados para este producto&quot;,&quot;servicesDetailsLabel&quot;:&quot;Detalles&quot;,&quot;labelBack&quot;:&quot;Volver a Todos los servicios&quot;,&quot;cartTop&quot;:&quot;Agregaste al carrito&quot;,&quot;continueLabel&quot;:&quot;Seguir comprando&quot;,&quot;licenseCaption&quot;:&quot;Tipo de licencia&quot;,&quot;priceCaption&quot;:&quot;Total&quot;,&quot;singlePriceCaption&quot;:&quot;Subtotal&quot;,&quot;viewCartLabel&quot;:&quot;Ir al Carrito&quot;,&quot;priceButtonLabel&quot;:&quot;Chequear ahora&quot;,&quot;freeLabel&quot;:&quot;Gratis&quot;,&quot;feeCaption&quot;:&quot;Tasa de tramitaci\u00f3n &quot;,&quot;labelCusomersChoice&quot;:&quot;Elecci\u00f3n de los clientes \u21161&quot;,&quot;labelRecommended&quot;:&quot;Recommended&quot;,&quot;labelServiceOfTheDay&quot;:&quot;Service of the Day&quot;}" aria-label="Carrito " title="Carrito ">
-      <svg viewBox="0 0 22 22" class="header-button-icon header-button-icon_cart"><path d="M19.45 15.24a.86.86 0 00.848-.719l1.69-10.14a.86.86 0 00-.848-1H4.91L4.229.65A.86.86 0 003.395 0H.858a.86.86 0 100 1.719h1.865l.673 2.696L5.07 14.45v2.6a2.553 2.553 0 00-1.69 2.4A2.552 2.552 0 005.93 22c1.744 0 2.981-1.726 2.41-3.38h7.01c-.572 1.655.667 3.38 2.41 3.38a2.552 2.552 0 002.55-2.55 2.552 2.552 0 00-2.55-2.55H6.79v-1.66zm.676-10.141l-1.404 8.422H6.658L5.254 5.099zM6.76 19.45a.832.832 0 01-1.661 0 .832.832 0 011.661 0m11 .831a.832.832 0 010-1.661.832.832 0 010 1.661"></path></svg>
-    <button type="button" aria-label="cart" class="cart-button-modal-opener"></button> </div>
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="anime-main/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/plyr.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/style.css" type="text/css">
+</head>
 
-    <div class="frame-toggler" id="frame-toggler" data-translations="{&quot;label&quot;:&quot;Ocultar panel&quot;}"><button type="button" class="frame-toggler-btn" title="Ocultar panel"><span class="frame-toggler-btn-icon"></span></button></div>
-  </div>
-  <div class="product-cart-modal-wrapper" id="product-cart-modal" data-type-id="50108" data-product-type-name="1" data-translations="{&quot;cartTitle&quot;:&quot;Carrito de la compra&quot;,&quot;titleServices&quot;:&quot;Servicios de personalizaci\u00f3n recomendados para este producto&quot;,&quot;servicesDetailsLabel&quot;:&quot;Detalles&quot;,&quot;labelBack&quot;:&quot;Volver a Todos los servicios&quot;,&quot;cartTop&quot;:&quot;Agregaste al carrito&quot;,&quot;continueLabel&quot;:&quot;Seguir comprando&quot;,&quot;licenseCaption&quot;:&quot;Tipo de licencia&quot;,&quot;priceCaption&quot;:&quot;Total&quot;,&quot;singlePriceCaption&quot;:&quot;Subtotal&quot;,&quot;viewCartLabel&quot;:&quot;Ir al Carrito&quot;,&quot;priceButtonLabel&quot;:&quot;Chequear ahora&quot;,&quot;freeLabel&quot;:&quot;Gratis&quot;,&quot;feeCaption&quot;:&quot;Tasa de tramitaci\u00f3n &quot;,&quot;labelCusomersChoice&quot;:&quot;Elecci\u00f3n de los clientes \u21161&quot;,&quot;labelRecommended&quot;:&quot;Recommended&quot;,&quot;labelServiceOfTheDay&quot;:&quot;Service of the Day&quot;}" data-list-name="Demo" data-types="{&quot;HTML_ID&quot;:50108,&quot;WORDPRESS_ID&quot;:50125,&quot;JOOMLA_ID&quot;:50126,&quot;OPENCART_ID&quot;:50122,&quot;WOOCOMMERCE_ID&quot;:61529,&quot;SHOPIFY_ID&quot;:67280,&quot;LOGO_TEMPLATES_ID&quot;:50133,&quot;LANDING_PAGE_ID&quot;:168633,&quot;NEWSLETTER_ID&quot;:109856,&quot;ADMIN_TEMPLATES_ID&quot;:207799,&quot;BIGCOMMERCE_ID&quot;:845761,&quot;PRESTASHOP_ID&quot;:50116,&quot;MOTO_CMS3_ID&quot;:168158,&quot;MOTOCMS_ECOMMERCE_ID&quot;:208727,&quot;DRUPAL_ID&quot;:50127}"><div class="product-cart-modal-overlay"></div> <div class="product-cart-modal" id="product-cart-popup"><div class="product-cart-modal-left"><h3 class="product-cart-modal-left-title">Servicios de personalización recomendados para este producto</h3> <div class="product-cart-modal-recomended-services-wrapper "><ul class="product-cart-modal-recomended-services " data-visibility-observer="{&quot;selector&quot;: &quot;.product-cart-modal-recomended-service&quot;, &quot;preset&quot;: &quot;recommendedServicesAnalytics&quot;}"></ul> </div></div> <div class="product-cart-modal-right"><div class="product-cart-modal-top">Agregaste al carrito</div>  <div class="single-product-cart-fixed "><div class="single-product-cart-footer"><div class="cart-modal-checkout"><div class="cart-modal-checkout-price"><span class="cart-modal-checkout-price-caption">Subtotal:</span> <span class="cart-modal-checkout-price-total"><span>0&nbsp;US$</span></span></div> <div class="cart-modal-checkout-buttons"><button class="cart-modal-checkout-btn cart-modal-checkout-btn_cart btn btn_1">Ir al Carrito</button></div> </div> <span class="cart-modal-continue-btn btn">Seguir comprando</span></div> <div class="single-product-cart-fixed-title-services product-cart-modal-top">Servicios de personalización recomendados para este producto</div></div></div> <div class="cart-modal-close-btn"></div></div></div>
-</header>
-      <section class="content">
-    <div class="frame-wrapper" id="frame-wrapper">
-      <iframe class="frame" src="https://uiparadox.co.uk/templates/animewave/v2/" width="100%" height="400px" title="Plantilla de vista previa" sandbox="allow-forms allow-same-origin allow-scripts allow-top-navigation allow-popups"></iframe>          </div>
-  </section>
-  </div>
-  <script type="application/ld+json">
-{"@context": "http://schema.org","@graph": [{"@context":"http://schema.org","@type":"WebPage","name":"Anime Wave - Plantilla HTML para sitio web de películas de anime, manga y K-Pop#468586","url":null}]}
-</script>
-  <script type="text/javascript">
-  window.__app__ = window.__app__ || {};
-  window.__app__ = {"language":"es","apiLocale":"es","analytics":{"pageType":"Demo"},"js":{"cookieDomain":".templatemonster.com","liveDemoDomain":"\/\/demo.templatemonster.com\/","fontPreviewDomain":"\/\/s3f.tmimgcdn.com\/","domain":"https:\/\/www.templatemonster.com","api":{"f1":"https:\/\/www.templatemonster.com\/f1\/api","products":"https:\/\/api.templatemonster.com\/products","pages":"https:\/\/api.templatemonster.com\/pages","navigations":"https:\/\/api.templatemonster.com\/navigations","properties":"https:\/\/api.templatemonster.com\/properties","authors":"https:\/\/api.templatemonster.com\/authors","currencies":"https:\/\/api.templatemonster.com\/currencies","reviews":"https:\/\/api.templatemonster.com\/reviews","collection":"https:\/\/api.templatemonster.com\/collection","carts":"https:\/\/api.templatemonster.com\/carts","users":"https:\/\/api.templatemonster.com\/users","payment-clients":"https:\/\/api.templatemonster.com\/payment-clients","promos":"https:\/\/api.templatemonster.com\/promos","services":"https:\/\/api.templatemonster.com\/services","licenses":"https:\/\/api.templatemonster.com\/licenses","support":"https:\/\/api.templatemonster.com\/support","orders":"https:\/\/api.templatemonster.com\/orders","discounts":"https:\/\/api.templatemonster.com\/discounts","mailer":"https:\/\/api.templatemonster.com\/mailer","marketplace-services":"https:\/\/api.templatemonster.com\/marketplace-services","consul":"https:\/\/api.templatemonster.com","tickets":"https:\/\/api.templatemonster.com\/tickets","locales":"https:\/\/api.templatemonster.com\/locales"},"revive":{"url":"https:\/\/r5.templatemonster.com\/dl\/1asyncjs.php","zoneId":2,"zoneProductsId":4,"hash":"5744eda1a89c46c055297f86d855c494"},"recaptchaSiteKey":"6LeaeVAdAAAAALs6W5unPcr6EWXTc5ZYpy4Irks3","centrifuge":"wss:\/\/ws1.templatemonster.com","stripe":{"stripePublicKey":"pk_live_H5qyFec6DCp3zddA8UkTb5aE","stripeId":"59d3a31deebec520e279c65e"},"consulUrl":"http:\/\/api.templatemonster.com","currency":{"code":"EUR","rate":0.87017},"abExperimentId":"1709_prod_addoff","abExperimentInit":false}};
-</script>
-    <script src="//www.templatemonster.com/assets/js/commons-a6eacdce2af96cff47d4.js" async="async"></script>
-<script src="//www.templatemonster.com/assets/js/demo-9f638b44ad6004a3e65b.js" async="async"></script>
-<script>window.addEventListener('load', function() {
-window.dataLayer = window.dataLayer || []; window.dataLayer.push({"pageType":"Demo","portalName":"All","portalContent":"All","categoryName":"Other","authorGAId":"G-384919758"});
-});
-window.addEventListener('load', function() {
-  window.dataLayer = window.dataLayer || []; window.dataLayer.push({"ecommerce":null}); window.dataLayer.push({"event":"view_item","ecommerce":{"items":[{"item_id":"468586","item_name":"1","affiliation":"uiparadox","discount":0,"item_brand":"Website templates","item_category":"Website","item_category2":"in_one - true","item_category3":"updated - true","item_category4":"booster - 125","item_variant":"premium + 46","price":0.21,"quantity":1,"item_list_name":"","index":1}]}});window.dataLayer.push({"event":"detailViewNew","productDetailView":{"name":"Anime Wave - Anime, Manga &amp; K-Pop Movies HTML Website Template","id":"468586","price":0.21,"brand":"Website templates","category":"Website","variant":"premium + 46","imageurl":"https:\/\/s.tmimgcdn.com\/scr\/800x500\/468500\/anime-wave-plantilla-html-para-sitio-web-de-peliculas-de-anime-manga-y-k-pop_468586-2-original.jpg","similars":[{"id":446583,"url":"https:\/\/www.templatemonster.com\/es\/plantillas-web-tipo-446583.html","imageurl":"https:\/\/s.tmimgcdn.com\/scr\/800x500\/446500\/anime-tube-plantilla-html-5-para-sitio-web-de-transmision-de-peliculas-manga-y-anime_446583-original.png","name":"Anime Tube - Plantilla HTML 5 para sitio web de transmisi\u00f3n de pel\u00edculas, manga y anime"},{"id":349197,"url":"https:\/\/www.templatemonster.com\/es\/plantillas-web-tipo-349197.html","imageurl":"https:\/\/s.tmimgcdn.com\/scr\/800x500\/349100\/visualice-el-mundo-del-anime-el-manga-y-las-peliculas-con-visual-su-plantilla-html-de-transmision-definitiva_349197-original.png","name":"Visualice el mundo del anime, el manga y las pel\u00edculas con Visual: su plantilla HTML de transmisi\u00f3n definitiva"},{"id":312920,"url":"https:\/\/www.templatemonster.com\/es\/plantillas-web-tipo-312920.html","imageurl":"https:\/\/s.tmimgcdn.com\/scr\/800x500\/312900\/anime-loop-plantilla-de-sitio-web-html-de-transmision-de-peliculas-y-manga-de-anime_312920-2-original.png","name":"Anime Loop: plantilla de sitio web HTML de transmisi\u00f3n de pel\u00edculas y manga de anime"},{"id":371725,"url":"https:\/\/www.templatemonster.com\/es\/plantillas-web-tipo-371725.html","imageurl":"https:\/\/s.tmimgcdn.com\/scr\/800x500\/371700\/vivid-plantilla-de-sitio-web-html-del-centro-de-entretenimiento-en-streaming-de-anime-y-peliculas_371725-2-original.png","name":"Vivid - Plantilla de sitio web HTML del centro de entretenimiento en streaming de anime y pel\u00edculas"}],"deals":[{"id":218246,"url":"https:\/\/www.templatemonster.com\/es\/plantillas-web-tipo-218246.html","imageurl":"https:\/\/s.tmimgcdn.com\/scr\/800x500\/218200\/anity-plantilla-de-sitio-web-anime-html5_218246-2-original.jpg","name":"Anity - Plantilla de sitio web Anime HTML5"},{"id":187851,"url":"https:\/\/www.templatemonster.com\/es\/plantillas-web-tipo-187851.html","imageurl":"https:\/\/s.tmimgcdn.com\/scr\/800x500\/187800\/cinet-plantilla-de-sitio-web-html5-de-transmision-de-peliculas_187851-2-original.jpg","name":"Cinet - Plantilla de sitio web HTML5 de transmisi\u00f3n de pel\u00edculas"}]}});
-});</script>  <script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;rayId&quot;:&quot;996244596f2e1bbb&quot;,&quot;serverTiming&quot;:{&quot;name&quot;:{&quot;cfExtPri&quot;:true,&quot;cfEdge&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfL4&quot;:true,&quot;cfSpeedBrain&quot;:true,&quot;cfCacheStatus&quot;:true}},&quot;version&quot;:&quot;2025.9.1&quot;,&quot;token&quot;:&quot;d60729d31c99463a932976f93a42a9c3&quot;}" crossorigin="anonymous"></script>
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
 
-  
-<script type="text/javascript" id="" charset="">setTimeout(function(){var a=document.createElement("script");a.setAttribute("id","cookiePolicyModal");a.setAttribute("type","text/javascript");a.setAttribute("src","https://account.templatemonster.com/cp/main.js");a.setAttribute("data-project","tm");document.body.appendChild(a);a=document.createElement("link");a.setAttribute("rel","stylesheet");a.setAttribute("href","https://account.templatemonster.com/cp/main.css");document.body.appendChild(a)},5E3);</script><script type="text/javascript" id="" charset="">(function(){function h(b,a,d){b=b+"\x3d"+a+"; path\x3d/; domain\x3d."+location.hostname.replace(/^www\./i,"");"undefined"!==typeof d&&(a=new Date,a.setTime(a.getTime()+d),b+="; expires\x3d"+a.toUTCString());document.cookie=b}function k(b){for(var a=document.cookie.split(";"),d,f=0;f<a.length;f++){var g=a[f].trim();0===g.indexOf(b+"\x3d")&&(d=g.substring((b+"\x3d").length,g.length))}return d}var e=k("aff"),c=new URLSearchParams(window.location.search);(c=c.get("aff"))||(c="TM");e||(e="TM"===c.toUpperCase()?
-31536E8:5184E6,h("aff",c,e));k("ref")||(e=btoa(document.referrer?document.referrer:window.location.href),h("ref",e));c&&"TM"!==c.toUpperCase()&&(window.dataLayer=window.dataLayer||[],window.dataLayer.push({event:"trackAffiliate"}))})();</script><script type="text/javascript" id="" charset="">var mainDomain=".templatemonster.com",popularDomains={"http://360.cn/":"360.cn","http://www.alice.com/":"Alice","http://aliceadsl.fr":"Alice","http://www.alltheweb.com/":"Alltheweb","http://www.altavista.com/":"Altavista","http://www.aol.com/":"AOL","http://www.ask.com/":"Ask","http://search.aol.fr":"Ask","alicesuche.aol.de":"Ask","http://search.auone.jp/":"Auone","http://isearch.avg.com":"Avg","http://search.babylon.com":"Babylon","http://www.baidu.com/":"Baidu","http://biglobe.ne.jp":"Biglobe",
-"http://www.bing.com/":"Bing",".bing.com":"Bing","http://search.centrum.cz/":"Centrum.cz","http://search.comcast.net":"Comcast","http://search.conduit.com":"Conduit","http://www.cnn.com/SEARCH/":"CNN","http://www.daum.net/":"Daum","http://duckduckgo.com":"DuckDuckGo","http://www.ecosia.org":"Ecosia","http://www.ekolay.net/":"Ekolay","http://www.eniro.se/":"Eniro","http://www.globo.com/busca/":"Globo","http://go.mail.ru/":"go.mail.ru","www.google.com":"Google","www.google.co.uk":"Google","www.google.":"Google",
-"google.com":"Google","http://goo.ne.jp":"goo.ne","http://www.haosou.com/s":"haosou.com","http://search.incredimail.com":"Incredimail","http://www.kvasir.no/":"Kvasir","http://www.lycos.com/":"Lycos","http://search.lycos.de":"Lycos","http://www.mamma.com/":"Mamma","http://www.msn.com/":"MSN","http://money.msn.com":"MSN","http://local.msn.com":"MSN","http://www.mynet.com/":"Mynet","http://najdi.si":"Najdi","http://www.naver.com/":"Naver","http://search.netscape.com/":"Netscape","http://szukaj.onet.pl":"ONET",
-"http://www.ozu.es/":"Ozu","https://www.qwant.com/":"Qwant","http://rakuten.co.jp":"Rakuten","http://rambler.ru/":"Rambler","http://search-results.com":"Search-results","http://search.smt.docomo.ne.jp":"search.smt.docomo","http://sesam.no/":"Sesam","http://www.seznam.cz/":"Seznam","http://www.so.com/s":"So.com","http://www.sogou.com/":"Sogou","http://www.startsiden.no/sok":"Startsiden","http://www.szukacz.pl/":"Szukacz","http://buscador.terra.com.br":"Terra","http://search.tut.by/":"Tut.by","http://search.ukr.net/":"Ukr",
-"http://search.virgilio.it/":"Virgilio","http://www.voila.fr/":"Voila","http://www.wp.pl/":"Wirtualna Polska","http://www.yahoo.com/":"Yahoo","http://yahoo.cn":"Yahoo","m.yahoo.com":"Yahoo","yahoo.com":"Yahoo","http://www.yandex.com/":"Yandex","http://yandex.ru":"Yandex","http://www.yam.com/":"Yam"};function setCookie(a,b){var d=14,c=new Date;c.setTime(c.getTime()+864E5*d);d="expires\x3d"+c.toUTCString();document.cookie=a+"\x3d"+b+";"+d+";domain\x3d"+mainDomain+";path\x3d/"}
-function getCookie(a){if(a=document.cookie.match(new RegExp("(^| )"+a+"\x3d([^;]+)")))return a[2]}
-function setUTMCookie(){var a=window.location.search,b=new URLSearchParams(a),d=b.get("gclid");a=b.get("utm_source");var c=b.get("utm_medium"),e=b.get("utm_campaign"),g=b.get("utm_term");b=b.get("utm_content");if(d)setCookie("gclid",d),setCookie("utm_source","google"),setCookie("utm_medium","cpc"),setCookie("utm_campaign",e||"none"),setCookie("utm_term",g||"none"),setCookie("utm_content",b||"none");else if(d=getCookie("gclid"),setCookie("gclid",d||"NULL"),a||c||e||g||b)setCookie("utm_source",a||"none"),
-setCookie("utm_medium",c||"none"),setCookie("utm_campaign",e||"none"),setCookie("utm_term",g||"none"),setCookie("utm_content",b||"none");else{e=document.referrer;var k=document.location.href;c=[mainDomain,"template-help.com","stripe.com","paypal.com","sofort.com","paydirekt.de","r3.girogate.de","diensten.asnbank.nl","ideal.bunq.com","ideal.ing.nl","ideal2.knab.nl","app.n26.com","oba.revolut.com","diensten.snsbank.nl","ideal.triodos.nl","auth.private.vanlanschotkempen.com","pay.bitsafe.com","auth.aliorbank.pl",
-"bankmillennium.pl","go.przelewy24.pl","banknowy24.pl","api.pekao24.pl","pbn.paybynet.com.pl","eblik.pl","goonline.bnpparibas.pl","bosbank24.pl","citibankonline.pl","ca24.credit-agricole.pl","online.pocztowy.pl","secure.velobank.pl","login.ingbank.pl","auth.inteligo.pl","online.mbank.pl","login.nestbank.pl","auth.pkobp.pl","plusbank24.pl","centrum24.pl"];g=c.find(function(f){return!!k.includes(f)});a=getCookie("utm_source");if(e){e=new URL(e);var h=e.hostname;(c=c.find(function(f){return!!h.includes(f)}))?
-a||(setCookie("utm_source","direct"),setCookie("utm_medium","none"),setCookie("utm_campaign","none"),setCookie("utm_term","none"),setCookie("utm_content","none")):(a=Object.keys(popularDomains),a=a.find(function(f){return!!f.includes(h)||!!h.includes(f)}),c=popularDomains[a],a?(setCookie("utm_source",c.toLowerCase()),setCookie("utm_medium","organic")):(setCookie("utm_source",h),setCookie("utm_medium","referral")),setCookie("utm_campaign","none"),setCookie("utm_term","none"),setCookie("utm_content",
-"none"))}else g&&!a&&(setCookie("utm_source","direct"),setCookie("utm_medium","none"),setCookie("utm_campaign","none"),setCookie("utm_term","none"),setCookie("utm_content","none"))}}setUTMCookie();</script>
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="header__logo">
+                        <a href="./index.php">
+                            <img src="logobutaca.png" alt="labutacalogo" width="50px">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="header__nav">
+                        <nav class="header__menu mobile-menu">
+                            <ul>
+                                <li class="active"><a href="./index.php">Home</a></li>
+                                <li><a href="./categories.php">Categorías</a></li>
+                                <li><a href="#">Películas <span class="arrow_carrot-down"></span></a>
+                                    <ul class="dropdown">
+                                        <li><a href="./peliculas.php">Todas las Películas</a></li>
+                                        <li><a href="./pelicula-detalle.php">Detalle Película</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="./blog.php">Blog</a></li>
+                                <li><a href="./contacto.php">Contacto</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="header__right">
+                        <a href="" class="search-switch"><span class="icon_search"></span></a>
+                        <?php if(isset($_SESSION['usuario_id'])): ?>
+                            <a href="./perfil.php"><span class="icon_profile"></span></a>
+                        <?php else: ?>
+                            <a href="./login.php"><span class="icon_profile"></span></a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
+    <!-- Header End -->
 
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero__slider owl-carousel">
+                <?php foreach(array_slice($peliculasPopulares, 0, 3) as $pelicula): ?>
+                <div class="hero__items set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="hero__text">
+                                <div class="label"><?= htmlspecialchars($pelicula['genero'] ?? 'Película') ?></div>
+                                <h2><?= htmlspecialchars($pelicula['titulo']) ?></h2>
+                                <p><?= htmlspecialchars(substr($pelicula['descripcion'] ?? '', 0, 150)) ?>...</p>
+                                <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><span>Ver Ahora</span> <i class="fa fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
 
+    <!-- Product Section Begin -->
+    <section class="product spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Trending Now -->
+                    <div class="trending__product">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <div class="section__title">
+                                    <h4>Películas Populares</h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="btn__all">
+                                    <a href="./peliculas.php" class="primary-btn">Ver Todas <span class="arrow_right"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <?php foreach(array_slice($peliculasPopulares, 0, 6) as $pelicula): ?>
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                                        <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
+                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
+                                        <div class="view"><i class="fa fa-eye"></i> <?= rand(1000, 9999) ?></div>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <ul>
+                                            <li>Película</li>
+                                        </ul>
+                                        <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
 
-<script type="text/javascript" id="" charset="">(function wait(){if(typeof fbq!=="undefined"&&fbq.version>"2.9"){var a=google_tag_manager["rm"]["456999"](38)=="en"?"":"_"+(google_tag_manager["rm"]["456999"](39)=="br"?"pt":google_tag_manager["rm"]["456999"](40));document.location.href.search(".appspot.")==-1&&fbq("track","ViewContent",{content_ids:[google_tag_manager["rm"]["456999"](41)+a],content_type:"product",product_group:google_tag_manager["rm"]["456999"](42),product_category:google_tag_manager["rm"]["456999"](43),value:google_tag_manager["rm"]["456999"](45),currency:"USD"},{},{pixelId:"838473489555909"})}else setTimeout(wait,3)})();</script><script type="text/javascript" id="" charset="">function runPNTRprod(){pintrk("track","pagevisit",{line_items:[{product_name:google_tag_manager["rm"]["456999"](64),product_id:google_tag_manager["rm"]["456999"](65),product_category:google_tag_manager["rm"]["456999"](66),product_brand:google_tag_manager["rm"]["456999"](67)}]})}setTimeout(function(){runPNTRprod()},7E3);</script><script type="text/javascript" id="" charset="">var d=new Date;d.setTime(d.getTime()+31536E6);var expires="expires\x3d"+d.toGMTString(),event=google_tag_manager["rm"]["456999"](68);document.cookie="ga"+event+"\x3d1; "+expires+"; domain\x3d.templatemonster.com; path\x3d/";</script>
-<script type="text/javascript" id="" charset="">function runPNTR(){!function(b){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var a=window.pintrk;a.queue=[];a.version="3.0";a=document.createElement("script");a.async=!0;a.src=b;b=document.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)}}("https://s.pinimg.com/ct/core.js");pintrk("load","2617870333268");pintrk("page")}setTimeout(function(){runPNTR()},google_tag_manager["rm"]["456999"](71));</script>
-  <noscript>
-    <img height="1" width="1" style="display:none;" alt="" src="https://ct.pinterest.com/v3/?tid=2617870333268&amp;noscript=1">
-  </noscript>
+                    <!-- Recently Added Shows -->
+                    <div class="recent__product">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <div class="section__title">
+                                    <h4>Agregadas Recientemente</h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="btn__all">
+                                    <a href="./peliculas.php" class="primary-btn">Ver Todas <span class="arrow_right"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <?php 
+                            // Obtener las últimas películas agregadas
+                            $peliculasRecientes = array_slice($peliculasPopulares, 0, 6);
+                            foreach($peliculasRecientes as $pelicula): 
+                            ?>
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                                        <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
+                                        <div class="comment"><i class="fa fa-comments"></i> <?= rand(5, 50) ?></div>
+                                        <div class="view"><i class="fa fa-eye"></i> <?= rand(1000, 9999) ?></div>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <ul>
+                                            <li>Nueva</li>
+                                            <li>Película</li>
+                                        </ul>
+                                        <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
 
-<script type="text/javascript" id="" charset="">function runChat(){google_tag_manager["rm"]["456999"](72)!="RU"&&google_tag_manager["rm"]["456999"](73)!="BY"&&(window.__lc=window.__lc||{},window.__lc.license=9531830,function(e,f,c){function d(a){return b._h?b._h.apply(null,a):b._q.push(a)}var b={_q:[],_h:null,_v:"2.0",on:function(){d(["on",c.call(arguments)])},once:function(){d(["once",c.call(arguments)])},off:function(){d(["off",c.call(arguments)])},get:function(){if(!b._h)throw Error("[LiveChatWidget] You can't use getters before load.");return d(["get",c.call(arguments)])},
-call:function(){d(["call",c.call(arguments)])},init:function(){var a=f.createElement("script");a.async=!0;a.type="text/javascript";a.src="https://cdn.livechatinc.com/tracking.js";f.head.appendChild(a)}};!e.__lc.asyncInit&&b.init();e.LiveChatWidget=e.LiveChatWidget||b}(window,document,[].slice))}
-function handleUserInteractionOnce(){runChat();window.removeEventListener("mousemove",handleUserInteractionOnce);window.removeEventListener("scroll",handleUserInteractionOnce);window.removeEventListener("touchstart",handleUserInteractionOnce);window.removeEventListener("keydown",handleUserInteractionOnce)}window.addEventListener("mousemove",handleUserInteractionOnce,{once:!0});window.addEventListener("scroll",handleUserInteractionOnce,{once:!0});
-window.addEventListener("touchstart",handleUserInteractionOnce,{once:!0});window.addEventListener("keydown",handleUserInteractionOnce,{once:!0});</script>
-<noscript><a href="https://www.livechatinc.com/chat-with/9531830/" rel="nofollow">Chat with us</a>, powered by <a href="https://www.livechatinc.com/?welcome" rel="noopener nofollow" target="_blank">LiveChat</a></noscript><iframe height="0" width="0" style="display: none; visibility: hidden;"></iframe>
+                <!-- Sidebar -->
+                <div class="col-lg-4 col-md-6 col-sm-8">
+                    <div class="product__sidebar">
+                        <div class="product__sidebar__view">
+                            <div class="section__title">
+                                <h5>Más Vistas</h5>
+                            </div>
+                            <ul class="filter__controls">
+                                <li class="active" data-filter="*">Día</li>
+                                <li data-filter=".week">Semana</li>
+                                <li data-filter=".month">Mes</li>
+                                <li data-filter=".years">Año</li>
+                            </ul>
+                            <div class="filter__gallery">
+                                <?php foreach(array_slice($peliculasPopulares, 0, 5) as $index => $pelicula): 
+                                    $filters = ['day', 'week', 'month', 'years'];
+                                    $filter = $filters[$index % 4];
+                                ?>
+                                <div class="product__sidebar__view__item set-bg mix <?= $filter ?>" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                                    <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
+                                    <div class="view"><i class="fa fa-eye"></i> <?= rand(5000, 15000) ?></div>
+                                    <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        
+                        <div class="product__sidebar__comment">
+                            <div class="section__title">
+                                <h5>Nuevos Comentarios</h5>
+                            </div>
+                            <?php foreach(array_slice($peliculasPopulares, 0, 4) as $pelicula): ?>
+                            <div class="product__sidebar__comment__item">
+                                <div class="product__sidebar__comment__item__pic">
+                                    <img src="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>" alt="" style="width: 50px; height: 70px; object-fit: cover;">
+                                </div>
+                                <div class="product__sidebar__comment__item__text">
+                                    <ul>
+                                        <li>Activa</li>
+                                        <li>Película</li>
+                                    </ul>
+                                    <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
+                                    <span><i class="fa fa-eye"></i> <?= rand(10000, 30000) ?> Vistas</span>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Product Section End -->
 
-<img src="https://t.co/1/i/adsct?bci=4&amp;dv=Europe%2FMadrid%26es-ES%2Ces%26Google%20Inc.%26Linux%20x86_64%26255%261920%261080%264%2624%261920%261080%260%26na&amp;eci=3&amp;event=%7B%7D&amp;event_id=9ba165a5-11f8-4b26-bdc9-38b25dafcf98&amp;integration=gtm&amp;p_id=Twitter&amp;p_user_id=0&amp;pl_id=eeb0c251-649c-429e-aa75-47f46d843bb7&amp;pt=Anime%20Wave%20-%20Plantilla%20HTML%20para%20sitio%20web%20de%20pel%C3%ADculas%20de%20anime%2C%20manga%20y%20K-Pop%23468586&amp;tw_document_href=https%3A%2F%2Fdemo.templatemonster.com%2Fes%2Fdemo%2F468586.html%3F_gl%3D1*1hky8o1*_ga*MzY3OTI3OTk0LjE3NjE1NTU4ODA.*_ga_FTPYEGT5LY*czE3NjE3MzY2MTckbzIkZzEkdDE3NjE3MzY2NDEkajM2JGwwJGgw&amp;tw_iframe_status=0&amp;txn_id=nw46i&amp;type=javascript&amp;version=2.3.34" height="1" width="1" style="display: none;"><img src="https://analytics.twitter.com/1/i/adsct?bci=4&amp;dv=Europe%2FMadrid%26es-ES%2Ces%26Google%20Inc.%26Linux%20x86_64%26255%261920%261080%264%2624%261920%261080%260%26na&amp;eci=3&amp;event=%7B%7D&amp;event_id=9ba165a5-11f8-4b26-bdc9-38b25dafcf98&amp;integration=gtm&amp;p_id=Twitter&amp;p_user_id=0&amp;pl_id=eeb0c251-649c-429e-aa75-47f46d843bb7&amp;pt=Anime%20Wave%20-%20Plantilla%20HTML%20para%20sitio%20web%20de%20pel%C3%ADculas%20de%20anime%2C%20manga%20y%20K-Pop%23468586&amp;tw_document_href=https%3A%2F%2Fdemo.templatemonster.com%2Fes%2Fdemo%2F468586.html%3F_gl%3D1*1hky8o1*_ga*MzY3OTI3OTk0LjE3NjE1NTU4ODA.*_ga_FTPYEGT5LY*czE3NjE3MzY2MTckbzIkZzEkdDE3NjE3MzY2NDEkajM2JGwwJGgw&amp;tw_iframe_status=0&amp;txn_id=nw46i&amp;type=javascript&amp;version=2.3.34" height="1" width="1" style="display: none;"><script id="cookiePolicyModal" type="text/javascript" src="https://account.templatemonster.com/cp/main.js" data-project="tm"></script><link rel="stylesheet" href="https://account.templatemonster.com/cp/main.css"><div id="chat-widget-container" style="opacity: 1; visibility: visible; z-index: 2147483639; position: fixed; bottom: 0px; width: 279px; height: 196px; max-width: 100%; max-height: calc(100% + 0px); min-height: 0px; min-width: 0px; background-color: transparent; border: 0px; overflow: hidden; right: 35px; transition: none !important;"><iframe allow="clipboard-read; clipboard-write; autoplay; display-capture *;" src="https://secure.livechatinc.com/customer/action/open_chat?license_id=9531830&amp;group=37&amp;embedded=1&amp;widget_version=3&amp;unique_groups=0&amp;organization_id=f6607cb5-ed84-4081-ba65-18ee1f0218a2&amp;use_parent_storage=1&amp;x-region=us-south1" id="chat-widget" name="chat-widget" title="LiveChat chat widget" scrolling="no" style="width: 100%; height: 100%; min-height: 0px; min-width: 0px; margin: 0px; padding: 0px; background-image: none; background-position: 0% 0%; background-size: initial; background-attachment: scroll; background-origin: initial; background-clip: initial; background-color: rgba(0, 0, 0, 0); border-width: 0px; float: none; color-scheme: light; position: absolute; inset: 0px; transition: none !important; display: none; visibility: hidden;"></iframe><iframe id="chat-widget-minimized" name="chat-widget-minimized" title="LiveChat chat widget" scrolling="no" style="width: 100%; height: 100%; min-height: 0px; min-width: 0px; margin: 0px; padding: 0px; background-image: none; background-position: 0% 0%; background-size: initial; background-attachment: scroll; background-origin: initial; background-clip: initial; background-color: rgba(0, 0, 0, 0); border-width: 0px; float: none; color-scheme: light; display: block;"></iframe><div aria-live="polite" id="lc-aria-announcer-polite" tabindex="-1" style="height: 1px; width: 1px; margin: -1px; overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; position: absolute;"></div><div aria-live="assertive" id="lc-aria-announcer-assertive" tabindex="-1" style="height: 1px; width: 1px; margin: -1px; overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; position: absolute;"></div></div></body></html>
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="page-up">
+            <a href="#" id="scrollToTopButton"><span class="arrow_carrot-up"></span></a>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="footer__logo">
+                        <a href="./index.php"><img src="img/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="footer__nav">
+                        <ul>
+                            <li class="active"><a href="./index.php">Home</a></li>
+                            <li><a href="./categories.php">Categorías</a></li>
+                            <li><a href="./blog.php">Blog</a></li>
+                            <li><a href="./contacto.php">Contacto</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                      Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos los derechos reservados | Plantilla de <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                      <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search model Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch"><i class="icon_close"></i></div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Buscar películas.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search model end -->
+
+    <!-- Js Plugins -->
+    <script src="anime-main/js/jquery-3.3.1.min.js"></script>
+    <script src="anime-main/js/bootstrap.min.js"></script>
+    <script src="anime-main/js/player.js"></script>
+    <script src="anime-main/js/jquery.nice-select.min.js"></script>
+    <script src="anime-main/js/mixitup.min.js"></script>
+    <script src="anime-main/js/jquery.slicknav.js"></script>
+    <script src="anime-main/js/owl.carousel.min.js"></script>
+    <script src="anime-main/js/main.js"></script>
+
+</body>
+</html>

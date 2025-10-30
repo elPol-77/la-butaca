@@ -1,144 +1,274 @@
 <?php
-include 'menu.php';
+session_start();
 include 'admin/includes/database.php'; 
 require_once 'admin/includes/crudPeliculas.php'; 
 
 $peliculaObj = new Peliculas();
-$peliculasPopulares = $peliculaObj->getPopulares(4);
+$peliculasPopulares = $peliculaObj->getPopulares(8);
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Plataforma de películas">
+    <meta name="keywords" content="Películas, cine, streaming">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>La Butaca - Home</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="anime-main/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/plyr.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/style.css" type="text/css">
+    
+    <!-- Estilos personalizados para hacer las imágenes clickeables -->
+    <style>
+        .product__item__pic {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .product__item__pic:hover {
+            transform: scale(1.05);
+        }
+        
+        a.imagen-enlace {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .product__item__pic > div {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        .product__sidebar__view__item {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .product__sidebar__view__item:hover {
+            transform: scale(1.02);
+        }
+        
+        .product__sidebar__comment__item__pic {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+<?php
+  include 'head.php'; 
 ?>
 
-<div class="container-fluid bg-dark text-light py-4 min-vh-100">
-  <div class="row">
-    <!-- Carrusel principal dinámico: populares -->
-    <div class="col-lg-8 mb-4">
-      <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner rounded shadow">
-          <?php
-          $primero = true;
-          foreach ($peliculasPopulares as $pelicula): ?>
-            <div class="carousel-item <?= $primero ? 'active' : '' ?>">
-              <img src="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>" class="d-block w-100 img-fluid" style="max-height:500px;object-fit:cover;" alt="<?= htmlspecialchars($pelicula['titulo']) ?>">
-              <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-50 rounded p-3">
-                <h2 class="fw-bold"><?= htmlspecialchars($pelicula['titulo']) ?></h2>
-                <?php if(!empty($pelicula['descripcion'])): ?>
-                  <p><?= htmlspecialchars($pelicula['descripcion']) ?></p>
-                <?php endif; ?>
-                <div>
-                  <span><?= htmlspecialchars("Duracion : " . $pelicula['duracion']. " Min") ?></span>
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero__slider owl-carousel">
+                <?php foreach(array_slice($peliculasPopulares, 0, 3) as $pelicula): ?>
+                <div class="hero__items set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="hero__text">
+                                <div class="label"><?= htmlspecialchars($pelicula['genero'] ?? 'Película') ?></div>
+                                <h2><?= htmlspecialchars($pelicula['titulo']) ?></h2>
+                                <p><?= htmlspecialchars(substr($pelicula['descripcion'] ?? '', 0, 150)) ?>...</p>
+                                <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><span>Ver Ahora</span> <i class="fa fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+                <?php endforeach; ?>
             </div>
-          <?php
-            $primero = false;
-          endforeach;
-          ?>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon"></span>
-          <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon"></span>
-          <span class="visually-hidden">Siguiente</span>
-        </button>
-      </div>
-    </div>
-    <!-- Lista de Novedades (Próximamente) -->
-    <div class="col-lg-4 mb-4">
-      <div class="bg-black rounded shadow p-3 h-100">
-        <h5 class="fw-bold text-warning mb-4">Novedades</h5>
-        <div class="d-flex mb-3">
-          <img src="imagenes/portadas_pelis/malice.jpg" width="60" height="60" class="rounded me-2" alt="Malice">
-          <div>
-            <div>
-              <span class="badge bg-dark text-light me-1"><i class="bi bi-play-fill"></i> 1:46</span>
-            </div>
-            <a href="#" class="fw-bold text-light text-decoration-none">"Malice"</a>
-            <div class="small">Watch the Trailer</div>
-            <div>
-              <span class="me-2"><i class="bi bi-hand-thumbs-up"></i> 48</span>
-              <span><i class="bi bi-heart-fill text-danger"></i> 14</span>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex mb-3">
-          <img src="imagenes/portadas_pelis/imdb.jpg" width="60" height="60" class="rounded me-2" alt="IMDB Interviews">
-          <div>
-            <span class="badge bg-dark text-light me-1"><i class="bi bi-play-fill"></i> 4:20</span>
-            <a href="#" class="fw-bold text-light text-decoration-none">Inside Guillermo del Toro's 'Frankenstein'</a>
-            <div class="small">Watch the Interview</div>
-            <div>
-              <span class="me-2"><i class="bi bi-hand-thumbs-up"></i> 45</span>
-              <span><i class="bi bi-heart-fill text-danger"></i> 30</span>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex mb-3">
-          <img src="imagenes/portadas_pelis/ellamccay.jpg" width="60" height="60" class="rounded me-2" alt="Ella McCay">
-          <div>
-            <span class="badge bg-dark text-light me-1"><i class="bi bi-play-fill"></i> 2:25</span>
-            <a href="#" class="fw-bold text-light text-decoration-none">Ella McCay</a>
-            <div class="small">Watch the Trailer</div>
-            <div>
-              <span class="me-2"><i class="bi bi-hand-thumbs-up"></i> 167</span>
-              <span><i class="bi bi-heart-fill text-danger"></i> 81</span>
-            </div>
-          </div>
-        </div>
-        <a href="#" class="fw-bold text-warning mt-3 d-inline-block">Explorar tráilers <i class="bi bi-arrow-right"></i></a>
-      </div>
-    </div>
-  </div>
+    </section>
+    <!-- Hero Section End -->
 
-  <!-- DESTACADO HOY -->
-  <section class="mt-4">
-    <h4 class="ms-4">Destacado hoy</h4>
-    <div class="d-flex overflow-auto ps-4">
-      <div class="me-3">
-        <img src="imagenes/portadas_pelis/pelicula1.jpg" width="120" height="180" class="rounded shadow" alt="...">
-      </div>
-      <div class="me-3">
-        <img src="imagenes/portadas_pelis/pelicula2.jpg" width="120" height="180" class="rounded shadow" alt="...">
-      </div>
-      <!-- Más miniaturas aquí -->
-    </div>
-  </section>
+    <!-- Product Section Begin -->
+    <section class="product spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Trending Now -->
+                    <div class="trending__product">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <div class="section__title">
+                                    <h4>Películas Populares</h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="btn__all">
+                                    <a href="./peliculas.php" class="primary-btn">Ver Todas <span class="arrow_right"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <?php foreach(array_slice($peliculasPopulares, 0, 6) as $pelicula): ?>
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                                        <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>" class="imagen-enlace"></a>
+                                        <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
+                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
+                                        <div class="view"><i class="fa fa-eye"></i> <?= rand(1000, 9999) ?></div>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <ul>
+                                            <li>Película</li>
+                                        </ul>
+                                        <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
 
-  <!-- PERFILES POPULARES -->
-  <section class="mt-4">
-    <h5 class="ms-4">Actores Populares</h5>
-    <div class="d-flex overflow-auto ps-4">
-      <div class="me-3 text-center">
-        <img src="imagenes/actores/actor1.jpg" width="70" height="70" class="rounded-circle border border-warning" alt="...">
-        <div class="mt-2 small">Actor 1</div>
-      </div>
-      <div class="me-3 text-center">
-        <img src="imagenes/actores/actor2.jpg" width="70" height="70" class="rounded-circle border border-warning" alt="...">
-        <div class="mt-2 small">Actor 2</div>
-      </div>
-      <!-- Más perfiles aquí -->
-    </div>
-  </section>
-  
-  <!-- FICHAS PELÍCULAS (tipo tarjetas) -->
-  <section class="mt-4">
-    <h5 class="ms-4">Películas más populares esta semana</h5>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 px-4">
-      <div class="col">
-        <div class="card bg-dark text-white h-100">
-          <img src="imagenes/portadas_pelis/pelicula3.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h6 class="card-title">A House of Dynamite</h6>
-            <p class="card-text mb-1">2025 | Drama</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="badge bg-warning text-dark">8.3</span>
-              <button class="btn btn-outline-light btn-sm">Ver más</button>
+                    <!-- Recently Added Shows -->
+                    <div class="recent__product">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <div class="section__title">
+                                    <h4>Agregadas Recientemente</h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="btn__all">
+                                    <a href="./peliculas.php" class="primary-btn">Ver Todas <span class="arrow_right"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <?php 
+                            $peliculasRecientes = array_slice($peliculasPopulares, 0, 6);
+                            foreach($peliculasRecientes as $pelicula): 
+                            ?>
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                                        <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>" class="imagen-enlace"></a>
+                                        <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
+                                        <div class="comment"><i class="fa fa-comments"></i> <?= rand(5, 50) ?></div>
+                                        <div class="view"><i class="fa fa-eye"></i> <?= rand(1000, 9999) ?></div>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <ul>
+                                            <li>Nueva</li>
+                                            <li>Película</li>
+                                        </ul>
+                                        <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4 col-md-6 col-sm-8">
+                    <div class="product__sidebar">
+                        <div class="product__sidebar__view">
+                            <div class="section__title">
+                                <h5>Más Vistas</h5>
+                            </div>
+                            <ul class="filter__controls">
+                                <li class="active" data-filter="*">Día</li>
+                                <li data-filter=".week">Semana</li>
+                                <li data-filter=".month">Mes</li>
+                                <li data-filter=".years">Año</li>
+                            </ul>
+                            <div class="filter__gallery">
+                                <?php foreach(array_slice($peliculasPopulares, 0, 5) as $index => $pelicula): 
+                                    $filters = ['day', 'week', 'month', 'years'];
+                                    $filter = $filters[$index % 4];
+                                ?>
+                                <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>">
+                                    <div class="product__sidebar__view__item set-bg mix <?= $filter ?>" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                                        <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
+                                        <div class="view"><i class="fa fa-eye"></i> <?= rand(5000, 15000) ?></div>
+                                        <h5><?= htmlspecialchars($pelicula['titulo']) ?></h5>
+                                    </div>
+                                </a>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        
+                        <div class="product__sidebar__comment">
+                            <div class="section__title">
+                                <h5>Nuevos Comentarios</h5>
+                            </div>
+                            <?php foreach(array_slice($peliculasPopulares, 0, 4) as $pelicula): ?>
+                            <div class="product__sidebar__comment__item">
+                                <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>">
+                                    <div class="product__sidebar__comment__item__pic">
+                                        <img src="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>" alt="" style="width: 50px; height: 70px; object-fit: cover;">
+                                    </div>
+                                </a>
+                                <div class="product__sidebar__comment__item__text">
+                                    <ul>
+                                        <li>Activa</li>
+                                        <li>Película</li>
+                                    </ul>
+                                    <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
+                                    <span><i class="fa fa-eye"></i> <?= rand(10000, 30000) ?> Vistas</span>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-      <!-- Más tarjetas aquí -->
+    </section>
+    <!-- Product Section End -->
+
+<?php
+  include 'footer.php'; 
+?>
+
+    <!-- Search model Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch"><i class="icon_close"></i></div>
+            <form class="search-model-form" action="buscar.php" method="GET">
+                <input type="text" name="q" id="search-input" placeholder="Buscar películas....." required>
+            </form>
+        </div>
     </div>
-  </section>
-</div>
-<?php include 'footer.php'; ?>
+    <!-- Search model end -->
+
+    <!-- Js Plugins -->
+    <script src="anime-main/js/jquery-3.3.1.min.js"></script>
+    <script src="anime-main/js/bootstrap.min.js"></script>
+    <script src="anime-main/js/player.js"></script>
+    <script src="anime-main/js/jquery.nice-select.min.js"></script>
+    <script src="anime-main/js/mixitup.min.js"></script>
+    <script src="anime-main/js/jquery.slicknav.js"></script>
+    <script src="anime-main/js/owl.carousel.min.js"></script>
+    <script src="anime-main/js/main.js"></script>
+
+</body>
+</html>

@@ -31,53 +31,113 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro de Usuario</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/estilos.css">
+    <meta name="description" content="Registro MovieDB">
+    <meta name="keywords" content="Registro, películas, streaming">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Registro - La Butaca</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="anime-main/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/plyr.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="anime-main/css/style.css" type="text/css">
 </head>
-<body class="bg-white text-dark">
-    <?php include("menu.php"); ?>
 
-    <main class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow-lg border-danger">
-                    <div class="card-header bg-danger text-white text-center">
-                        <h2>Crear cuenta</h2>
-                    </div>
-                    <div class="card-body bg-light">
-                        <?php if (!empty($mensaje)): ?>
-                            <div class="alert alert-danger"><?= htmlspecialchars($mensaje) ?></div>
-                        <?php endif; ?>
-                        <form method="POST" class="mb-3">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Usuario</label>
-                                <input name="username" id="username" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Correo electrónico</label>
-                                <input type="email" name="email" id="email" class="form-control" required>
-                            </div>
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
 
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" name="password" id="password" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password_confirm" class="form-label">Repetir Contraseña</label>
-                                <input type="password" name="password_confirm" id="password_confirm" class="form-control" required>
-                            </div>
-                            <button class="btn btn-danger w-100" type="submit">Registrarse</button>
-                        </form>
-                        <div class="text-center">
-                            <a href="login.php" class="btn btn-link text-danger">¿Ya tienes cuenta? Iniciar sesión</a>
-                        </div>
+    <?php include 'head.php'; ?>
+
+    <!-- Normal Breadcrumb Begin -->
+    <section class="normal-breadcrumb set-bg" data-setbg="anime-main/img/normal-breadcrumb.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="normal__breadcrumb__text">
+                        <h2>Crear Cuenta</h2>
+                        <p>Únete a La Butaca y disfruta de todo el contenido</p>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
-    <?php include("footer.php"); ?>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </section>
+    <!-- Normal Breadcrumb End -->
+
+    <!-- Signup Section Begin -->
+    <section class="signup spad">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8 col-sm-10">
+                    <div class="login__form">
+                        <h3 class="text-center">Registrarse</h3>
+
+                        <?php if (!empty($mensaje)): ?>
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fa fa-exclamation-triangle"></i> <?= htmlspecialchars($mensaje) ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <form method="POST" action="registro.php">
+                            <div class="input__item">
+                                <input type="email" name="email" id="email" placeholder="Correo electrónico" required>
+                                <span class="icon_mail"></span>
+                            </div>
+                            <div class="input__item">
+                                <input type="text" name="username" id="username" placeholder="Nombre de usuario" required>
+                                <span class="icon_profile"></span>
+                            </div>
+                            <div class="input__item">
+                                <input type="password" name="password" id="password" placeholder="Contraseña" required>
+                                <span class="icon_lock"></span>
+                            </div>
+                            <div class="input__item">
+                                <input type="password" name="password_confirm" id="password_confirm" placeholder="Repetir Contraseña" required>
+                                <span class="icon_lock"></span>
+                            </div>
+                            <button type="submit" class="site-btn">Registrarse Ahora</button>
+                        </form>
+                        <h5 class="text-center mt-3">¿Ya tienes cuenta? <a href="login.php">¡Inicia Sesión!</a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Signup Section End -->
+
+    <?php include 'footer.php'; ?>
+
+    <!-- Search model Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch"><i class="icon_close"></i></div>
+            <form class="search-model-form" action="buscar.php" method="GET">
+                <input type="text" name="q" id="search-input" placeholder="Buscar películas....." required>
+            </form>
+        </div>
+    </div>
+    <!-- Search model end -->
+
+    <!-- Js Plugins -->
+    <script src="anime-main/js/jquery-3.3.1.min.js"></script>
+    <script src="anime-main/js/bootstrap.min.js"></script>
+    <script src="anime-main/js/player.js"></script>
+    <script src="anime-main/js/jquery.nice-select.min.js"></script>
+    <script src="anime-main/js/mixitup.min.js"></script>
+    <script src="anime-main/js/jquery.slicknav.js"></script>
+    <script src="anime-main/js/owl.carousel.min.js"></script>
+    <script src="anime-main/js/main.js"></script>
+
 </body>
 </html>
