@@ -209,7 +209,7 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
                                     <div class="product__sidebar__view__item set-bg mix <?= $filter ?>" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
                                         <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
                                         <div class="view"><i class="fa fa-eye"></i> <?= rand(5000, 15000) ?></div>
-                                        <h5><?= htmlspecialchars($pelicula['titulo']) ?></h5>
+                                        <h5 style="color: #fff; font-weight: bold;"><?= htmlspecialchars($pelicula['titulo']) ?></h5>
                                     </div>
                                 </a>
                                 <?php endforeach; ?>

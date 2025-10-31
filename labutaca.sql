@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 30-10-2025 a las 18:40:42
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Servidor: localhost
+-- Tiempo de generación: 31-10-2025 a las 12:45:11
+-- Versión del servidor: 8.0.43-0ubuntu0.24.04.1
+-- Versión de PHP: 8.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,11 +28,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `actores` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
+  `id` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `fecha_nacimiento` date DEFAULT NULL,
-  `biografia` text DEFAULT NULL,
-  `imagen` varchar(255) DEFAULT NULL
+  `biografia` text COLLATE utf8mb4_general_ci,
+  `imagen` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -68,10 +68,10 @@ INSERT INTO `actores` (`id`, `nombre`, `fecha_nacimiento`, `biografia`, `imagen`
 --
 
 CREATE TABLE `directores` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
+  `id` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `fecha_nacimiento` date DEFAULT NULL,
-  `biografia` text DEFAULT NULL
+  `biografia` text COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -101,8 +101,8 @@ INSERT INTO `directores` (`id`, `nombre`, `fecha_nacimiento`, `biografia`) VALUE
 --
 
 CREATE TABLE `generos` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(50) NOT NULL
+  `id` int NOT NULL,
+  `nombre` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -132,37 +132,38 @@ INSERT INTO `generos` (`id`, `nombre`) VALUES
 --
 
 CREATE TABLE `peliculas` (
-  `id` int(11) NOT NULL,
-  `titulo` varchar(150) NOT NULL,
-  `descripcion` text NOT NULL,
-  `anio` int(11) DEFAULT NULL,
-  `duracion` int(11) DEFAULT NULL,
-  `director_id` int(11) DEFAULT NULL,
-  `imagen` varchar(255) NOT NULL,
+  `id` int NOT NULL,
+  `titulo` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` text COLLATE utf8mb4_general_ci NOT NULL,
+  `anio` int DEFAULT NULL,
+  `duracion` int DEFAULT NULL,
+  `director_id` int DEFAULT NULL,
+  `imagen` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `fecha_estreno` date DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `plataforma_id` int(11) DEFAULT NULL
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `plataforma_id` int DEFAULT NULL,
+  `LINK` varchar(500) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `peliculas`
 --
 
-INSERT INTO `peliculas` (`id`, `titulo`, `descripcion`, `anio`, `duracion`, `director_id`, `imagen`, `fecha_estreno`, `created_at`, `plataforma_id`) VALUES
-(1, 'Avatar: Fire and Ash', 'Tercera entrega de la saga Avatar, en Pandora.', 2025, 170, 1, 'avatar3.jpg', '2025-12-19', '2025-10-27 12:57:30', 4),
-(2, 'Una película de Minecraft', 'Adaptación del popular juego Minecraft.', 2025, 125, 2, 'minecraft.jpg', '2025-04-04', '2025-10-27 12:57:30', NULL),
-(4, 'Five Nights at Freddy\'s', 'Secuela de terror basada en el videojuego.', 2025, 110, 4, 'fnaf.jpg', '2025-12-05', '2025-10-27 12:57:30', 1),
-(5, 'Pesadilla en Navidad', 'Pesadilla de Guillermo ', 2023, 20, 4, 'pesadilla.png', '2023-12-25', '2025-10-27 19:44:50', 2),
-(11, 'Dune: Parte Dos', 'Secuela de Dune con nuevas aventuras en Arrakis.', 2024, 155, 5, 'dune2.jpg', '2024-03-01', '2025-10-30 14:22:00', 1),
-(12, 'Spiderman: Cruzando el Multiverso', 'Nueva entrega animada de Spiderman.', 2023, 140, 6, 'spiderverse2.jpg', '2023-06-16', '2025-10-30 14:22:00', 1),
-(13, 'Oppenheimer', 'Drama biográfico dirigido por Christopher Nolan.', 2023, 180, 7, 'oppenheimer.jpg', '2023-07-21', '2025-10-30 14:22:00', 2),
-(14, 'Barbie', 'Comedia y fantasía protagonizada por Margot Robbie.', 2023, 125, 8, 'barbie.jpg', '2023-08-05', '2025-10-30 14:22:00', 3),
-(15, 'John Wick 4', 'Cuarta entrega del implacable asesino John Wick.', 2023, 169, 9, 'johnwick4.jpg', '2023-03-24', '2025-10-30 14:22:00', 4),
-(16, 'Misión Imposible: Sentencia Mortal', 'Nueva misión de Ethan Hunt.', 2023, 163, 10, 'mi7.jpg', '2023-07-14', '2025-10-30 14:22:00', 5),
-(17, 'The Marvels', 'Marvel presenta nueva aventura espacial.', 2023, 105, 11, 'themarvels.jpg', '2023-11-10', '2025-10-30 14:22:00', 1),
-(18, 'Wonka', 'Historia de origen de Willy Wonka.', 2023, 112, 12, 'wonka.jpg', '2023-12-15', '2025-10-30 14:22:00', 6),
-(19, 'Indiana Jones y el Dial del Destino', 'Nueva aventura de Indiana Jones.', 2023, 142, 13, 'indianajones5.jpg', '2023-06-30', '2025-10-30 14:22:00', 1),
-(20, 'Killers of the Flower Moon', 'Drama criminal dirigido por Scorsese.', 2023, 206, 14, 'killersoftheflowermoon.jpg', '2023-10-20', '2025-10-30 14:22:00', 2);
+INSERT INTO `peliculas` (`id`, `titulo`, `descripcion`, `anio`, `duracion`, `director_id`, `imagen`, `fecha_estreno`, `created_at`, `plataforma_id`, `LINK`) VALUES
+(1, 'Avatar: Fire and Ash', 'Tercera entrega de la saga Avatar, en Pandora.', 2025, 170, 1, 'avatar3.jpg', '2025-12-19', '2025-10-27 12:57:30', 4, 'https://youtu.be/lhLsr9S3bgQ?si=RvmERvpl_PLYGhZB'),
+(2, 'Una película de Minecraft', 'Adaptación del popular juego Minecraft.', 2025, 125, 2, 'minecraft.jpg', '2025-04-04', '2025-10-27 12:57:30', 4, 'https://www.hbomax.com/es/es/movies/una-pelicula-de-minecraft/05eee581-3112-4515-b17f-219ff6265ef8?utm_source=universal_search'),
+(4, 'Five Nights at Freddy\'s', 'Secuela de terror basada en el videojuego.', 2025, 110, 4, 'fnaf.jpg', '2025-12-05', '2025-10-27 12:57:30', 7, 'https://www.movistarplus.es/cine/five-nights-at-freddy-s/ficha?tipo=E&id=3263458&origen=GGL&referrer=GGL&utm_campaign=product_feed&utm_medium=aggregator&utm_source=google'),
+(5, 'Pesadilla en Navidad', 'Pesadilla de Guillermo ', 2023, 20, 4, 'pesadilla.png', '2023-12-25', '2025-10-27 19:44:50', 8, 'https://youtu.be/--dGfVyuTks?si=D4Tn-JjIzW7k5PQS'),
+(11, 'Dune: Parte Dos', 'Secuela de Dune con nuevas aventuras en Arrakis.', 2024, 155, 5, 'dune2.jpg', '2024-03-01', '2025-10-30 14:22:00', 4, 'https://www.hbomax.com/es/es/movies/dune-parte-dos/f0a4f239-0b57-47e2-a39a-54fb96925e61?utm_source=universal_search'),
+(12, 'Spiderman: Cruzando el Multiverso', 'Nueva entrega animada de Spiderman.', 2023, 140, 6, 'spiderverse2.jpg', '2023-06-16', '2025-10-30 14:22:00', 2, 'https://www.primevideo.com/dp/amzn1.dv.gti.08bf002f-a5e6-4c0d-9288-6e83a129e2d4?autoplay=0&ref_=atv_cf_strg_wb'),
+(13, 'Oppenheimer', 'Drama biográfico dirigido por Christopher Nolan.', 2023, 180, 7, 'oppenheimer.jpg', '2023-07-21', '2025-10-30 14:22:00', 2, 'https://www.youtube.com/watch?v=MVvGSBKV504'),
+(14, 'Barbie', 'Comedia y fantasía protagonizada por Margot Robbie.', 2023, 125, 8, 'barbie.jpg', '2023-08-05', '2025-10-30 14:22:00', 4, 'https://www.hbomax.com/es/es/movies/barbie/80bc4915-c826-499f-9961-b422b17559b6?utm_source=universal_search'),
+(15, 'John Wick 4', 'Cuarta entrega del implacable asesino John Wick.', 2023, 169, 9, 'johnwick4.jpg', '2023-03-24', '2025-10-30 14:22:00', 2, 'https://www.primevideo.com/dp/amzn1.dv.gti.a183463a-b642-40fe-9457-99d9ea5e0be1?autoplay=0&ref_=atv_cf_strg_wb'),
+(16, 'Misión Imposible: Sentencia Mortal', 'Nueva misión de Ethan Hunt.', 2023, 163, 10, 'mi7.jpg', '2023-07-14', '2025-10-30 14:22:00', 2, 'https://www.primevideo.com/dp/amzn1.dv.gti.11311722-0576-4b19-b2fd-01561f3a3e4d?autoplay=0&ref_=atv_cf_strg_wb'),
+(17, 'The Marvels', 'Marvel presenta nueva aventura espacial.', 2023, 105, 11, 'themarvels.jpg', '2023-11-10', '2025-10-30 14:22:00', 3, 'https://www.disneyplus.com/es-es/browse/entity-75c90eca-8969-4edb-ac1a-7165cff2671c?distributionPartner=google'),
+(18, 'Wonka', 'Historia de origen de Willy Wonka.', 2023, 112, 12, 'wonka.jpg', '2023-12-15', '2025-10-30 14:22:00', 4, 'https://www.hbomax.com/es/es/movies/wonka/c34d4c23-39eb-4eb8-95dd-209fa0cb3fb4?utm_source=universal_search'),
+(19, 'Indiana Jones y el Dial del Destino', 'Nueva aventura de Indiana Jones.', 2023, 142, 13, 'indianajones5.jpg', '2023-06-30', '2025-10-30 14:22:00', 3, 'https://www.disneyplus.com/play/f4bbe891-e949-4a15-9df1-6c2e87cca2bc?distributionPartner=google'),
+(20, 'Killers of the Flower Moon', 'Drama criminal dirigido por Scorsese.', 2023, 206, 14, 'killersoftheflowermoon.jpg', '2023-10-20', '2025-10-30 14:22:00', 5, 'https://tv.apple.com/es/movie/los-asesinos-de-la-luna/umc.cmc.5x1fg9vferlfeutzpq6rra1zf?action=play');
 
 -- --------------------------------------------------------
 
@@ -171,8 +172,8 @@ INSERT INTO `peliculas` (`id`, `titulo`, `descripcion`, `anio`, `duracion`, `dir
 --
 
 CREATE TABLE `pelicula_actor` (
-  `pelicula_id` int(11) NOT NULL,
-  `actor_id` int(11) NOT NULL
+  `pelicula_id` int NOT NULL,
+  `actor_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -187,6 +188,7 @@ INSERT INTO `pelicula_actor` (`pelicula_id`, `actor_id`) VALUES
 (4, 7),
 (4, 8),
 (11, 9),
+(18, 9),
 (11, 10),
 (12, 11),
 (12, 12),
@@ -195,9 +197,7 @@ INSERT INTO `pelicula_actor` (`pelicula_id`, `actor_id`) VALUES
 (15, 15),
 (16, 16),
 (17, 17),
-(18, 9),
-(18, 18),
-(19, 19),
+(19, 18),
 (20, 20);
 
 -- --------------------------------------------------------
@@ -207,8 +207,8 @@ INSERT INTO `pelicula_actor` (`pelicula_id`, `actor_id`) VALUES
 --
 
 CREATE TABLE `pelicula_genero` (
-  `pelicula_id` int(11) NOT NULL,
-  `genero_id` int(11) NOT NULL
+  `pelicula_id` int NOT NULL,
+  `genero_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -216,41 +216,41 @@ CREATE TABLE `pelicula_genero` (
 --
 
 INSERT INTO `pelicula_genero` (`pelicula_id`, `genero_id`) VALUES
-(1, 7),
-(2, 3),
-(2, 6),
 (4, 1),
+(12, 1),
+(15, 1),
+(16, 1),
+(17, 1),
+(19, 1),
+(11, 2),
+(17, 2),
+(2, 3),
+(12, 3),
 (4, 4),
+(11, 4),
+(13, 4),
+(20, 4),
+(14, 5),
+(18, 5),
+(2, 6),
+(11, 6),
+(12, 6),
+(16, 6),
+(19, 6),
+(1, 7),
 (4, 7),
 (5, 7),
-(11, 2),
-(11, 4),
-(11, 6),
-(12, 1),
-(12, 3),
-(12, 6),
-(13, 4),
-(13, 9),
-(13, 11),
-(14, 5),
 (14, 8),
-(15, 1),
-(15, 12),
-(16, 1),
-(16, 6),
-(16, 12),
-(17, 1),
-(17, 2),
-(18, 5),
 (18, 8),
-(18, 13),
-(19, 1),
-(19, 6),
-(19, 11),
-(20, 4),
+(13, 9),
 (20, 10),
+(13, 11),
+(19, 11),
 (20, 11),
-(20, 12);
+(15, 12),
+(16, 12),
+(20, 12),
+(18, 13);
 
 -- --------------------------------------------------------
 
@@ -259,10 +259,10 @@ INSERT INTO `pelicula_genero` (`pelicula_id`, `genero_id`) VALUES
 --
 
 CREATE TABLE `plataformas` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL
+  `id` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -275,7 +275,9 @@ INSERT INTO `plataformas` (`id`, `nombre`, `descripcion`, `url`) VALUES
 (3, 'Disney+', 'Plataforma con contenido de Disney, Pixar, Marvel, Star Wars y National Geographic.', 'https://www.disneyplus.com'),
 (4, 'HBO Max', 'Servicio de streaming de Warner Bros., HBO y más.', 'https://www.hbomax.com'),
 (5, 'Apple TV+', 'Plataforma de Apple con contenido original exclusivo.', 'https://tv.apple.com'),
-(6, 'Filmin', 'Plataforma española especializada en cine independiente y de autor.', 'https://www.filmin.es');
+(6, 'Filmin', 'Plataforma española especializada en cine independiente y de autor.', 'https://www.filmin.es'),
+(7, 'Movistar +', 'Plataforma de Movistar', 'https://www.movistarplus.es/'),
+(8, 'Youtube', 'Plataforma de Vídeos ', 'https://www.youtube.com/');
 
 -- --------------------------------------------------------
 
@@ -284,12 +286,12 @@ INSERT INTO `plataformas` (`id`, `nombre`, `descripcion`, `url`) VALUES
 --
 
 CREATE TABLE `usuarios` (
-  `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `rol` enum('admin','usuario') DEFAULT 'usuario',
-  `fecha_registro` timestamp NULL DEFAULT current_timestamp()
+  `id` int NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `rol` enum('admin','usuario') COLLATE utf8mb4_general_ci DEFAULT 'usuario',
+  `fecha_registro` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -309,13 +311,13 @@ INSERT INTO `usuarios` (`id`, `username`, `email`, `password`, `rol`, `fecha_reg
 --
 
 CREATE TABLE `valoraciones` (
-  `id` int(11) NOT NULL,
-  `usuario_id` int(11) DEFAULT NULL,
-  `pelicula_id` int(11) DEFAULT NULL,
-  `puntuacion` tinyint(4) DEFAULT NULL CHECK (`puntuacion` between 1 and 10),
-  `comentario` text DEFAULT NULL,
-  `fecha` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` int NOT NULL,
+  `usuario_id` int DEFAULT NULL,
+  `pelicula_id` int DEFAULT NULL,
+  `puntuacion` tinyint DEFAULT NULL,
+  `comentario` text COLLATE utf8mb4_general_ci,
+  `fecha` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ;
 
 --
 -- Índices para tablas volcadas
@@ -393,43 +395,43 @@ ALTER TABLE `valoraciones`
 -- AUTO_INCREMENT de la tabla `actores`
 --
 ALTER TABLE `actores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `directores`
 --
 ALTER TABLE `directores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `generos`
 --
 ALTER TABLE `generos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `peliculas`
 --
 ALTER TABLE `peliculas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `plataformas`
 --
 ALTER TABLE `plataformas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `valoraciones`
 --
 ALTER TABLE `valoraciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas

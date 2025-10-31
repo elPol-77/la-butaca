@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <?php include 'head.php'; ?>
 
     <!-- Normal Breadcrumb Begin -->
-    <section class="normal-breadcrumb set-bg" data-setbg="anime-main/img/normal-breadcrumb.jpg">
+    <section class="normal-breadcrumb set-bg" data-setbg="imagenes/header.png">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">

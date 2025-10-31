@@ -208,6 +208,9 @@ $peliculasMasVistas = $peliculaObj->getPopulares(5);
                     <div class="product__sidebar">
                         <div class="product__sidebar__view">
                             <div class="section-title">
+                                <h5>Géneros</h5>
+                            </div>
+                            <div class="section-title">
                                 <h5>Más Vistas</h5>
                             </div>
                             <ul class="filter__controls">
@@ -227,7 +230,7 @@ $peliculasMasVistas = $peliculaObj->getPopulares(5);
                                     <div class="product__sidebar__view__item set-bg mix <?= $filters[$index] ?>" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($vista['imagen']) ?>">
                                         <div class="ep"><?= htmlspecialchars($vista['duracion'] ?? '0') ?> min</div>
                                         <div class="view"><i class="fa fa-eye"></i> <?= rand(5000, 15000) ?></div>
-                                        <h5><?= htmlspecialchars($vista['titulo']) ?></h5>
+                                        <h5 style="color: white ; font-weight: bold;"><?= htmlspecialchars($vista['titulo']) ?></h5>
                                     </div>
                                 </a>
                                 <?php 

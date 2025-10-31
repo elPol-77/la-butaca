@@ -27,11 +27,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Login MovieDB">
+    <meta name="description" content="Login La Butaca">
     <meta name="keywords" content="Login, películas, streaming">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login - MovieDB</title>
+    <title>Login - La Butaca</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -59,13 +59,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
     <!-- Normal Breadcrumb Begin -->
-    <section class="normal-breadcrumb set-bg" data-setbg="anime-main/img/normal-breadcrumb.jpg">
+    <section class="normal-breadcrumb set-bg" data-setbg="imagenes/header.png">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="normal__breadcrumb__text">
                         <h2>Iniciar Sesión</h2>
-                        <p>Bienvenido a MovieDB - Tu plataforma de películas favorita</p>
+                        <p>Bienvenido a La Butaca - Tu plataforma de películas favorita</p>
                     </div>
                 </div>
             </div>

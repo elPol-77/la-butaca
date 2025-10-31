@@ -160,8 +160,7 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(6);
                             </div>
                             <div class="anime__details__btn">
                                 <a href="#" class="follow-btn"><i class="fa fa-heart-o"></i> Agregar a Favoritos</a>
-                                <a href="#" class="watch-btn"><span>Ver Ahora</span> <i class="fa fa-angle-right"></i></a>
-                            </div>
+                                <a href="<?php echo $pelicula['LINK']; ?>" target="_blank" class="watch-btn"><span>Ver Ahora</span> <i class="fa fa-angle-right"></i></a>                            </div>
                         </div>
                     </div>
                 </div>
@@ -223,7 +222,7 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(6);
                             <div class="product__sidebar__view__item set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($relacionada['imagen']) ?>">
                                 <div class="ep"><?= htmlspecialchars($relacionada['duracion'] ?? '0') ?> min</div>
                                 <div class="view"><i class="fa fa-eye"></i> <?= rand(3000, 12000) ?></div>
-                                <h5><?= htmlspecialchars($relacionada['titulo']) ?></h5>
+                                <h5 style="color: white ; font-weight: bold;"><?= htmlspecialchars($relacionada['titulo']) ?></h5>
                             </div>
                         </a>
                         <?php endforeach; ?>
