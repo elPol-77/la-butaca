@@ -170,6 +170,26 @@ public function getNombresGenerosByPelicula($pelicula_id) {
     $db->closeConnection($conn);
     return $nombres;
 }
+public function getPeliculasPorGenero($nombreGenero) {
+    $db = new Connection();
+    $conn = $db->getConnection();
+    
+    $sql = "SELECT DISTINCT p.* 
+            FROM peliculas p
+            INNER JOIN pelicula_genero pg ON p.id = pg.pelicula_id
+            INNER JOIN generos g ON pg.genero_id = g.id
+            WHERE g.nombre = ?
+            ORDER BY p.titulo ASC";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $nombreGenero);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $db->closeConnection($conn);
+    
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
 
 
 }
