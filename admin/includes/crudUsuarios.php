@@ -60,6 +60,23 @@ class Usuarios {
         $db->closeConnection($conn);
     }
 
+    public function verificarPassword($id, $password) {
+        $db = new Connection();
+        $conn = $db->getConnection();
+        $sql = "SELECT password FROM usuarios WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $usuario = $result->fetch_assoc();
+        $db->closeConnection($conn);
+        
+        if ($usuario && password_verify($password, $usuario['password'])) {
+            return true;
+        }
+        return false;
+    }
+
     public function eliminarUsuario($id) {
         $db = new Connection();
         $conn = $db->getConnection();

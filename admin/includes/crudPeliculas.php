@@ -190,6 +190,38 @@ public function getPeliculasPorGenero($nombreGenero) {
     return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 }
 
+/**
+ * Obtener películas del mismo género (excluyendo la película actual)
+ */
+public function getPeliculasMismoGenero($pelicula_id, $limite = 3) {
+    $db = new Connection();
+    $conn = $db->getConnection();
+    
+    $sql = "SELECT DISTINCT p.* 
+            FROM peliculas p
+            INNER JOIN pelicula_genero pg ON p.id = pg.pelicula_id
+            WHERE pg.genero_id IN (
+                SELECT genero_id 
+                FROM pelicula_genero 
+                WHERE pelicula_id = ?
+            )
+            AND p.id != ?
+            ORDER BY RAND()
+            LIMIT ?";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iii", $pelicula_id, $pelicula_id, $limite);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $peliculas = [];
+    while ($row = $result->fetch_assoc()) {
+        $peliculas[] = $row;
+    }
+    $stmt->close();
+    $db->closeConnection($conn);
+    
+    return $peliculas;
+}
 
 
 }

@@ -1,3 +1,9 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <!-- Header Section Begin -->
 <header class="header">
     <div class="container">
@@ -29,10 +35,10 @@
             <div class="col-lg-2">
                 <div class="header__right">
                     <a href="#" class="search-switch"><span class="icon_search"></span></a>
-                    <?php if(isset($_SESSION['usuario_id'])): ?>
-                    <a href="./perfil.php"><span class="icon_profile"></span></a>
+                    <?php if(isset($_SESSION['id'])): ?>
+                        <a href="./perfil.php"><span class="icon_profile"></span></a>
                     <?php else: ?>
-                    <a href="./login.php"><span class="icon_profile"></span></a>
+                        <a href="./login.php"><span class="icon_profile"></span></a>
                     <?php endif; ?>
                 </div>
             </div>

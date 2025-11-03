@@ -2,6 +2,7 @@
 session_start();
 require_once 'admin/includes/database.php';
 require_once 'admin/includes/crudPeliculas.php';
+require_once 'admin/includes/crudResenas.php';
 
 // Verificar que se recibió el ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -11,8 +12,9 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id = (int)$_GET['id'];
 
-// Instanciar la clase Peliculas
+// Instanciar las clases
 $peliculaObj = new Peliculas();
+$resenaObj = new Resenas();
 
 // Obtener datos de la película usando el CRUD
 $pelicula = $peliculaObj->getPeliculaById($id);
@@ -46,8 +48,68 @@ if ($stmt_actores) {
 $pelicula['actores'] = !empty($actores) ? implode(', ', $actores) : 'Desconocidos';
 $db->closeConnection($conn);
 
-// Obtener películas relacionadas usando el CRUD
-$peliculasRelacionadas = $peliculaObj->getPopulares(3);
+// NUEVO: Procesar envío de reseña usando CRUD
+$mensaje_exito = '';
+$mensaje_error = '';
+
+// CAMBIO AQUÍ: Usar $_SESSION['id'] en lugar de $_SESSION['usuario_id']
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_resena']) && isset($_SESSION['id'])) {
+    $usuario_id = (int)$_SESSION['id']; // CAMBIO: de 'usuario_id' a 'id'
+    $pelicula_id = $id;
+    $puntuacion_estrellas = (int)$_POST['puntuacion_estrellas'];
+    $puntuacion_imdb = (int)$_POST['puntuacion_imdb'];
+    $comentario = trim($_POST['comentario']);
+    
+    // Validación
+    if ($puntuacion_estrellas >= 1 && $puntuacion_estrellas <= 5 && 
+        $puntuacion_imdb >= 0 && $puntuacion_imdb <= 100) {
+        
+        // Verificar si ya existe una reseña usando CRUD
+        if ($resenaObj->usuarioYaReseño($usuario_id, $pelicula_id)) {
+            // Actualizar reseña existente
+            if ($resenaObj->updateResena($usuario_id, $pelicula_id, $puntuacion_estrellas, $puntuacion_imdb, $comentario)) {
+                $mensaje_exito = "Tu reseña ha sido actualizada correctamente.";
+            } else {
+                $mensaje_error = "Error al actualizar la reseña.";
+            }
+        } else {
+            // Insertar nueva reseña
+            if ($resenaObj->insertResena($usuario_id, $pelicula_id, $puntuacion_estrellas, $puntuacion_imdb, $comentario)) {
+                $mensaje_exito = "Tu reseña ha sido publicada correctamente.";
+            } else {
+                $mensaje_error = "Error al publicar la reseña.";
+            }
+        }
+    } else {
+        $mensaje_error = "Valores inválidos. Por favor, verifica los datos.";
+    }
+}
+
+// NUEVO: Obtener datos de reseñas usando CRUD
+$resena_usuario = null;
+// CAMBIO AQUÍ: Usar $_SESSION['id']
+if (isset($_SESSION['id'])) {
+    $resena_usuario = $resenaObj->getResenaUsuarioPelicula($_SESSION['id'], $id);
+}
+
+$todas_resenas = $resenaObj->getResenasPorPelicula($id);
+$estadisticas = $resenaObj->getEstadisticasPelicula($id);
+
+// Obtener películas relacionadas del mismo género
+$peliculasRelacionadas = $peliculaObj->getPeliculasMismoGenero($id, 3);
+
+// Si no hay películas del mismo género, usar populares como fallback
+if (empty($peliculasRelacionadas)) {
+    $peliculasRelacionadas = $peliculaObj->getPopulares(3);
+}
+
+// Función auxiliar para obtener clase de color según puntuación
+function getColorClase($puntuacion) {
+    if ($puntuacion === null) return 'sin-valoracion';
+    if ($puntuacion < 45) return 'valoracion-roja';
+    if ($puntuacion < 70) return 'valoracion-amarilla';
+    return 'valoracion-verde';
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -77,6 +139,40 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(3);
 
     <!-- Estilos personalizados -->
     <style>
+    /* ESTILOS PARA VALORACIÓN - BADGE SIDEBAR */
+    .valoracion-badge-sidebar {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 14px;
+        border: 2px solid;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 3;
+    }
+
+    .valoracion-badge-sidebar.valoracion-roja {
+        color: #ff4444;
+        border-color: #ff4444;
+    }
+
+    .valoracion-badge-sidebar.valoracion-amarilla {
+        color: #ffcc00;
+        border-color: #ffcc00;
+    }
+
+    .valoracion-badge-sidebar.valoracion-verde {
+        color: #00ff00;
+        border-color: #00ff00;
+    }
+
+    .valoracion-badge-sidebar.sin-valoracion {
+        color: #999;
+        border-color: #999;
+    }
+
     /* Contenedor de imágenes en "También te puede gustar" y "Más Vistas" */
     .product__sidebar__view__item {
         cursor: pointer;
@@ -128,20 +224,12 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(3);
         line-height: 1.3;
     }
 
-    /* Duración y vistas en la parte superior */
-    .product__sidebar__view__item .ep,
-    .product__sidebar__view__item .view {
+    /* Duración en la parte superior izquierda */
+    .product__sidebar__view__item .ep {
         position: absolute;
         top: 10px;
-        z-index: 2;
-    }
-
-    .product__sidebar__view__item .ep {
         left: 10px;
-    }
-
-    .product__sidebar__view__item .view {
-        right: 10px;
+        z-index: 2;
     }
 
     /* Espaciado para la sección "También te puede gustar" */
@@ -152,8 +240,91 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(3);
     .anime__details__sidebar .section-title {
         margin-bottom: 20px;
     }
-    </style>
 
+    /* Estilos para el sistema de reseñas */
+    .rating-stars {
+        font-size: 2rem;
+        cursor: pointer;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+
+    .rating-stars .star {
+        color: #ddd;
+        transition: color 0.2s;
+        cursor: pointer;
+    }
+
+    .rating-stars .star.active,
+    .rating-stars .star:hover,
+    .rating-stars .star:hover~.star {
+        color: #ffc107;
+    }
+
+    .score-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        display: inline-block;
+        margin: 10px 5px;
+    }
+
+    .user-review-form {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        border: 2px solid #e9ecef;
+    }
+
+    .review-item {
+        background: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #e50914;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .review-user {
+        font-weight: bold;
+        color: #e50914;
+        font-size: 1.1rem;
+    }
+
+    .review-date {
+        color: #999;
+        font-size: 0.9rem;
+    }
+
+    .review-rating {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 10px;
+    }
+
+    .stars-display {
+        color: #ffc107;
+    }
+
+    .alert-custom {
+        border-radius: 8px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+    }
     </style>
 </head>
 
@@ -189,8 +360,16 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(3);
                     <div class="col-lg-3">
                         <div class="anime__details__pic set-bg"
                             data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
-                            <div class="comment"><i class="fa fa-comments"></i> <?= rand(10, 100) ?></div>
-                            <div class="view"><i class="fa fa-eye"></i> <?= rand(5000, 25000) ?></div>
+                            <div class="comment"><i class="fa fa-comments"></i> <?= $estadisticas['total_resenas'] ?? 0 ?></div>
+                            
+                            <!-- VALORACIÓN EN PORTADA PRINCIPAL -->
+                            <?php 
+                            $valoracionPortada = $estadisticas['promedio_imdb'] ? round($estadisticas['promedio_imdb']) : null;
+                            $colorClasePortada = getColorClase($valoracionPortada);
+                            ?>
+                            <div class="valoracion-badge-sidebar <?= $colorClasePortada ?>">
+                                <?= $valoracionPortada !== null ? $valoracionPortada : 'N/A' ?>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -202,9 +381,16 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(3);
                             <div class="anime__details__rating">
                                 <div class="rating">
                                     <?php 
-                                    // Convertir calificación IMDb (0-10) a estrellas (0-5)
-                                    $calificacion = isset($pelicula['calificacion']) ? floatval($pelicula['calificacion']) : 0;
-                                    $estrellas = ($calificacion / 10) * 5;
+                                    // Usar el promedio de usuarios si existe, sino usar la calificación original
+                                    $calificacion_mostrar = ($estadisticas['total_resenas'] > 0) 
+                                        ? ($estadisticas['promedio_imdb'] / 10) 
+                                        : (isset($pelicula['calificacion']) ? floatval($pelicula['calificacion']) : 0);
+                                    
+                                    $estrellas = $calificacion_mostrar * 5;
+                                    if ($estadisticas['total_resenas'] > 0) {
+                                        $estrellas = floatval($estadisticas['promedio_estrellas']);
+                                    }
+                                    
                                     $estrellasCompletas = floor($estrellas);
                                     $mediaEstrella = ($estrellas - $estrellasCompletas) >= 0.5;
                                     
@@ -220,7 +406,14 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(3);
                                     <a href="#"><i class="fa fa-star-o"></i></a>
                                     <?php endfor; ?>
                                 </div>
-                                <span><?= number_format($calificacion, 1) ?> Puntuación</span>
+                                <span>
+                                    <?php if ($estadisticas['total_resenas'] > 0): ?>
+                                        <?= number_format($estadisticas['promedio_imdb'], 1) ?>/100
+                                        (<?= $estadisticas['total_resenas'] ?> reseña<?= $estadisticas['total_resenas'] != 1 ? 's' : '' ?>)
+                                    <?php else: ?>
+                                        <?= number_format($calificacion_mostrar * 10, 1) ?>/100
+                                    <?php endif; ?>
+                                </span>
                             </div>
                             <p><?= htmlspecialchars($pelicula['descripcion'] ?? 'Sin descripción disponible.') ?></p>
                             <div class="anime__details__widget">
@@ -232,7 +425,12 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(3);
                                             </li>
                                             <li><span>Duración:</span>
                                                 <?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</li>
-                                            <li><span>Calificación:</span> <?= number_format($calificacion, 1) ?> / 10
+                                            <li><span>Calificación:</span>
+                                                <?php if ($estadisticas['total_resenas'] > 0): ?>
+                                                    <?= number_format($estadisticas['promedio_imdb'], 1) ?>/100
+                                                <?php else: ?>
+                                                    <?= number_format($calificacion_mostrar * 10, 1) ?>/100
+                                                <?php endif; ?>
                                             </li>
                                         </ul>
                                     </div>
@@ -258,69 +456,160 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(3);
                 <div class="col-lg-8 col-md-8">
                     <div class="anime__details__review">
                         <div class="section-title">
-                            <h5>Reseñas</h5>
+                            <h5>Reseñas (<?= count($todas_resenas) ?>)</h5>
                         </div>
 
-                        <?php if(isset($_SESSION['usuario_id'])): ?>
-                        <!-- Formulario para agregar reseña -->
-                        <div class="anime__review__item">
-                            <div class="anime__review__item__text">
-                                <h6>Agregar tu reseña</h6>
-                                <form action="agregar_resena.php" method="POST">
-                                    <input type="hidden" name="pelicula_id" value="<?= $pelicula['id'] ?>">
-                                    <textarea name="comentario" placeholder="Escribe tu comentario..." rows="4"
-                                        class="form-control mb-3" required></textarea>
-                                    <button type="submit" class="site-btn">Publicar Reseña</button>
-                                </form>
-                            </div>
-                        </div>
-                        <?php else: ?>
-                        <div class="alert alert-info">
-                            <a href="login.php">Inicia sesión</a> para dejar tu reseña.
+                        <!-- Mensajes de éxito/error -->
+                        <?php if ($mensaje_exito): ?>
+                        <div class="alert alert-success alert-custom alert-dismissible fade show" role="alert">
+                            <i class="fa fa-check-circle"></i> <?= $mensaje_exito ?>
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
                         </div>
                         <?php endif; ?>
 
-                        <!-- Ejemplo de reseñas -->
-                        <div class="anime__review__item">
-                            <div class="anime__review__item__pic">
-                                <img src="anime-main/img/anime/review-1.jpg" alt="">
-                            </div>
-                            <div class="anime__review__item__text">
-                                <h6>Usuario123 - <span>Hace 1 hora</span></h6>
-                                <p>¡Excelente película! La trama es cautivadora y las actuaciones son impecables.
-                                    Totalmente recomendada.</p>
-                            </div>
+                        <?php if ($mensaje_error): ?>
+                        <div class="alert alert-danger alert-custom alert-dismissible fade show" role="alert">
+                            <i class="fa fa-exclamation-triangle"></i> <?= $mensaje_error ?>
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
                         </div>
-                        <div class="anime__review__item">
-                            <div class="anime__review__item__pic">
-                                <img src="anime-main/img/anime/review-2.jpg" alt="">
-                            </div>
-                            <div class="anime__review__item__text">
-                                <h6>CineAmante - <span>Hace 5 horas</span></h6>
-                                <p>Una obra maestra del cine. La dirección y cinematografía son de primer nivel.</p>
-                            </div>
+                        <?php endif; ?>
+
+                        <!-- Formulario para agregar/editar reseña (solo usuarios logueados y con rol 'usuario') -->
+                        <?php if(isset($_SESSION['id']) && isset($_SESSION['rol']) && $_SESSION['rol'] === 'usuario'): ?>
+                        <div class="user-review-form">
+                            <h6 style="margin-bottom: 20px; font-size: 1.3rem;">
+                                <i class="fa fa-edit"></i> 
+                                <?= $resena_usuario ? 'Editar mi reseña' : 'Agregar mi reseña' ?>
+                            </h6>
+                            
+                            <form method="POST" id="formResena">
+                                <input type="hidden" name="enviar_resena" value="1">
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label style="font-weight: bold; margin-bottom: 10px;">
+                                            <i class="fa fa-star"></i> Calificación por estrellas (1-5)
+                                        </label>
+                                        <div class="rating-stars" id="ratingStars">
+                                            <span class="star" data-rating="5">★</span>
+                                            <span class="star" data-rating="4">★</span>
+                                            <span class="star" data-rating="3">★</span>
+                                            <span class="star" data-rating="2">★</span>
+                                            <span class="star" data-rating="1">★</span>
+                                        </div>
+                                        <input type="hidden" name="puntuacion_estrellas" id="puntuacionEstrellas" 
+                                               value="<?= $resena_usuario['puntuacion_estrellas'] ?? 0 ?>" required>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="puntuacionImdb" style="font-weight: bold; margin-bottom: 10px;">
+                                            <i class="fa fa-trophy"></i> Puntuación estilo IMDb (0-100)
+                                        </label>
+                                        <input type="number" class="form-control" id="puntuacionImdb" 
+                                               name="puntuacion_imdb" min="0" max="100" 
+                                               value="<?= $resena_usuario['puntuacion_imdb'] ?? '' ?>" 
+                                               placeholder="Ej: 85" required>
+                                        <small class="form-text text-muted">Ingresa un valor entre 0 y 100</small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="comentario" style="font-weight: bold; margin-bottom: 10px;">
+                                        <i class="fa fa-comment"></i> Tu opinión (opcional)
+                                    </label>
+                                    <textarea name="comentario" id="comentario" placeholder="Comparte tu opinión sobre esta película..." 
+                                              rows="5" class="form-control"><?= $resena_usuario['comentario'] ?? '' ?></textarea>
+                                </div>
+
+                                <button type="submit" class="site-btn">
+                                    <i class="fa fa-paper-plane"></i> 
+                                    <?= $resena_usuario ? 'Actualizar Reseña' : 'Publicar Reseña' ?>
+                                </button>
+                                
+                                <?php if ($resena_usuario): ?>
+                                <small class="text-muted ml-3">
+                                    Última actualización: <?= date('d/m/Y H:i', strtotime($resena_usuario['fecha_actualizacion'])) ?>
+                                </small>
+                                <?php endif; ?>
+                            </form>
                         </div>
+                        <?php elseif(!isset($_SESSION['id'])): ?>
+                        <div class="alert alert-info alert-custom">
+                            <i class="fa fa-info-circle"></i> 
+                            <a href="login.php" style="color: #0056b3; font-weight: bold;">Inicia sesión</a> para dejar tu reseña.
+                        </div>
+                        <?php endif; ?>
+
+                        <!-- Mostrar todas las reseñas -->
+                        <?php if (empty($todas_resenas)): ?>
+                        <div class="alert alert-info alert-custom">
+                            <i class="fa fa-info-circle"></i> 
+                            Aún no hay reseñas para esta película. ¡Sé el primero en dejar una!
+                        </div>
+                        <?php else: ?>
+                            <?php foreach($todas_resenas as $resena): ?>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div>
+                                        <div class="review-user">
+                                            <i class="fa fa-user-circle"></i> 
+                                            <?= htmlspecialchars($resena['usuario_nombre']) ?>
+                                        </div>
+                                        <div class="review-date">
+                                            <i class="fa fa-calendar"></i> 
+                                            <?= date('d/m/Y H:i', strtotime($resena['fecha_creacion'])) ?>
+                                        </div>
+                                    </div>
+                                    <div class="review-rating">
+                                        <div class="stars-display">
+                                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                                <i class="fa fa-star<?= $i <= $resena['puntuacion_estrellas'] ? '' : '-o' ?>"></i>
+                                            <?php endfor; ?>
+                                        </div>
+                                        <span class="score-badge"><?= $resena['puntuacion_imdb'] ?>/100</span>
+                                    </div>
+                                </div>
+                                
+                                <?php if (!empty($resena['comentario'])): ?>
+                                <p style="margin: 0; color: #555; line-height: 1.6;">
+                                    <?= nl2br(htmlspecialchars($resena['comentario'])) ?>
+                                </p>
+                                <?php endif; ?>
+                            </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
+                
                 <div class="col-lg-4 col-md-4">
                     <div class="anime__details__sidebar">
                         <div class="section-title">
                             <h5>También te puede gustar</h5>
                         </div>
-                        <?php foreach($peliculasRelacionadas as $relacionada): ?>
+                        <?php foreach($peliculasRelacionadas as $relacionada): 
+                            // Obtener valoración para películas relacionadas
+                            $estadisticasRelacionada = $resenaObj->getEstadisticasPelicula($relacionada['id']);
+                            $valoracionRelacionada = $estadisticasRelacionada['promedio_imdb'] ? round($estadisticasRelacionada['promedio_imdb']) : null;
+                            $colorClaseRelacionada = getColorClase($valoracionRelacionada);
+                        ?>
                         <a href="pelicula-detalle.php?id=<?= $relacionada['id'] ?>">
                             <div class="product__sidebar__view__item set-bg"
                                 data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($relacionada['imagen']) ?>">
                                 <div class="ep"><?= htmlspecialchars($relacionada['duracion'] ?? '0') ?> min</div>
-                                <div class="view"><i class="fa fa-eye"></i> <?= number_format(rand(3000, 12000)) ?>
+                                
+                                <!-- VALORACIÓN EN "TAMBIÉN TE PUEDE GUSTAR" -->
+                                <div class="valoracion-badge-sidebar <?= $colorClaseRelacionada ?>">
+                                    <?= $valoracionRelacionada !== null ? $valoracionRelacionada : 'N/A' ?>
                                 </div>
+                                
                                 <h5><?= htmlspecialchars($relacionada['titulo']) ?></h5>
                             </div>
                         </a>
                         <?php endforeach; ?>
                     </div>
                 </div>
-
+            </div>
+        </div>
     </section>
     <!-- Anime Section End -->
 
@@ -331,7 +620,7 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(3);
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form" action="buscar.php" method="GET">
-                <input type="text" name="q" id="search-input" placeholder="Buscar películas....." required>
+                <input type="text" name="q" id="search-input" placeholder="Buscar películas.....">
             </form>
         </div>
     </div>
@@ -347,6 +636,67 @@ $peliculasRelacionadas = $peliculaObj->getPopulares(3);
     <script src="anime-main/js/owl.carousel.min.js"></script>
     <script src="anime-main/js/main.js"></script>
 
+    <script>
+        const stars = document.querySelectorAll('.star');
+        const puntuacionEstrellas = document.getElementById('puntuacionEstrellas');
+        const puntuacionImdb = document.getElementById('puntuacionImdb');
+        
+        // Cargar rating existente
+        const currentRating = parseInt(puntuacionEstrellas.value) || 0;
+        if (currentRating > 0) {
+            updateStars(currentRating);
+        }
+        
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                puntuacionEstrellas.value = rating;
+                updateStars(rating);
+                
+                if (!puntuacionImdb.value) {
+                    puntuacionImdb.value = rating * 20;
+                }
+            });
+            
+            star.addEventListener('mouseenter', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                updateStars(rating);
+            });
+        });
+        
+        document.querySelector('.rating-stars').addEventListener('mouseleave', function() {
+            const currentRating = parseInt(puntuacionEstrellas.value) || 0;
+            updateStars(currentRating);
+        });
+        
+        function updateStars(rating) {
+            stars.forEach(star => {
+                const starRating = parseInt(star.getAttribute('data-rating'));
+                if (starRating <= rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+        
+        document.getElementById('formResena').addEventListener('submit', function(e) {
+            const rating = parseInt(puntuacionEstrellas.value);
+            const score = parseInt(puntuacionImdb.value);
+            
+            if (rating < 1 || rating > 5) {
+                e.preventDefault();
+                alert('Por favor, selecciona una calificación de 1 a 5 estrellas.');
+                return false;
+            }
+            
+            if (score < 0 || score > 100 || isNaN(score)) {
+                e.preventDefault();
+                alert('La puntuación debe estar entre 0 y 100.');
+                return false;
+            }
+        });
+    </script>
 </body>
 
 </html>

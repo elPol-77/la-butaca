@@ -2,9 +2,19 @@
 session_start();
 include 'admin/includes/database.php'; 
 require_once 'admin/includes/crudPeliculas.php'; 
+require_once 'admin/includes/crudResenas.php';
 
 $peliculaObj = new Peliculas();
+$resenasObj = new Resenas();
 $peliculasPopulares = $peliculaObj->getPopulares(8);
+
+// Función auxiliar para obtener clase de color según puntuación
+function getColorClase($puntuacion) {
+    if ($puntuacion === null) return 'sin-valoracion';
+    if ($puntuacion < 45) return 'valoracion-roja';
+    if ($puntuacion < 70) return 'valoracion-amarilla';
+    return 'valoracion-verde';
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -30,7 +40,7 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
     <link rel="stylesheet" href="anime-main/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/style.css" type="text/css">
     
-    <!-- Estilos personalizados para hacer las imágenes clickeables -->
+    <!-- Estilos personalizados -->
     <style>
         .product__item__pic {
             cursor: pointer;
@@ -54,7 +64,78 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
         .product__item__pic > div {
             position: relative;
             z-index: 2;
-            pointer-events: none;
+        }
+        
+        /* ESTILOS PARA VALORACIÓN - GRID PRINCIPAL */
+        .valoracion-badge {
+            position: absolute !important;
+            bottom: 10px !important;
+            right: 10px !important;
+            width: 50px !important;
+            height: 50px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: bold !important;
+            font-size: 18px !important;
+            border-radius: 6px !important;
+            z-index: 999 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+            pointer-events: none !important;
+        }
+
+        .valoracion-roja {
+            background-color: #e74c3c !important;
+            color: white !important;
+        }
+
+        .valoracion-amarilla {
+            background-color: #f39c12 !important;
+            color: white !important;
+        }
+
+        .valoracion-verde {
+            background-color: #27ae60 !important;
+            color: white !important;
+        }
+
+        .sin-valoracion {
+            background-color: #95a5a6 !important;
+            color: white !important;
+        }
+
+        /* ESTILOS PARA VALORACIÓN - SIDEBAR */
+        .product__sidebar__view__item .valoracion-badge-sidebar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+            border: 2px solid;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3;
+        }
+
+        .product__sidebar__view__item .valoracion-badge-sidebar.valoracion-roja {
+            color: #ff4444;
+            border-color: #ff4444;
+        }
+
+        .product__sidebar__view__item .valoracion-badge-sidebar.valoracion-amarilla {
+            color: #ffcc00;
+            border-color: #ffcc00;
+        }
+
+        .product__sidebar__view__item .valoracion-badge-sidebar.valoracion-verde {
+            color: #00ff00;
+            border-color: #00ff00;
+        }
+
+        .product__sidebar__view__item .valoracion-badge-sidebar.sin-valoracion {
+            color: #999;
+            border-color: #999;
         }
         
         .product__sidebar__view__item {
@@ -77,10 +158,7 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
     <div id="preloder">
         <div class="loader"></div>
     </div>
-<?php
-  include 'head.php'; 
-?>
-
+<?php include 'head.php'; ?>
 
     <!-- Hero Section Begin -->
     <section class="hero">
@@ -114,7 +192,7 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
                     <div class="trending__product">
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-8">
-                                <div class="section__title">
+                                <div class="section-title">
                                     <h4>Películas Populares</h4>
                                 </div>
                             </div>
@@ -125,14 +203,22 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
                             </div>
                         </div>
                         <div class="row">
-                            <?php foreach(array_slice($peliculasPopulares, 0, 6) as $pelicula): ?>
+                            <?php foreach(array_slice($peliculasPopulares, 0, 6) as $pelicula): 
+                                $estadisticas = $resenasObj->getEstadisticasPelicula($pelicula['id']);
+                                $valoracion = $estadisticas['promedio_imdb'] ? round($estadisticas['promedio_imdb']) : null;
+                                $colorClase = getColorClase($valoracion);
+                            ?>
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
                                     <div class="product__item__pic set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
                                         <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>" class="imagen-enlace"></a>
                                         <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
                                         <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> <?= rand(1000, 9999) ?></div>
+                                        
+                                        <!-- VALORACIÓN -->
+                                        <div class="valoracion-badge <?= $colorClase ?>">
+                                            <?= $valoracion !== null ? $valoracion : 'N/A' ?>
+                                        </div>
                                     </div>
                                     <div class="product__item__text">
                                         <ul>
@@ -150,7 +236,7 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
                     <div class="recent__product">
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-8">
-                                <div class="section__title">
+                                <div class="section-title">
                                     <h4>Agregadas Recientemente</h4>
                                 </div>
                             </div>
@@ -164,6 +250,9 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
                             <?php 
                             $peliculasRecientes = array_slice($peliculasPopulares, 0, 6);
                             foreach($peliculasRecientes as $pelicula): 
+                                $estadisticas = $resenasObj->getEstadisticasPelicula($pelicula['id']);
+                                $valoracion = $estadisticas['promedio_imdb'] ? round($estadisticas['promedio_imdb']) : null;
+                                $colorClase = getColorClase($valoracion);
                             ?>
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
@@ -171,7 +260,11 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
                                         <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>" class="imagen-enlace"></a>
                                         <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
                                         <div class="comment"><i class="fa fa-comments"></i> <?= rand(5, 50) ?></div>
-                                        <div class="view"><i class="fa fa-eye"></i> <?= rand(1000, 9999) ?></div>
+                                        
+                                        <!-- VALORACIÓN -->
+                                        <div class="valoracion-badge <?= $colorClase ?>">
+                                            <?= $valoracion !== null ? $valoracion : 'N/A' ?>
+                                        </div>
                                     </div>
                                     <div class="product__item__text">
                                         <ul>
@@ -191,24 +284,24 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
                 <div class="col-lg-4 col-md-6 col-sm-8">
                     <div class="product__sidebar">
                         <div class="product__sidebar__view">
-                            <div class="section__title">
-                                <h5>Más Vistas</h5>
+                            <div class="section-title">
+                                <h5>Recomendaciones</h5>
                             </div>
-                            <ul class="filter__controls">
-                                <li class="active" data-filter="*">Día</li>
-                                <li data-filter=".week">Semana</li>
-                                <li data-filter=".month">Mes</li>
-                                <li data-filter=".years">Año</li>
-                            </ul>
                             <div class="filter__gallery">
                                 <?php foreach(array_slice($peliculasPopulares, 0, 5) as $index => $pelicula): 
-                                    $filters = ['day', 'week', 'month', 'years'];
-                                    $filter = $filters[$index % 4];
+                                    $estadisticasVista = $resenasObj->getEstadisticasPelicula($pelicula['id']);
+                                    $valoracionVista = $estadisticasVista['promedio_imdb'] ? round($estadisticasVista['promedio_imdb']) : null;
+                                    $colorClaseVista = getColorClase($valoracionVista);
                                 ?>
                                 <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>">
                                     <div class="product__sidebar__view__item set-bg mix <?= $filter ?>" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
                                         <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
-                                        <div class="view"><i class="fa fa-eye"></i> <?= rand(5000, 15000) ?></div>
+                                        
+                                        <!-- VALORACIÓN EN SIDEBAR -->
+                                        <div class="valoracion-badge-sidebar <?= $colorClaseVista ?>">
+                                            <?= $valoracionVista !== null ? $valoracionVista : 'N/A' ?>
+                                        </div>
+                                        
                                         <h5 style="color: #fff; font-weight: bold;"><?= htmlspecialchars($pelicula['titulo']) ?></h5>
                                     </div>
                                 </a>
@@ -216,28 +309,7 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
                             </div>
                         </div>
                         
-                        <div class="product__sidebar__comment">
-                            <div class="section__title">
-                                <h5>Nuevos Comentarios</h5>
-                            </div>
-                            <?php foreach(array_slice($peliculasPopulares, 0, 4) as $pelicula): ?>
-                            <div class="product__sidebar__comment__item">
-                                <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>">
-                                    <div class="product__sidebar__comment__item__pic">
-                                        <img src="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>" alt="" style="width: 50px; height: 70px; object-fit: cover;">
-                                    </div>
-                                </a>
-                                <div class="product__sidebar__comment__item__text">
-                                    <ul>
-                                        <li>Activa</li>
-                                        <li>Película</li>
-                                    </ul>
-                                    <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
-                                    <span><i class="fa fa-eye"></i> <?= rand(10000, 30000) ?> Vistas</span>
-                                </div>
-                            </div>
-                            <?php endforeach; ?>
-                        </div>
+                       
                     </div>
                 </div>
             </div>
@@ -245,16 +317,14 @@ $peliculasPopulares = $peliculaObj->getPopulares(8);
     </section>
     <!-- Product Section End -->
 
-<?php
-  include 'footer.php'; 
-?>
+<?php include 'footer.php'; ?>
 
     <!-- Search model Begin -->
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form" action="buscar.php" method="GET">
-                <input type="text" name="q" id="search-input" placeholder="Buscar películas....." required>
+                <input type="text" name="q" id="search-input" placeholder="Buscar películas.....">
             </form>
         </div>
     </div>
