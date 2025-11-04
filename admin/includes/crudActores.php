@@ -57,5 +57,29 @@ class Actores {
         $db->closeConnection($conn);
         return $exito;
     }
+
+    public function getActorByNombre($nombre) {
+        $db = new Connection();
+        $conn = $db->getConnection();
+        $sql = "SELECT * FROM actores WHERE nombre = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $nombre);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $actor = $result->fetch_assoc();
+        $db->closeConnection($conn);
+        return $actor;
+    }
+    public function showActores()
+{
+    $db = new Connection();
+    $conn = $db->getConnection();
+    $sql = "SELECT id, nombre FROM actores ORDER BY nombre ASC";
+    $result = $conn->query($sql);
+    $db->closeConnection($conn);
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 }
+
+}
+
 ?>

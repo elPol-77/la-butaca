@@ -28,25 +28,35 @@ if (!$pelicula) {
 $generosArray = $peliculaObj->getNombresGenerosByPelicula($id);
 $pelicula['generos'] = !empty($generosArray) ? implode(', ', $generosArray) : 'Sin género';
 
-// Obtener actores relacionados
-$db = new Connection();
-$conn = $db->getConnection();
+// Obtener actores relacionados CON IDs usando el CRUD
+$actoresIds = $peliculaObj->getActoresByPelicula($id);
 $actores = [];
-$stmt_actores = $conn->prepare("SELECT a.nombre 
-                                 FROM actores a 
-                                 INNER JOIN pelicula_actor pa ON a.id = pa.actor_id 
-                                 WHERE pa.pelicula_id = ?");
-if ($stmt_actores) {
-    $stmt_actores->bind_param("i", $id);
-    $stmt_actores->execute();
-    $result_actores = $stmt_actores->get_result();
-    while ($row = $result_actores->fetch_assoc()) {
-        $actores[] = $row['nombre'];
+
+if (!empty($actoresIds)) {
+    $db = new Connection();
+    $conn = $db->getConnection();
+    $placeholders = implode(',', array_fill(0, count($actoresIds), '?'));
+    $sql = "SELECT id, nombre FROM actores WHERE id IN ($placeholders)";
+    $stmt = $conn->prepare($sql);
+    
+    // Bind dinámico para múltiples parámetros
+    $types = str_repeat('i', count($actoresIds));
+    $stmt->bind_param($types, ...$actoresIds);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    while ($row = $result->fetch_assoc()) {
+        $actores[] = $row;
     }
-    $stmt_actores->close();
+    $stmt->close();
+    $db->closeConnection($conn);
 }
-$pelicula['actores'] = !empty($actores) ? implode(', ', $actores) : 'Desconocidos';
-$db->closeConnection($conn);
+
+// Obtener director con ID (ya viene en getPeliculaById)
+$director = [
+    'id' => $pelicula['director_id'] ?? null,
+    'nombre' => $pelicula['director'] ?? 'Desconocido'
+];
 
 // NUEVO: Procesar envío de reseña usando CRUD
 $mensaje_exito = '';
@@ -325,6 +335,20 @@ function getColorClase($puntuacion) {
         padding: 15px 20px;
         margin-bottom: 20px;
     }
+
+    /* Enlaces de actores y directores */
+    .link-detalle {
+        color: #e50914;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid transparent;
+    }
+
+    .link-detalle:hover {
+        color: #ff0a16;
+        border-bottom: 1px solid #e50914;
+    }
     </style>
 </head>
 
@@ -436,9 +460,30 @@ function getColorClase($puntuacion) {
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <ul>
-                                            <li><span>Director:</span>
-                                                <?= htmlspecialchars($pelicula['director'] ?? 'Desconocido') ?></li>
-                                            <li><span>Actores:</span> <?= htmlspecialchars($pelicula['actores']) ?></li>
+                                            <li>
+                                                <span>Director:</span>
+                                                <?php if ($director['id']): ?>
+                                                    <a href="director-detalle.php?id=<?= $director['id'] ?>" 
+                                                       class="link-detalle">
+                                                        <?= htmlspecialchars($director['nombre']) ?>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <?= htmlspecialchars($director['nombre']) ?>
+                                                <?php endif; ?>
+                                            </li>
+                                            <li>
+                                                <span>Actores:</span>
+                                                <?php if (!empty($actores)): ?>
+                                                    <?php foreach ($actores as $index => $actor): ?>
+                                                        <a href="actor-detalle.php?id=<?= $actor['id'] ?>" 
+                                                           class="link-detalle">
+                                                            <?= htmlspecialchars($actor['nombre']) ?>
+                                                        </a><?= $index < count($actores) - 1 ? ', ' : '' ?>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    Desconocidos
+                                                <?php endif; ?>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>

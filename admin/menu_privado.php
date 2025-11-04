@@ -1,53 +1,55 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-<style>
-.navbar-light .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='red' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
 }
-</style>
+$logueado = isset($_SESSION['usuario']) && isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador';
+$usuario = $_SESSION['usuario'] ?? 'Admin';
+?>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-black shadow-sm mb-4">
+<!-- Header Section Begin -->
+<header class="header">
     <div class="container">
-        <a class="navbar-brand fw-bold text-danger d-flex align-items-center" href="index.php">
-            <img src="../logobutaca.png" height="80px">
-        </a>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="header__logo">
+                    <a href="./index.php">
+                        <img src="../logobutaca.png" alt="labutacalogo" width="50px">
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="header__nav">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li class="active"><a href="./index.php">Dashboard</a></li>
+                            <li><a href="#">Gestión <span class="arrow_carrot-down"></span></a>
+                                <ul class="dropdown">
+                                    <li><a href="./peliculas.php">Películas</a></li>
+                                    <li><a href="./actores.php">Actores</a></li>
+                                    <li><a href="./directores.php">Directores</a></li>
+                                    <li><a href="./generos.php">Géneros</a></li>
+                                    <li><a href="./usuarios.php">Usuarios</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="../index.php">Ver Sitio Público</a></li>
+                            <li><a href="./includes/logout.php">Cerrar Sesión</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContenido" aria-controls="navbarContenido" aria-expanded="false" aria-label="Menú">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-center" id="navbarContenido">
-            <ul class="navbar-nav gap-3">
-                <li class="nav-item">
-                    <a class="nav-link text-white fw-semibold" href="peliculas.php">
-                        <i class="bi bi-film"></i> Películas
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white fw-semibold" href="actores.php">
-                        <i class="bi bi-person"></i> Actores
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white fw-semibold" href="directores.php">
-                        <i class="bi bi-person-badge"></i> Directores
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white fw-semibold" href="generos.php">
-                        <i class="bi bi-tag"></i> Géneros
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white fw-semibold" href="usuarios.php">
-                        <i class="bi bi-people"></i> Usuarios
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-danger fw-bold" href="./includes/logout.php">
-                        <i class="bi bi-box-arrow-right"></i> Salir
-                    </a>
-                </li>
-            </ul>
+            <div class="col-lg-2">
+                <div class="header__right">
+                    <a href="#" class="search-switch"><span class="icon_search"></span></a>
+                    <?php if($logueado): ?>
+                        <a href="./includes/logout.php" title="Cerrar sesión"><span class="icon_profile"></span></a>
+                    <?php else: ?>
+                        <a href="../login.php"><span class="icon_profile"></span></a>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
+        <div id="mobile-menu-wrap"></div>
     </div>
-</nav>
+</header>
+<!-- Header End -->

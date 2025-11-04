@@ -20,11 +20,15 @@ if (session_status() === PHP_SESSION_NONE) {
                     <nav class="header__menu mobile-menu">
                         <ul>
                             <li class="active"><a href="./index.php">Home</a></li>
-                            <li><a href="#">Películas <span class="arrow_carrot-down"></span></a>
+                            <li><a href="./peliculas.php">Películas</a>
+                            <!-- <li><a href="#">Películas <span class="arrow_carrot-down"></span></a>
                                 <ul class="dropdown">
                                     <li><a href="./peliculas.php">Todas las Películas</a></li>
-                                </ul>
+                                </ul> -->
+
                             </li>
+                            <li><a href="./actores.php">Actores</a>
+                            <li><a href="./directores.php">Directores</span></a>
                             <li><a href="./about.php">About me</a></li>
                             <li><a href="./contacto.php">Contacto</a></li>
                         </ul>
@@ -35,7 +39,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="col-lg-2">
                 <div class="header__right">
                     <a href="#" class="search-switch"><span class="icon_search"></span></a>
-                    <?php if(isset($_SESSION['id'])): ?>
+                    <?php if (isset($_SESSION['id'])): ?>
                         <a href="./perfil.php"><span class="icon_profile"></span></a>
                     <?php else: ?>
                         <a href="./login.php"><span class="icon_profile"></span></a>
