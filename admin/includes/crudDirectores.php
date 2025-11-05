@@ -99,6 +99,7 @@ class Directores
         $db->closeConnection($conn);
         return $director;
     }
+
     public function getPeliculasDirector($director_id)
     {
         $db = new Connection();
@@ -114,6 +115,48 @@ class Directores
         $peliculas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         $db->closeConnection($conn);
         return $peliculas;
+    }
+
+    public function getDirectoresAlAzar($limite = 6)
+    {
+        $db = new Connection();
+        $conn = $db->getConnection();
+
+        $sql = "SELECT * FROM directores 
+                ORDER BY RAND() 
+                LIMIT ?";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $limite);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $directores = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+
+        $stmt->close();
+        $db->closeConnection($conn);
+
+        return $directores;
+    }
+    public function getDirectoresAlAzarExcluyendo($excluir_id, $limite = 5)
+    {
+        $db = new Connection();
+        $conn = $db->getConnection();
+
+        $sql = "SELECT * FROM directores 
+            WHERE id != ?
+            ORDER BY RAND() 
+            LIMIT ?";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $excluir_id, $limite);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $directores = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+
+        $stmt->close();
+        $db->closeConnection($conn);
+
+        return $directores;
     }
 
 }

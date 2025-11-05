@@ -5,6 +5,39 @@ if (session_status() == PHP_SESSION_NONE) {
 $logueado = isset($_SESSION['usuario']) && isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador';
 $usuario = $_SESSION['usuario'] ?? 'Admin';
 ?>
+<style>
+    .header__logo img {
+        max-height: 60px;
+        width: auto;
+    }
+    
+    
+    /* Hover con línea roja en el menú */
+    .header__menu ul li {
+        position: relative;
+    }
+    
+    .header__menu ul li a {
+        position: relative;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    
+    .header__menu ul li a::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #e50914;
+        transition: width 0.3s ease;
+    }
+    
+    .header__menu ul li a:hover::after {
+        width: 100%;
+    }
+</style>
 
 <!-- Header Section Begin -->
 <header class="header">
@@ -21,7 +54,7 @@ $usuario = $_SESSION['usuario'] ?? 'Admin';
                 <div class="header__nav">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="./index.php">Dashboard</a></li>
+                            <li ><a href="./index.php">Dashboard</a></li>
                             <li><a href="#">Gestión <span class="arrow_carrot-down"></span></a>
                                 <ul class="dropdown">
                                     <li><a href="./peliculas.php">Películas</a></li>
@@ -29,6 +62,7 @@ $usuario = $_SESSION['usuario'] ?? 'Admin';
                                     <li><a href="./directores.php">Directores</a></li>
                                     <li><a href="./generos.php">Géneros</a></li>
                                     <li><a href="./usuarios.php">Usuarios</a></li>
+                                    <li><a href="./plataformas.php">Plataformas</a></li>
                                 </ul>
                             </li>
                             <li><a href="../index.php">Ver Sitio Público</a></li>
@@ -40,7 +74,6 @@ $usuario = $_SESSION['usuario'] ?? 'Admin';
 
             <div class="col-lg-2">
                 <div class="header__right">
-                    <a href="#" class="search-switch"><span class="icon_search"></span></a>
                     <?php if($logueado): ?>
                         <a href="./includes/logout.php" title="Cerrar sesión"><span class="icon_profile"></span></a>
                     <?php else: ?>

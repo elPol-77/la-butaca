@@ -3,6 +3,39 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
+<style>
+    .header__logo img {
+        max-height: 60px;
+        width: auto;
+    }
+    
+    
+    /* Hover con línea roja en el menú */
+    .header__menu ul li {
+        position: relative;
+    }
+    
+    .header__menu ul li a {
+        position: relative;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    
+    .header__menu ul li a::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #e50914;
+        transition: width 0.3s ease;
+    }
+    
+    .header__menu ul li a:hover::after {
+        width: 100%;
+    }
+</style>
 
 <!-- Header Section Begin -->
 <header class="header">
@@ -19,16 +52,10 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div class="header__nav">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="./index.php">Home</a></li>
-                            <li><a href="./peliculas.php">Películas</a>
-                            <!-- <li><a href="#">Películas <span class="arrow_carrot-down"></span></a>
-                                <ul class="dropdown">
-                                    <li><a href="./peliculas.php">Todas las Películas</a></li>
-                                </ul> -->
-
-                            </li>
-                            <li><a href="./actores.php">Actores</a>
-                            <li><a href="./directores.php">Directores</span></a>
+                            <li><a href="./index.php">Home</a></li>
+                            <li><a href="./peliculas.php">Películas</a></li>
+                            <li><a href="./actores.php">Actores</a></li>
+                            <li><a href="./directores.php">Directores</a></li>
                             <li><a href="./about.php">About me</a></li>
                             <li><a href="./contacto.php">Contacto</a></li>
                         </ul>

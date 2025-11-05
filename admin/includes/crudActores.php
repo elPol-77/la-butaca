@@ -70,16 +70,56 @@ class Actores {
         $db->closeConnection($conn);
         return $actor;
     }
-    public function showActores()
-{
-    $db = new Connection();
-    $conn = $db->getConnection();
-    $sql = "SELECT id, nombre FROM actores ORDER BY nombre ASC";
-    $result = $conn->query($sql);
-    $db->closeConnection($conn);
-    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
-}
 
-}
+    public function showActores() {
+        $db = new Connection();
+        $conn = $db->getConnection();
+        $sql = "SELECT id, nombre FROM actores ORDER BY nombre ASC";
+        $result = $conn->query($sql);
+        $db->closeConnection($conn);
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+    }
 
+
+    public function getActoresAlAzar($limite = 6) {
+        $db = new Connection();
+        $conn = $db->getConnection();
+        
+        $sql = "SELECT * FROM actores 
+                ORDER BY RAND() 
+                LIMIT ?";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $limite);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $actores = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        
+        $stmt->close();
+        $db->closeConnection($conn);
+        
+        return $actores;
+    }
+
+    public function getActoresAlAzarExcluyendo($excluir_id, $limite = 5) {
+        $db = new Connection();
+        $conn = $db->getConnection();
+        
+        $sql = "SELECT * FROM actores 
+                WHERE id != ?
+                ORDER BY RAND() 
+                LIMIT ?";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $excluir_id, $limite);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $actores = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        
+        $stmt->close();
+        $db->closeConnection($conn);
+        
+        return $actores;
+    }
+}
 ?>

@@ -68,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Perfil - La Butaca">
@@ -78,7 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="anime-main/css/bootstrap.min.css" type="text/css">
@@ -97,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
         <div class="loader"></div>
     </div>
 
-<?php include 'head.php'; ?>
+    <?php include 'head.php'; ?>
 
     <!-- Normal Breadcrumb Begin -->
     <section class="normal-breadcrumb set-bg" data-setbg="imagenes/header.png">
@@ -122,31 +124,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>Información de la Cuenta</h3>
-                        
+
                         <?php if (!empty($error) && !isset($_POST['cambiar_password'])): ?>
-                            <div class="alert alert-danger" role="alert" style="background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; color: #dc3545; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
-                                <i class="fa fa-exclamation-triangle"></i> <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+                            <div class="alert alert-danger" role="alert"
+                                style="background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; color: #dc3545; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
                             </div>
                         <?php endif; ?>
 
                         <?php if (!empty($success) && !isset($_POST['cambiar_password'])): ?>
-                            <div class="alert alert-success" role="alert" style="background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; color: #28a745; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
+                            <div class="alert alert-success" role="alert"
+                                style="background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; color: #28a745; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
                                 <i class="fa fa-check-circle"></i> <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
                             </div>
                         <?php endif; ?>
 
                         <form method="POST" action="perfil.php">
                             <div class="input__item">
-                                <input type="text" name="username" value="<?= htmlspecialchars($usuario['username'], ENT_QUOTES, 'UTF-8') ?>" placeholder="Nombre de Usuario">
+                                <input type="text" name="username"
+                                    value="<?= htmlspecialchars($usuario['username'], ENT_QUOTES, 'UTF-8') ?>"
+                                    placeholder="Nombre de Usuario">
                                 <span class="icon_profile"></span>
                             </div>
 
                             <div class="input__item">
-                                <input type="email" name="email" value="<?= htmlspecialchars($usuario['email'], ENT_QUOTES, 'UTF-8') ?>" placeholder="Correo Electrónico">
+                                <input type="email" name="email"
+                                    value="<?= htmlspecialchars($usuario['email'], ENT_QUOTES, 'UTF-8') ?>"
+                                    placeholder="Correo Electrónico">
                                 <span class="icon_mail"></span>
                             </div>
 
-                            <button type="submit" name="actualizar_info" class="site-btn">Actualizar Información</button>
+                            <button type="submit" name="actualizar_info" class="site-btn">Actualizar
+                                Información</button>
+                            <?php if ($usuario['rol'] === 'admin'): ?>
+                                <a href="admin/index.php" class="site-btn"
+                                    style="display: block; text-align: center; margin-top: 15px; background-color: #e36414; text-decoration: none;">
+                                    <i class="fa fa-dashboard"></i> Panel de Administración
+                                </a>
+                            <?php endif; ?>
                         </form>
                     </div>
                 </div>
@@ -155,15 +171,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>Cambiar Contraseña</h3>
-                        
+
                         <?php if (!empty($error) && isset($_POST['cambiar_password'])): ?>
-                            <div class="alert alert-danger" role="alert" style="background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; color: #dc3545; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
-                                <i class="fa fa-exclamation-triangle"></i> <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+                            <div class="alert alert-danger" role="alert"
+                                style="background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; color: #dc3545; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
                             </div>
                         <?php endif; ?>
 
                         <?php if (!empty($success) && isset($_POST['cambiar_password'])): ?>
-                            <div class="alert alert-success" role="alert" style="background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; color: #28a745; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
+                            <div class="alert alert-success" role="alert"
+                                style="background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; color: #28a745; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
                                 <i class="fa fa-check-circle"></i> <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
                             </div>
                         <?php endif; ?>
@@ -180,7 +199,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
                             </div>
 
                             <div class="input__item">
-                                <input type="password" name="password_confirmar" placeholder="Confirmar Contraseña Nueva">
+                                <input type="password" name="password_confirmar"
+                                    placeholder="Confirmar Contraseña Nueva">
                                 <span class="icon_lock-open"></span>
                             </div>
 
@@ -188,7 +208,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
                         </form>
 
                         <div style="margin-top: 20px;">
-                            <a href="admin/includes/logout.php" class="btn btn-outline-danger btn-block" style="display: block; text-align: center; padding: 12px; border: 1px solid #dc3545; color: #dc3545; border-radius: 5px; text-decoration: none; transition: all 0.3s;">
+                            <a href="admin/includes/logout.php" class="btn btn-outline-danger btn-block"
+                                style="display: block; text-align: center; padding: 12px; border: 1px solid #dc3545; color: #dc3545; border-radius: 5px; text-decoration: none; transition: all 0.3s;">
                                 <i class="fa fa-sign-out"></i> Cerrar Sesión
                             </a>
                         </div>
@@ -199,7 +220,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
     </section>
     <!-- Perfil Section End -->
 
-<?php include 'footer.php'; ?>
+    <?php include 'footer.php'; ?>
 
     <!-- Search model Begin -->
     <div class="search-model">
@@ -222,4 +243,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
     <script src="anime-main/js/owl.carousel.min.js"></script>
     <script src="anime-main/js/main.js"></script>
 </body>
+
 </html>

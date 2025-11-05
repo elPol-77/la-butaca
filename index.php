@@ -3,9 +3,14 @@ session_start();
 include 'admin/includes/database.php'; 
 require_once 'admin/includes/crudPeliculas.php'; 
 require_once 'admin/includes/crudResenas.php';
+require_once 'admin/includes/crudActores.php';
+require_once 'admin/includes/crudDirectores.php';
 
 $peliculaObj = new Peliculas();
 $resenasObj = new Resenas();
+$actorObj = new Actores();
+$directorObj = new Directores();
+
 $peliculasPopulares = $peliculaObj->getPopulares(8);
 
 // Función auxiliar para obtener clase de color según puntuación
@@ -42,17 +47,58 @@ function getColorClase($puntuacion) {
     
     <!-- Estilos personalizados -->
     <style>
+        /* MEJORA DEL CARRUSEL HERO */
+        .hero__items {
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+            min-height: 500px;
+            position: relative;
+        }
+        
+        .hero__items::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, 
+                rgba(0, 0, 0, 0.85) 0%, 
+                rgba(0, 0, 0, 0.6) 50%, 
+                rgba(0, 0, 0, 0.3) 100%);
+            z-index: 1;
+        }
+        
+        .hero__text {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* GRID PRINCIPAL CON OBJECT-FIT */
         .product__item__pic {
             cursor: pointer;
             transition: transform 0.3s ease;
             position: relative;
+            overflow: hidden;
+            height: 350px;
+            width: 100%;
+            background: #000;
+        }
+
+        .product__item__pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
         }
         
         .product__item__pic:hover {
             transform: scale(1.05);
         }
         
-        a.imagen-enlace {
+        .product__item__pic a.imagen-enlace {
             position: absolute;
             top: 0;
             left: 0;
@@ -104,6 +150,76 @@ function getColorClase($puntuacion) {
             color: white !important;
         }
 
+        /* SIDEBAR CON OBJECT-FIT */
+        .product__sidebar__view__item {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        .product__sidebar__view__item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+            z-index: 0;
+        }
+        
+        .product__sidebar__view__item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Degradado para mejor legibilidad del título en sidebar */
+        .product__sidebar__view__item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70%;
+            background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.95) 0%,
+                rgba(0, 0, 0, 0.7) 40%,
+                rgba(0, 0, 0, 0.3) 70%,
+                transparent 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Título del sidebar mejor posicionado */
+        .product__sidebar__view__item h5 {
+            position: relative;
+            z-index: 2;
+            margin: 0;
+            padding: 15px 12px;
+            color: white !important;
+            font-weight: bold !important;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+            line-height: 1.3;
+            font-size: 15px;
+        }
+        
+        /* Duración en sidebar */
+        .product__sidebar__view__item .ep {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 3;
+        }
+
         /* ESTILOS PARA VALORACIÓN - SIDEBAR */
         .product__sidebar__view__item .valoracion-badge-sidebar {
             position: absolute;
@@ -114,7 +230,7 @@ function getColorClase($puntuacion) {
             font-weight: bold;
             font-size: 14px;
             border: 2px solid;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 3;
         }
 
@@ -138,17 +254,19 @@ function getColorClase($puntuacion) {
             border-color: #999;
         }
         
-        .product__sidebar__view__item {
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .product__sidebar__view__item:hover {
-            transform: scale(1.02);
-        }
-        
-        .product__sidebar__comment__item__pic {
-            cursor: pointer;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product__item__pic {
+                height: 300px;
+            }
+            
+            .product__sidebar__view__item {
+                height: 180px;
+            }
+            
+            .hero__items {
+                min-height: 400px;
+            }
         }
     </style>
 </head>
@@ -210,10 +328,12 @@ function getColorClase($puntuacion) {
                             ?>
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                                    <div class="product__item__pic">
+                                        <img src="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>" 
+                                             alt="<?= htmlspecialchars($pelicula['titulo']) ?>">
                                         <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>" class="imagen-enlace"></a>
                                         <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
+                                        <div class="comment"><i class="fa fa-comments"></i> <?= $estadisticas['total_resenas'] ?? 0 ?></div>
                                         
                                         <!-- VALORACIÓN -->
                                         <div class="valoracion-badge <?= $colorClase ?>">
@@ -232,46 +352,75 @@ function getColorClase($puntuacion) {
                         </div>
                     </div>
 
-                    <!-- Recently Added Shows -->
+                    <!-- Actores Destacados -->
                     <div class="recent__product">
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-8">
                                 <div class="section-title">
-                                    <h4>Agregadas Recientemente</h4>
+                                    <h4>Actores Destacados</h4>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4">
                                 <div class="btn__all">
-                                    <a href="./peliculas.php" class="primary-btn">Ver Todas <span class="arrow_right"></span></a>
+                                    <a href="./actores.php" class="primary-btn">Ver Todos <span class="arrow_right"></span></a>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <?php 
-                            $peliculasRecientes = array_slice($peliculasPopulares, 0, 6);
-                            foreach($peliculasRecientes as $pelicula): 
-                                $estadisticas = $resenasObj->getEstadisticasPelicula($pelicula['id']);
-                                $valoracion = $estadisticas['promedio_imdb'] ? round($estadisticas['promedio_imdb']) : null;
-                                $colorClase = getColorClase($valoracion);
+                            $actoresAleatorios = $actorObj->getActoresAlAzar(6);
+                            foreach($actoresAleatorios as $actor): 
                             ?>
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
-                                        <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>" class="imagen-enlace"></a>
-                                        <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> <?= rand(5, 50) ?></div>
-                                        
-                                        <!-- VALORACIÓN -->
-                                        <div class="valoracion-badge <?= $colorClase ?>">
-                                            <?= $valoracion !== null ? $valoracion : 'N/A' ?>
-                                        </div>
+                                    <div class="product__item__pic">
+                                        <img src="imagenes/actores/<?= htmlspecialchars($actor['imagen'] ?? 'default-actor.jpg') ?>" 
+                                             alt="<?= htmlspecialchars($actor['nombre']) ?>">
+                                        <a href="actor-detalle.php?id=<?= $actor['id'] ?>" class="imagen-enlace"></a>
                                     </div>
                                     <div class="product__item__text">
                                         <ul>
-                                            <li>Nueva</li>
-                                            <li>Película</li>
+                                            <li>Actor</li>
                                         </ul>
-                                        <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
+                                        <h5><a href="actor-detalle.php?id=<?= $actor['id'] ?>"><?= htmlspecialchars($actor['nombre']) ?></a></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- Directores Destacados -->
+                    <div class="recent__product" style="margin-top: 40px;">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <div class="section-title">
+                                    <h4>Directores Destacados</h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="btn__all">
+                                    <a href="./directores.php" class="primary-btn">Ver Todos <span class="arrow_right"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <?php 
+                            $directoresAleatorios = $directorObj->getDirectoresAlAzar(6);
+                            foreach($directoresAleatorios as $director): 
+                            ?>
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic">
+                                        <img src="imagenes/directores/<?= htmlspecialchars($director['imagen'] ?? 'default-director.jpg') ?>" 
+                                             alt="<?= htmlspecialchars($director['nombre']) ?>">
+                                        <a href="director-detalle.php?id=<?= $director['id'] ?>" class="imagen-enlace"></a>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <ul>
+                                            <li>Director</li>
+                                        </ul>
+                                        <h5><a href="director-detalle.php?id=<?= $director['id'] ?>"><?= htmlspecialchars($director['nombre']) ?></a></h5>
                                     </div>
                                 </div>
                             </div>
@@ -288,13 +437,17 @@ function getColorClase($puntuacion) {
                                 <h5>Recomendaciones</h5>
                             </div>
                             <div class="filter__gallery">
-                                <?php foreach(array_slice($peliculasPopulares, 0, 5) as $index => $pelicula): 
+                                <?php 
+                                $peliculasAzar = $peliculaObj->getPeliculasAlAzar(5);
+                                foreach($peliculasAzar as $pelicula): 
                                     $estadisticasVista = $resenasObj->getEstadisticasPelicula($pelicula['id']);
                                     $valoracionVista = $estadisticasVista['promedio_imdb'] ? round($estadisticasVista['promedio_imdb']) : null;
                                     $colorClaseVista = getColorClase($valoracionVista);
                                 ?>
                                 <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>">
-                                    <div class="product__sidebar__view__item set-bg mix <?= $filter ?>" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                                    <div class="product__sidebar__view__item">
+                                        <img src="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>" 
+                                             alt="<?= htmlspecialchars($pelicula['titulo']) ?>">
                                         <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
                                         
                                         <!-- VALORACIÓN EN SIDEBAR -->
@@ -302,14 +455,12 @@ function getColorClase($puntuacion) {
                                             <?= $valoracionVista !== null ? $valoracionVista : 'N/A' ?>
                                         </div>
                                         
-                                        <h5 style="color: #fff; font-weight: bold;"><?= htmlspecialchars($pelicula['titulo']) ?></h5>
+                                        <h5><?= htmlspecialchars($pelicula['titulo']) ?></h5>
                                     </div>
                                 </a>
                                 <?php endforeach; ?>
                             </div>
                         </div>
-                        
-                       
                     </div>
                 </div>
             </div>

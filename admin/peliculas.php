@@ -867,14 +867,7 @@ if ($accion == "eliminar" && $id) {
     <?php include("../footer.php"); ?>
 
     <!-- Search model Begin -->
-    <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch"><i class="icon_close"></i></div>
-            <form class="search-model-form" action="buscar.php" method="GET">
-                <input type="text" name="q" id="search-input" placeholder="Buscar películas.....">
-            </form>
-        </div>
-    </div>
+
     <!-- Search model end -->
 
     <!-- Js Plugins -->

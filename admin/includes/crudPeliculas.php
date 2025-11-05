@@ -4,13 +4,46 @@ class Peliculas {
     public function getPopulares($limite = 4) {
         $db = new Connection();
         $conn = $db->getConnection();
-        $sql = "SELECT * FROM peliculas ORDER BY anio DESC LIMIT ?";
+        
+        $sql = "SELECT p.*, 
+                COALESCE(AVG(r.puntuacion_imdb), 0) as valoracion_promedio,
+                COUNT(r.id) as total_resenas
+                FROM peliculas p
+                LEFT JOIN resenas r ON p.id = r.pelicula_id
+                GROUP BY p.id
+                ORDER BY valoracion_promedio DESC, total_resenas DESC
+                LIMIT ?";
+        
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $limite);
         $stmt->execute();
         $result = $stmt->get_result();
+        $peliculas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        
+        $stmt->close();
         $db->closeConnection($conn);
-        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        
+        return $peliculas;
+    }
+
+    public function getPeliculasAlAzar($limite = 5) {
+        $db = new Connection();
+        $conn = $db->getConnection();
+        
+        $sql = "SELECT * FROM peliculas 
+                ORDER BY RAND() 
+                LIMIT ?";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $limite);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $peliculas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        
+        $stmt->close();
+        $db->closeConnection($conn);
+        
+        return $peliculas;
     }
 
     // Obtener las películas más recientes (por fecha de estreno)
@@ -220,15 +253,6 @@ class Peliculas {
         return $peliculas;
     }
 
-    // ========================================
-    // MÉTODOS PARA ACTORES (NUEVOS)
-    // ========================================
-    
-    /**
-     * Obtener IDs de actores de una película
-     * @param int $pelicula_id
-     * @return array Array de actor_id
-     */
     public function getActoresByPelicula($pelicula_id) {
         $db = new Connection();
         $conn = $db->getConnection();
@@ -245,12 +269,6 @@ class Peliculas {
         return $actores;
     }
 
-    /**
-     * Asociar actores a una película (elimina los anteriores e inserta los nuevos)
-     * @param int $pelicula_id
-     * @param array $actores Array de actor_id
-     * @return bool
-     */
     public function asociarActores($pelicula_id, $actores) {
         $db = new Connection();
         $conn = $db->getConnection();
@@ -276,11 +294,6 @@ class Peliculas {
         return true;
     }
 
-    /**
-     * Obtener nombres de actores de una película
-     * @param int $pelicula_id
-     * @return array Array de nombres de actores
-     */
     public function getNombresActoresByPelicula($pelicula_id) {
         $db = new Connection();
         $conn = $db->getConnection();
@@ -300,11 +313,6 @@ class Peliculas {
         return $nombres;
     }
 
-    /**
-     * Obtener películas por director (usando director_id)
-     * @param int $director_id
-     * @return array
-     */
     public function getPeliculasPorDirector($director_id) {
         $db = new Connection();
         $conn = $db->getConnection();
@@ -318,11 +326,6 @@ class Peliculas {
         return $peliculas;
     }
 
-    /**
-     * Obtener películas por actor (usando pelicula_actor)
-     * @param int $actor_id
-     * @return array
-     */
     public function getPeliculasPorActor($actor_id) {
         $db = new Connection();
         $conn = $db->getConnection();

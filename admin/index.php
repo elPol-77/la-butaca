@@ -7,6 +7,26 @@ if (!$session->comprobarSesion()) {
     exit();
 }
 $usuario = $_SESSION['usuario']; 
+
+// Incluir clases para contar registros
+require_once "./includes/crudPeliculas.php";
+require_once "./includes/crudUsuarios.php";
+require_once "./includes/crudGeneros.php";
+require_once "./includes/crudValoraciones.php";
+
+
+
+$peliculasObj = new Peliculas();
+$usuariosObj = new Usuarios();
+$generosObj = new Generos();
+
+// Contar registros
+$totalPeliculas = count($peliculasObj->getAll());
+$totalUsuarios = count($usuariosObj->showUsuarios());
+$totalGeneros = count($generosObj->getAll());
+
+$valoracionesObj = new Valoraciones();
+$totalValoraciones = count($valoracionesObj->getAll());
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -62,8 +82,8 @@ $usuario = $_SESSION['usuario'];
         .admin-card {
             background: #fff;
             border-radius: 8px;
-            padding: 30px;
-            margin-bottom: 30px;
+            padding: 20px;
+            margin-bottom: 20px;
             transition: all 0.3s ease;
             border: 1px solid #eee;
             height: 100%;
@@ -76,35 +96,36 @@ $usuario = $_SESSION['usuario'];
         }
         
         .admin-card-icon {
-            font-size: 48px;
+            font-size: 36px;
             color: #e50914;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         
         .admin-card h4 {
             color: #111;
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-family: 'Oswald', sans-serif;
         }
         
         .admin-card p {
             color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-            line-height: 1.6;
+            font-size: 13px;
+            margin-bottom: 15px;
+            line-height: 1.5;
         }
         
         .admin-card .btn-admin {
             background: #e50914;
             color: #fff;
-            padding: 10px 30px;
+            padding: 8px 20px;
             border-radius: 50px;
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s ease;
             font-weight: 600;
+            font-size: 13px;
         }
         
         .admin-card .btn-admin:hover {
@@ -120,10 +141,11 @@ $usuario = $_SESSION['usuario'];
         .stat-card {
             background: #fff;
             border-radius: 8px;
-            padding: 25px;
+            padding: 20px;
             text-align: center;
             border: 1px solid #eee;
             transition: all 0.3s ease;
+            margin-bottom: 15px;
         }
         
         .stat-card:hover {
@@ -131,13 +153,13 @@ $usuario = $_SESSION['usuario'];
         }
         
         .stat-card i {
-            font-size: 36px;
+            font-size: 32px;
             color: #e50914;
             margin-bottom: 10px;
         }
         
         .stat-card .stat-number {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
             color: #111;
             margin-bottom: 5px;
@@ -146,7 +168,18 @@ $usuario = $_SESSION['usuario'];
         
         .stat-card .stat-label {
             color: #666;
-            font-size: 14px;
+            font-size: 13px;
+        }
+
+        /* Espaciado adicional entre cards */
+        .row-cards {
+            margin-left: -10px;
+            margin-right: -10px;
+        }
+
+        .row-cards > [class*="col-"] {
+            padding-left: 10px;
+            padding-right: 10px;
         }
         
     </style>
@@ -176,28 +209,28 @@ $usuario = $_SESSION['usuario'];
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="stat-card">
                         <i class="fa fa-film"></i>
-                        <div class="stat-number">-</div>
+                        <div class="stat-number"><?= $totalPeliculas ?></div>
                         <div class="stat-label">Películas</div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="stat-card">
                         <i class="fa fa-users"></i>
-                        <div class="stat-number">-</div>
+                        <div class="stat-number"><?= $totalUsuarios ?></div>
                         <div class="stat-label">Usuarios</div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="stat-card">
                         <i class="fa fa-star"></i>
-                        <div class="stat-number">-</div>
+                        <div class="stat-number"><?= $totalValoraciones ?></div>
                         <div class="stat-label">Valoraciones</div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="stat-card">
                         <i class="fa fa-tags"></i>
-                        <div class="stat-number">-</div>
+                        <div class="stat-number"><?= $totalGeneros ?></div>
                         <div class="stat-label">Géneros</div>
                     </div>
                 </div>
@@ -208,7 +241,7 @@ $usuario = $_SESSION['usuario'];
         <div class="section-title">
             <h4>Herramientas de Gestión</h4>
         </div>
-        <div class="row">
+        <div class="row row-cards">
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="admin-card">
                     <div class="admin-card-icon">
@@ -225,7 +258,7 @@ $usuario = $_SESSION['usuario'];
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="admin-card">
                     <div class="admin-card-icon">
-                        <i class="fa fa-user-tie"></i>
+                        <i class="fa fa-tags"></i>
                     </div>
                     <h4>Gestionar Actores</h4>
                     <p>Administra el catálogo de actores y actrices</p>
@@ -279,10 +312,10 @@ $usuario = $_SESSION['usuario'];
                     <div class="admin-card-icon">
                         <i class="fa fa-cog"></i>
                     </div>
-                    <h4>Configuración</h4>
-                    <p>Ajusta los parámetros del sistema</p>
-                    <a href="./configuracion.php" class="btn-admin">
-                        <i class="fa fa-arrow-right"></i> Configurar
+                    <h4>Plataformas</h4>
+                    <p>Configura las plataformas</p>
+                    <a href="./plataformas.php" class="btn-admin">
+                        <i class="fa fa-arrow-right"></i> Plataformas
                     </a>
                 </div>
             </div>

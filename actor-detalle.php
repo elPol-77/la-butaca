@@ -54,12 +54,9 @@ function calcularEdad($fecha_nacimiento) {
 
 $edad = calcularEdad($actor['fecha_nacimiento']);
 
-// Obtener actores destacados para sidebar (excluyendo el actual)
-$todosActores = $actorObj->getAll();
-$actoresDestacados = array_filter($todosActores, function($a) use ($id) {
-    return $a['id'] != $id;
-});
-$actoresDestacados = array_slice($actoresDestacados, 0, 5);
+// Obtener actores aleatorios para sidebar (excluyendo el actual)
+$actoresDestacados = $actorObj->getActoresAlAzarExcluyendo($id, 5);
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -335,9 +332,18 @@ $actoresDestacados = array_slice($actoresDestacados, 0, 5);
                             $imagenPath = !empty($actor['imagen']) ? 'imagenes/actores/' . htmlspecialchars($actor['imagen']) : 'imagenes/actores/default-actor.jpg';
                             ?>
                             <img src="<?= $imagenPath ?>" alt="<?= htmlspecialchars($actor['nombre']) ?>">
-                            
-
                         </div>
+                        
+                        <!-- Botón de editar solo para admin -->
+                        <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
+                        <div style="margin-top: 15px;">
+                            <a href="admin/actores.php?accion=editar&id=<?= $id ?>" 
+                               class="site-btn" 
+                               style="width: 100%; background-color: #e36414; border: none; padding: 12px; text-align: center; display: block; border-radius: 5px; text-decoration: none; transition: all 0.3s;">
+                                <i class="fa fa-edit"></i> Editar Actor
+                            </a>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <div class="col-lg-9">
                         <div class="anime__details__text">

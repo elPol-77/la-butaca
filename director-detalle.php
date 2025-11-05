@@ -35,12 +35,8 @@ function calcularEdad($fecha_nacimiento) {
 
 $edad = calcularEdad($director['fecha_nacimiento']);
 
-// Obtener directores destacados para sidebar (excluyendo el actual)
-$todosDirectores = $directorObj->getAll();
-$directoresDestacados = array_filter($todosDirectores, function($d) use ($id) {
-    return $d['id'] != $id;
-});
-$directoresDestacados = array_slice($directoresDestacados, 0, 5);
+// Obtener directores aleatorios para sidebar (excluyendo el actual)
+$directoresDestacados = $directorObj->getDirectoresAlAzarExcluyendo($id, 5);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -317,6 +313,17 @@ $directoresDestacados = array_slice($directoresDestacados, 0, 5);
                             ?>
                             <img src="<?= $imagenPath ?>" alt="<?= htmlspecialchars($director['nombre']) ?>">
                         </div>
+                        
+                        <!-- Botón de editar solo para admin -->
+                        <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin'): ?>
+                        <div style="margin-top: 15px;">
+                            <a href="admin/directores.php?accion=editar&id=<?= $id ?>" 
+                               class="site-btn" 
+                               style="width: 100%; background-color: #e36414; border: none; padding: 12px; text-align: center; display: block; border-radius: 5px; text-decoration: none; transition: all 0.3s;">
+                                <i class="fa fa-edit"></i> Editar Director
+                            </a>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <div class="col-lg-9">
                         <div class="anime__details__text">
