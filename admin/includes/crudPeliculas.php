@@ -70,13 +70,13 @@ class Peliculas {
     }
 
     // Insertar nueva película (SIN created_at)
-    public function insertarPelicula($titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $imagen, $fecha_estreno) {
+    public function insertarPelicula($titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $imagen, $fecha_estreno, $link) {
         $db = new Connection();
         $conn = $db->getConnection();
-        $sql = "INSERT INTO peliculas (titulo, descripcion, anio, duracion, director_id, plataforma_id, imagen, fecha_estreno)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO peliculas (titulo, descripcion, anio, duracion, director_id, plataforma_id, imagen, fecha_estreno, link)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssiiisss", $titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $imagen, $fecha_estreno);
+        $stmt->bind_param("ssiiissss", $titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $imagen, $fecha_estreno, $link);
         $exito = $stmt->execute();
         $nuevoId = $conn->insert_id;
         $db->closeConnection($conn);
@@ -84,14 +84,14 @@ class Peliculas {
     }
 
     // Actualizar película
-    public function actualizarPelicula($id, $titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $imagen, $fecha_estreno) {
+    public function actualizarPelicula($id, $titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $imagen, $fecha_estreno, $link) {
         $db = new Connection();
         $conn = $db->getConnection();
         $sql = "UPDATE peliculas
-                SET titulo=?, descripcion=?, anio=?, duracion=?, director_id=?, plataforma_id=?, imagen=?, fecha_estreno=?
+                SET titulo=?, descripcion=?, anio=?, duracion=?, director_id=?, plataforma_id=?, imagen=?, fecha_estreno=?, link=?
                 WHERE id=?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssiiisssi", $titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $imagen, $fecha_estreno, $id);
+        $stmt->bind_param("ssiiissssi", $titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $imagen, $fecha_estreno, $link, $id);
         $exito = $stmt->execute();
         $db->closeConnection($conn);
         return $exito;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 31-10-2025 a las 12:45:11
+-- Tiempo de generación: 03-11-2025 a las 08:59:08
 -- Versión del servidor: 8.0.43-0ubuntu0.24.04.1
 -- Versión de PHP: 8.4.12
 
@@ -59,7 +59,9 @@ INSERT INTO `actores` (`id`, `nombre`, `fecha_nacimiento`, `biografia`, `imagen`
 (17, 'Brie Larson', '1989-10-01', 'Protagonista en The Marvels.', NULL),
 (18, 'Harrison Ford', '1942-07-13', 'Protagonista en Indiana Jones y el Dial del Destino.', NULL),
 (19, 'Leonardo DiCaprio', '1974-11-11', 'Protagonista en Killers of the Flower Moon.', NULL),
-(20, 'Paul King', '1978-07-06', 'Director y voz secundaria en Wonka.', NULL);
+(20, 'Paul King', '1978-07-06', 'Director y voz secundaria en Wonka.', NULL),
+(21, 'Ethan Hawke', '1970-11-06', 'Ethan Green Hawke es un actor, escritor y director estadounidense.', 'ethan_hawke.jpg'),
+(22, 'Mason Thames', '2007-07-10', 'Mason Thames es un joven actor estadounidense conocido por su papel en The Black Phone.', 'mason_thames.jpg');
 
 -- --------------------------------------------------------
 
@@ -92,7 +94,8 @@ INSERT INTO `directores` (`id`, `nombre`, `fecha_nacimiento`, `biografia`) VALUE
 (11, 'Nia DaCosta', '1989-11-08', 'Directora y guionista estadounidense, reconocida por The Marvels y Candyman.'),
 (12, 'Paul King', '1978-07-06', 'Director británico de cine y televisión, conocido por Paddington y Wonka.'),
 (13, 'James Mangold', '1963-12-16', 'Director y guionista estadounidense, conocido por Logan, Ford v Ferrari e Indiana Jones 5.'),
-(14, 'Martin Scorsese', '1942-11-17', 'Legendario director estadounidense, famoso por Taxi Driver, Goodfellas y Killers of the Flower Moon.');
+(14, 'Martin Scorsese', '1942-11-17', 'Legendario director estadounidense, famoso por Taxi Driver, Goodfellas y Killers of the Flower Moon.'),
+(15, 'Scott Derrickson', '1966-07-16', 'Director de Miedo');
 
 -- --------------------------------------------------------
 
@@ -163,7 +166,8 @@ INSERT INTO `peliculas` (`id`, `titulo`, `descripcion`, `anio`, `duracion`, `dir
 (17, 'The Marvels', 'Marvel presenta nueva aventura espacial.', 2023, 105, 11, 'themarvels.jpg', '2023-11-10', '2025-10-30 14:22:00', 3, 'https://www.disneyplus.com/es-es/browse/entity-75c90eca-8969-4edb-ac1a-7165cff2671c?distributionPartner=google'),
 (18, 'Wonka', 'Historia de origen de Willy Wonka.', 2023, 112, 12, 'wonka.jpg', '2023-12-15', '2025-10-30 14:22:00', 4, 'https://www.hbomax.com/es/es/movies/wonka/c34d4c23-39eb-4eb8-95dd-209fa0cb3fb4?utm_source=universal_search'),
 (19, 'Indiana Jones y el Dial del Destino', 'Nueva aventura de Indiana Jones.', 2023, 142, 13, 'indianajones5.jpg', '2023-06-30', '2025-10-30 14:22:00', 3, 'https://www.disneyplus.com/play/f4bbe891-e949-4a15-9df1-6c2e87cca2bc?distributionPartner=google'),
-(20, 'Killers of the Flower Moon', 'Drama criminal dirigido por Scorsese.', 2023, 206, 14, 'killersoftheflowermoon.jpg', '2023-10-20', '2025-10-30 14:22:00', 5, 'https://tv.apple.com/es/movie/los-asesinos-de-la-luna/umc.cmc.5x1fg9vferlfeutzpq6rra1zf?action=play');
+(20, 'Killers of the Flower Moon', 'Drama criminal dirigido por Scorsese.', 2023, 206, 14, 'killersoftheflowermoon.jpg', '2023-10-20', '2025-10-30 14:22:00', 5, 'https://tv.apple.com/es/movie/los-asesinos-de-la-luna/umc.cmc.5x1fg9vferlfeutzpq6rra1zf?action=play'),
+(21, 'Black Phone 2', 'Black Phone 2 es una película estadounidense de terror sobrenatural de 2025 dirigida por Scott Derrickson a partir de un guion que coescribió la película con C. Robert Cargill y producida por Jason Blum. Es la secuela de The Black Phone', 2025, 114, 15, 'blackphonedos.jpg', '2025-11-24', '2025-11-03 08:38:15', 2, 'https://www.youtube.com/watch?reload=9&v=szKBR8NLPAk');
 
 -- --------------------------------------------------------
 
@@ -198,7 +202,9 @@ INSERT INTO `pelicula_actor` (`pelicula_id`, `actor_id`) VALUES
 (16, 16),
 (17, 17),
 (19, 18),
-(20, 20);
+(20, 20),
+(21, 21),
+(21, 22);
 
 -- --------------------------------------------------------
 
@@ -222,6 +228,7 @@ INSERT INTO `pelicula_genero` (`pelicula_id`, `genero_id`) VALUES
 (16, 1),
 (17, 1),
 (19, 1),
+(1, 2),
 (11, 2),
 (17, 2),
 (2, 3),
@@ -237,18 +244,17 @@ INSERT INTO `pelicula_genero` (`pelicula_id`, `genero_id`) VALUES
 (12, 6),
 (16, 6),
 (19, 6),
-(1, 7),
 (4, 7),
 (5, 7),
+(21, 7),
 (14, 8),
 (18, 8),
 (13, 9),
 (20, 10),
 (13, 11),
+(15, 11),
 (19, 11),
 (20, 11),
-(15, 12),
-(16, 12),
 (20, 12),
 (18, 13);
 
@@ -395,13 +401,13 @@ ALTER TABLE `valoraciones`
 -- AUTO_INCREMENT de la tabla `actores`
 --
 ALTER TABLE `actores`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `directores`
 --
 ALTER TABLE `directores`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `generos`
@@ -413,7 +419,7 @@ ALTER TABLE `generos`
 -- AUTO_INCREMENT de la tabla `peliculas`
 --
 ALTER TABLE `peliculas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `plataformas`
