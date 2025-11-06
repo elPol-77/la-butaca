@@ -13,7 +13,11 @@ if (!$sesion->comprobarSesion()) {
     header("Location: ../login.php");
     exit();
 }
-
+// Verificar que el usuario sea administrador
+if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+    header("Location: ../index.php");
+    exit();
+}
 $accion = $_GET['accion'] ?? null;
 $id = $_GET['id'] ?? null;
 $mensaje = "";

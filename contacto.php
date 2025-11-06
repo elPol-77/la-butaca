@@ -10,17 +10,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email'] ?? '');
     $asunto = trim($_POST['asunto'] ?? '');
     $mensaje = trim($_POST['mensaje'] ?? '');
-    
+
     // Validaciones
     if (empty($nombre) || empty($email) || empty($asunto) || empty($mensaje)) {
         $error = "Todos los campos son obligatorios";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "El correo electrónico no es válido";
     } else {
-        // Aquí puedes agregar la lógica para enviar el email o guardar en BD
-        // Por ahora solo mostramos mensaje de éxito
+
         $success = "¡Gracias por contactarnos! Te responderemos pronto.";
-        
+
         // Limpiar campos después del envío exitoso
         $nombre = $email = $asunto = $mensaje = "";
     }
@@ -28,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Contacto - La Butaca">
@@ -38,7 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="anime-main/css/bootstrap.min.css" type="text/css">
@@ -49,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="anime-main/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/style.css" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./logobutaca.png">
 
     <style>
         .contact-info-box {
@@ -120,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="loader"></div>
     </div>
 
-<?php include 'head.php'; ?>
+    <?php include 'head.php'; ?>
 
     <!-- Normal Breadcrumb Begin -->
     <section class="normal-breadcrumb set-bg" data-setbg="imagenes/header.png">
@@ -172,37 +174,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col-lg-8 offset-lg-2">
                     <div class="login__form">
                         <h3>Envíanos un Mensaje</h3>
-                        
+
                         <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger" role="alert" style="background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; color: #dc3545; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
-                                <i class="fa fa-exclamation-triangle"></i> <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+                            <div class="alert alert-danger" role="alert"
+                                style="background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; color: #dc3545; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
                             </div>
                         <?php endif; ?>
 
                         <?php if (!empty($success)): ?>
-                            <div class="alert alert-success" role="alert" style="background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; color: #28a745; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
+                            <div class="alert alert-success" role="alert"
+                                style="background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; color: #28a745; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
                                 <i class="fa fa-check-circle"></i> <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
                             </div>
                         <?php endif; ?>
 
                         <form method="POST" action="contacto.php">
                             <div class="input__item">
-                                <input type="text" name="nombre" placeholder="Tu Nombre" value="<?= htmlspecialchars($nombre ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                                <input type="text" name="nombre" placeholder="Tu Nombre"
+                                    value="<?= htmlspecialchars($nombre ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
                                 <span class="icon_profile"></span>
                             </div>
 
                             <div class="input__item">
-                                <input type="email" name="email" placeholder="Tu Correo Electrónico" value="<?= htmlspecialchars($email ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                                <input type="email" name="email" placeholder="Tu Correo Electrónico"
+                                    value="<?= htmlspecialchars($email ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
                                 <span class="icon_mail"></span>
                             </div>
 
                             <div class="input__item">
-                                <input type="text" name="asunto" placeholder="Asunto" value="<?= htmlspecialchars($asunto ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                                <input type="text" name="asunto" placeholder="Asunto"
+                                    value="<?= htmlspecialchars($asunto ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
                                 <span class="icon_comment"></span>
                             </div>
 
                             <div style="position: relative; margin-bottom: 20px;">
-                                <textarea name="mensaje" placeholder="Tu Mensaje" required><?= htmlspecialchars($mensaje ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                                <textarea name="mensaje" placeholder="Tu Mensaje"
+                                    required><?= htmlspecialchars($mensaje ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                             </div>
 
                             <button type="submit" class="site-btn">Enviar Mensaje</button>
@@ -216,7 +225,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col-lg-12">
                     <div class="login__form">
                         <h3 style="text-align: center; margin-bottom: 30px;">Preguntas Frecuentes</h3>
-                        
+
                         <div class="row">
                             <div class="col-lg-6">
                                 <div style="margin-bottom: 25px;">
@@ -224,36 +233,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <i class="fa fa-question-circle"></i> ¿Cómo puedo agregar una reseña?
                                     </h5>
                                     <p style="color: #b7b7b7; line-height: 1.6;">
-                                        Simplemente inicia sesión, busca la película que quieres reseñar y haz clic en "Agregar Reseña" en la página de detalles.
+                                        Simplemente inicia sesión, busca la película que quieres reseñar y haz clic en
+                                        "Agregar Reseña" en la página de detalles.
                                     </p>
                                 </div>
-                                
+
                                 <div style="margin-bottom: 25px;">
                                     <h5 style="color: #e50914; margin-bottom: 10px;">
                                         <i class="fa fa-question-circle"></i> ¿Es gratuito registrarse?
                                     </h5>
                                     <p style="color: #b7b7b7; line-height: 1.6;">
-                                        Sí, el registro y uso de La Butaca es completamente gratuito para todos los usuarios.
+                                        Sí, el registro y uso de La Butaca es completamente gratuito para todos los
+                                        usuarios.
                                     </p>
                                 </div>
                             </div>
-                            
+
                             <div class="col-lg-6">
                                 <div style="margin-bottom: 25px;">
                                     <h5 style="color: #e50914; margin-bottom: 10px;">
                                         <i class="fa fa-question-circle"></i> ¿Cómo actualizo mi perfil?
                                     </h5>
                                     <p style="color: #b7b7b7; line-height: 1.6;">
-                                        Ve a la sección "Mi Perfil" desde el menú principal y allí podrás actualizar tu información personal y contraseña.
+                                        Ve a la sección "Mi Perfil" desde el menú principal y allí podrás actualizar tu
+                                        información personal y contraseña.
                                     </p>
                                 </div>
-                                
+
                                 <div style="margin-bottom: 25px;">
                                     <h5 style="color: #e50914; margin-bottom: 10px;">
                                         <i class="fa fa-question-circle"></i> ¿Puedo sugerir películas?
                                     </h5>
                                     <p style="color: #b7b7b7; line-height: 1.6;">
-                                        ¡Por supuesto! Envíanos un mensaje con tu sugerencia y la consideraremos para agregarla a nuestro catálogo.
+                                        ¡Por supuesto! Envíanos un mensaje con tu sugerencia y la consideraremos para
+                                        agregarla a nuestro catálogo.
                                     </p>
                                 </div>
                             </div>
@@ -265,19 +278,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Redes Sociales -->
             <div class="row" style="margin-top: 40px;">
                 <div class="col-lg-12">
-                    <div style="text-align: center; padding: 30px; background: rgba(255, 255, 255, 0.05); border-radius: 10px;">
+                    <div
+                        style="text-align: center; padding: 30px; background: rgba(255, 255, 255, 0.05); border-radius: 10px;">
                         <h4 style="color: #fff; margin-bottom: 20px;">Síguenos en Redes Sociales</h4>
                         <div>
-                            <a href="#" style="display: inline-block; width: 50px; height: 50px; line-height: 50px; background: rgba(229, 9, 20, 0.2); border-radius: 50%; color: #e50914; font-size: 20px; margin: 0 10px; transition: all 0.3s;" onmouseover="this.style.background='#e50914'; this.style.color='#fff'" onmouseout="this.style.background='rgba(229, 9, 20, 0.2)'; this.style.color='#e50914'">
+                            <a href="#"
+                                style="display: inline-block; width: 50px; height: 50px; line-height: 50px; background: rgba(229, 9, 20, 0.2); border-radius: 50%; color: #e50914; font-size: 20px; margin: 0 10px; transition: all 0.3s;"
+                                onmouseover="this.style.background='#e50914'; this.style.color='#fff'"
+                                onmouseout="this.style.background='rgba(229, 9, 20, 0.2)'; this.style.color='#e50914'">
                                 <i class="fa fa-facebook"></i>
                             </a>
-                            <a href="#" style="display: inline-block; width: 50px; height: 50px; line-height: 50px; background: rgba(229, 9, 20, 0.2); border-radius: 50%; color: #e50914; font-size: 20px; margin: 0 10px; transition: all 0.3s;" onmouseover="this.style.background='#e50914'; this.style.color='#fff'" onmouseout="this.style.background='rgba(229, 9, 20, 0.2)'; this.style.color='#e50914'">
+                            <a href="#"
+                                style="display: inline-block; width: 50px; height: 50px; line-height: 50px; background: rgba(229, 9, 20, 0.2); border-radius: 50%; color: #e50914; font-size: 20px; margin: 0 10px; transition: all 0.3s;"
+                                onmouseover="this.style.background='#e50914'; this.style.color='#fff'"
+                                onmouseout="this.style.background='rgba(229, 9, 20, 0.2)'; this.style.color='#e50914'">
                                 <i class="fa fa-twitter"></i>
                             </a>
-                            <a href="#" style="display: inline-block; width: 50px; height: 50px; line-height: 50px; background: rgba(229, 9, 20, 0.2); border-radius: 50%; color: #e50914; font-size: 20px; margin: 0 10px; transition: all 0.3s;" onmouseover="this.style.background='#e50914'; this.style.color='#fff'" onmouseout="this.style.background='rgba(229, 9, 20, 0.2)'; this.style.color='#e50914'">
+                            <a href="#"
+                                style="display: inline-block; width: 50px; height: 50px; line-height: 50px; background: rgba(229, 9, 20, 0.2); border-radius: 50%; color: #e50914; font-size: 20px; margin: 0 10px; transition: all 0.3s;"
+                                onmouseover="this.style.background='#e50914'; this.style.color='#fff'"
+                                onmouseout="this.style.background='rgba(229, 9, 20, 0.2)'; this.style.color='#e50914'">
                                 <i class="fa fa-instagram"></i>
                             </a>
-                            <a href="#" style="display: inline-block; width: 50px; height: 50px; line-height: 50px; background: rgba(229, 9, 20, 0.2); border-radius: 50%; color: #e50914; font-size: 20px; margin: 0 10px; transition: all 0.3s;" onmouseover="this.style.background='#e50914'; this.style.color='#fff'" onmouseout="this.style.background='rgba(229, 9, 20, 0.2)'; this.style.color='#e50914'">
+                            <a href="#"
+                                style="display: inline-block; width: 50px; height: 50px; line-height: 50px; background: rgba(229, 9, 20, 0.2); border-radius: 50%; color: #e50914; font-size: 20px; margin: 0 10px; transition: all 0.3s;"
+                                onmouseover="this.style.background='#e50914'; this.style.color='#fff'"
+                                onmouseout="this.style.background='rgba(229, 9, 20, 0.2)'; this.style.color='#e50914'">
                                 <i class="fa fa-youtube"></i>
                             </a>
                         </div>
@@ -288,7 +314,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </section>
     <!-- Contact Section End -->
 
-<?php include 'footer.php'; ?>
+    <?php include 'footer.php'; ?>
 
     <!-- Search model Begin -->
     <div class="search-model">
@@ -311,4 +337,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="anime-main/js/owl.carousel.min.js"></script>
     <script src="anime-main/js/main.js"></script>
 </body>
+
 </html>

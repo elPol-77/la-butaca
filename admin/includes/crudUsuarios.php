@@ -28,16 +28,22 @@ class Usuarios {
         return $result->fetch_assoc();
     }
 
-    public function insertarUsuario($username, $email, $passwd, $rol) {
-        $db = new Connection();
-        $conn = $db->getConnection();
-        $hashed_password = password_hash($passwd, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO usuarios (username, email, password, rol, fecha_registro) VALUES (?, ?, ?, ?, NOW())";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $username, $email, $hashed_password, $rol);
+public function insertarUsuario($username, $email, $passwd, $rol) {
+    $db = new Connection();
+    $conn = $db->getConnection();
+    $hashed_password = password_hash($passwd, PASSWORD_DEFAULT);
+    $sql = "INSERT INTO usuarios (username, email, password, rol, fecha_registro) VALUES (?, ?, ?, ?, NOW())";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssss", $username, $email, $hashed_password, $rol);
+    try {
         $stmt->execute();
+    } catch (mysqli_sql_exception $e) {
         $db->closeConnection($conn);
+
+        throw $e;
     }
+    $db->closeConnection($conn);
+}
 
     public function actualizarUsuario($id, $username, $email, $rol) {
         $db = new Connection();

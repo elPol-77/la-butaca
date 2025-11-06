@@ -10,7 +10,7 @@ $actoresObj = new Actores();
 $letraSeleccionada = isset($_GET['letra']) ? strtoupper($_GET['letra']) : null;
 
 // Obtener actores con paginación
-$pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$pagina = isset($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
 $actores_por_pagina = 18;
 
 // Obtener todos los actores
@@ -18,7 +18,7 @@ $todosLosActores = $actoresObj->getAll();
 
 // Filtrar por letra si está seleccionada
 if ($letraSeleccionada && strlen($letraSeleccionada) === 1) {
-    $todosLosActores = array_filter($todosLosActores, function($actor) use ($letraSeleccionada) {
+    $todosLosActores = array_filter($todosLosActores, function ($actor) use ($letraSeleccionada) {
         return strtoupper(substr($actor['nombre'], 0, 1)) === $letraSeleccionada;
     });
 }
@@ -33,15 +33,18 @@ $offset = ($pagina - 1) * $actores_por_pagina;
 $actoresPagina = array_slice($todosLosActores, $offset, $actores_por_pagina);
 
 // Función auxiliar para calcular edad
-function calcularEdad($fecha_nacimiento) {
-    if (!$fecha_nacimiento) return null;
+function calcularEdad($fecha_nacimiento)
+{
+    if (!$fecha_nacimiento)
+        return null;
     $nacimiento = new DateTime($fecha_nacimiento);
     $hoy = new DateTime();
     return $hoy->diff($nacimiento)->y;
 }
 
 // Función para obtener iniciales del alfabeto con actores
-function getLetrasDisponibles($actores) {
+function getLetrasDisponibles($actores)
+{
     $letras = [];
     foreach ($actores as $actor) {
         $inicial = strtoupper(substr($actor['nombre'], 0, 1));
@@ -53,7 +56,7 @@ function getLetrasDisponibles($actores) {
     return $letras;
 }
 
-$todosParaLetras = $actoresObj->getAll(); // Sin filtrar para el alfabeto
+$todosParaLetras = $actoresObj->getAll(); 
 $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
 ?>
 <!DOCTYPE html>
@@ -69,7 +72,8 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="anime-main/css/bootstrap.min.css" type="text/css">
@@ -80,6 +84,8 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
     <link rel="stylesheet" href="anime-main/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/style.css" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./logobutaca.png">
+
 
     <!-- Estilos personalizados -->
     <style>
@@ -110,11 +116,11 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
             left: 0;
             right: 0;
             height: 70%;
-            background: linear-gradient(to top, 
-                rgba(0, 0, 0, 0.95) 0%, 
-                rgba(0, 0, 0, 0.75) 30%, 
-                rgba(0, 0, 0, 0.4) 60%, 
-                transparent 100%);
+            background: linear-gradient(to top,
+                    rgba(0, 0, 0, 0.95) 0%,
+                    rgba(0, 0, 0, 0.75) 30%,
+                    rgba(0, 0, 0, 0.4) 60%,
+                    transparent 100%);
             pointer-events: none;
             z-index: 1;
         }
@@ -224,10 +230,10 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
             right: 0;
             height: 60%;
             background: linear-gradient(to top,
-                rgba(0, 0, 0, 0.95) 0%,
-                rgba(0, 0, 0, 0.75) 30%,
-                rgba(0, 0, 0, 0.4) 60%,
-                transparent 100%);
+                    rgba(0, 0, 0, 0.95) 0%,
+                    rgba(0, 0, 0, 0.75) 30%,
+                    rgba(0, 0, 0, 0.4) 60%,
+                    transparent 100%);
             pointer-events: none;
             z-index: 1;
         }
@@ -271,11 +277,11 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
         }
 
         /* Espaciado entre secciones del sidebar */
-        .product__sidebar > div {
+        .product__sidebar>div {
             margin-bottom: 45px;
         }
 
-        .product__sidebar > div:last-child {
+        .product__sidebar>div:last-child {
             margin-bottom: 0;
         }
 
@@ -324,7 +330,6 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
     <section class="product-page spad">
         <div class="container">
             <div class="row">
-                <!-- Columna Principal (Izquierda) - 8 columnas -->
                 <div class="col-lg-8">
                     <div class="product__page__content">
                         <div class="product__page__title">
@@ -357,28 +362,29 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
                                 foreach ($actoresPagina as $actor):
                                     $edad = calcularEdad($actor['fecha_nacimiento']);
                                     $imagenPath = !empty($actor['imagen']) ? 'imagenes/actores/' . htmlspecialchars($actor['imagen']) : 'imagenes/actores/default-actor.jpg';
-                            ?>
-                                <div class="col-lg-4 col-md-6 col-sm-6">
-                                    <div class="actor__item">
-                                        <div class="actor__item__pic set-bg" data-setbg="<?= $imagenPath ?>">
-                                            <a href="actor-detalle.php?id=<?= $actor['id'] ?>" class="imagen-enlace"></a>
-                                            <div class="actor__item__text">
-                                                <h5><?= htmlspecialchars($actor['nombre']) ?></h5>
-                                                <?php if ($edad): ?>
-                                                    <p><span class="edad"><?= $edad ?> años</span></p>
-                                                <?php endif; ?>
+                                    ?>
+                                    <div class="col-lg-4 col-md-6 col-sm-6">
+                                        <div class="actor__item">
+                                            <div class="actor__item__pic set-bg" data-setbg="<?= $imagenPath ?>">
+                                                <a href="actor-detalle.php?id=<?= $actor['id'] ?>" class="imagen-enlace"></a>
+                                                <div class="actor__item__text">
+                                                    <h5><?= htmlspecialchars($actor['nombre']) ?></h5>
+                                                    <?php if ($edad): ?>
+                                                        <p><span class="edad"><?= $edad ?> años</span></p>
+                                                    <?php endif; ?>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            <?php
+                                    <?php
                                 endforeach;
                             else:
-                            ?>
+                                ?>
                                 <div class="col-12">
                                     <div class="alert alert-warning text-center">
                                         <i class="fa fa-exclamation-triangle"></i>
-                                        No hay actores disponibles<?= $letraSeleccionada ? ' para la letra "' . htmlspecialchars($letraSeleccionada) . '"' : '' ?>.
+                                        No hay actores
+                                        disponibles<?= $letraSeleccionada ? ' para la letra "' . htmlspecialchars($letraSeleccionada) . '"' : '' ?>.
                                         <?php if ($letraSeleccionada): ?>
                                             <br><a href="./actores.php" class="btn btn-primary mt-3">Ver todos los actores</a>
                                         <?php endif; ?>
@@ -418,7 +424,8 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
                             <?php endif; ?>
 
                             <?php for ($i = $inicio; $i <= $fin; $i++): ?>
-                                <a href="<?= $urlBase ?><?= $i ?>" class="<?= $i == $pagina ? 'current-page' : '' ?>"><?= $i ?></a>
+                                <a href="<?= $urlBase ?><?= $i ?>"
+                                    class="<?= $i == $pagina ? 'current-page' : '' ?>"><?= $i ?></a>
                             <?php endfor; ?>
 
                             <?php if ($fin < $total_paginas): ?>
@@ -445,16 +452,16 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
                                 <h5>Buscar por Inicial</h5>
                             </div>
                             <div class="alfabeto-grid">
-                                <?php 
+                                <?php
                                 $alfabeto = range('A', 'Z');
-                                foreach ($alfabeto as $letra): 
+                                foreach ($alfabeto as $letra):
                                     $disponible = in_array($letra, $letrasDisponibles);
                                     $activo = ($letraSeleccionada === $letra);
                                     $clase = !$disponible ? 'disabled' : ($activo ? 'active' : '');
-                                ?>
-                                    <a href="<?= $disponible ? './actores.php?letra=' . $letra : '#' ?>" 
-                                       class="<?= $clase ?>" 
-                                       title="<?= $disponible ? 'Ver actores con ' . $letra : 'No hay actores con ' . $letra ?>">
+                                    ?>
+                                    <a href="<?= $disponible ? './actores.php?letra=' . $letra : '#' ?>"
+                                        class="<?= $clase ?>"
+                                        title="<?= $disponible ? 'Ver actores con ' . $letra : 'No hay actores con ' . $letra ?>">
                                         <?= $letra ?>
                                     </a>
                                 <?php endforeach; ?>
@@ -473,13 +480,13 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
                                 if (!empty($actoresDestacados)):
                                     foreach ($actoresDestacados as $destacado):
                                         $imagenDestacado = !empty($destacado['imagen']) ? 'imagenes/actores/' . htmlspecialchars($destacado['imagen']) : 'imagenes/actores/default-actor.jpg';
-                                ?>
-                                    <a href="actor-detalle.php?id=<?= $destacado['id'] ?>">
-                                        <div class="actor__sidebar__item set-bg" data-setbg="<?= $imagenDestacado ?>">
-                                            <h5><?= htmlspecialchars($destacado['nombre']) ?></h5>
-                                        </div>
-                                    </a>
-                                <?php
+                                        ?>
+                                        <a href="actor-detalle.php?id=<?= $destacado['id'] ?>">
+                                            <div class="actor__sidebar__item set-bg" data-setbg="<?= $imagenDestacado ?>">
+                                                <h5><?= htmlspecialchars($destacado['nombre']) ?></h5>
+                                            </div>
+                                        </a>
+                                        <?php
                                     endforeach;
                                 endif;
                                 ?>

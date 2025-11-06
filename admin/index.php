@@ -15,6 +15,11 @@ require_once "./includes/crudGeneros.php";
 require_once "./includes/crudValoraciones.php";
 
 
+// Verificar que el usuario sea administrador
+if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
+    header("Location: ../index.php");
+    exit();
+}
 
 $peliculasObj = new Peliculas();
 $usuariosObj = new Usuarios();

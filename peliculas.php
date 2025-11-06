@@ -79,6 +79,8 @@ function getColorClase($puntuacion)
     <link rel="stylesheet" href="anime-main/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/style.css" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./logobutaca.png">
+
 
     <!-- Estilos personalizados -->
     <!-- Estilos personalizados -->

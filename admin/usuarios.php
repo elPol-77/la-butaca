@@ -46,7 +46,6 @@ if (($accion === "editar" || $accion === "editar_password") && $id) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $errores = [];
 
-    // VALIDACIONES CON isset()
     $username = isset($_POST['username']) ? trim($_POST['username']) : '';
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
@@ -54,98 +53,87 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $rol = isset($_POST['rol']) ? trim($_POST['rol']) : '';
 
     if ($accion === "crear") {
-        // Validar username
         if (empty($username)) {
             $errores[] = "El nombre de usuario es obligatorio.";
         }
-
-        // Validar email
         if (empty($email)) {
             $errores[] = "El email es obligatorio.";
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errores[] = "El email no es válido.";
         }
-
-        // Validar rol
         if (empty($rol)) {
             $errores[] = "Debes seleccionar un rol.";
         }
-
-        // Validar contraseña
         if (empty($password)) {
             $errores[] = "La contraseña es obligatoria.";
         } elseif (strlen($password) < 6) {
             $errores[] = "La contraseña debe tener al menos 6 caracteres.";
         }
-
-        // Validar confirmación de contraseña
         if ($password !== $password_confirm) {
             $errores[] = "Las contraseñas no coinciden.";
         }
 
-        // Si no hay errores, crear usuario
         if (empty($errores)) {
             $usuariosObj->insertarUsuario($username, $email, $password, $rol);
             header("Location: usuarios.php");
             exit();
         } else {
             $mensaje = implode('<br>', $errores);
-        }
 
+            // Mantener datos introducidos
+            $datosFormulario['username'] = $username;
+            $datosFormulario['email'] = $email;
+            $datosFormulario['rol'] = $rol;
+        }
     } elseif ($accion === "editar" && $id) {
-        // Validar username
         if (empty($username)) {
             $errores[] = "El nombre de usuario es obligatorio.";
         }
-
-        // Validar email
         if (empty($email)) {
             $errores[] = "El email es obligatorio.";
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errores[] = "El email no es válido.";
         }
-
-        // Validar rol
         if (empty($rol)) {
             $errores[] = "Debes seleccionar un rol.";
         }
 
-        // Si no hay errores, actualizar usuario
         if (empty($errores)) {
             $usuariosObj->actualizarUsuario($id, $username, $email, $rol);
             header("Location: usuarios.php");
             exit();
         } else {
             $mensaje = implode('<br>', $errores);
-        }
 
+            // Mantener datos introducidos
+            $datosFormulario['username'] = $username;
+            $datosFormulario['email'] = $email;
+            $datosFormulario['rol'] = $rol;
+        }
     } elseif ($accion === "editar_password" && $id) {
-        // Validar contraseña
         if (empty($password)) {
             $errores[] = "La contraseña es obligatoria.";
         } elseif (strlen($password) < 6) {
             $errores[] = "La contraseña debe tener al menos 6 caracteres.";
         }
-
-        // Validar confirmación de contraseña
         if ($password !== $password_confirm) {
             $errores[] = "Las contraseñas no coinciden.";
         }
 
-        // Si no hay errores, actualizar contraseña
         if (empty($errores)) {
             $usuariosObj->actualizarPassword($id, $password);
             header("Location: usuarios.php");
             exit();
         } else {
             $mensaje = implode('<br>', $errores);
+            // Normalmente NO repueblas campos de password
         }
     }
 }
 
 // Eliminar usuario
 if ($accion == "eliminar" && $id) {
-    if ((int)$id !== (int)$currentUserId) {
+    if ((int) $id !== (int) $currentUserId) {
         $usuariosObj->eliminarUsuario($id);
         header("Location: usuarios.php");
         exit();
@@ -156,6 +144,7 @@ if ($accion == "eliminar" && $id) {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Gestión de Usuarios - Admin">
@@ -165,7 +154,8 @@ if ($accion == "eliminar" && $id) {
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="../anime-main/css/bootstrap.min.css" type="text/css">
@@ -212,7 +202,7 @@ if ($accion == "eliminar" && $id) {
             background: #1a1d3a;
             border-radius: 10px;
             padding: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             overflow-x: auto;
         }
 
@@ -236,7 +226,7 @@ if ($accion == "eliminar" && $id) {
         }
 
         .user-table tbody tr {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s;
         }
 
@@ -302,7 +292,7 @@ if ($accion == "eliminar" && $id) {
             border-radius: 10px;
             padding: 40px;
             margin-top: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
 
         .form-container h3 {
@@ -328,7 +318,7 @@ if ($accion == "eliminar" && $id) {
 
         .form-control {
             background: #0b0c2a;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #fff;
             padding: 12px 15px;
             border-radius: 5px;
@@ -343,12 +333,12 @@ if ($accion == "eliminar" && $id) {
         }
 
         .form-control::placeholder {
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
         }
 
         select.form-select {
             background: #0b0c2a;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #fff;
             padding: 12px 15px;
             border-radius: 5px;
@@ -415,7 +405,7 @@ if ($accion == "eliminar" && $id) {
         }
 
         .form-hint {
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 12px;
             margin-top: 5px;
             font-style: italic;
@@ -480,39 +470,41 @@ if ($accion == "eliminar" && $id) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach($listaUsuarios as $user): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($user['username'] ?? '') ?></td>
-                                        <td><?= htmlspecialchars($user['email'] ?? '') ?></td>
-                                        <td>
-                                            <span class="role-badge <?= $user['rol'] ?>">
-                                                <?= htmlspecialchars($user['rol'] ?? '') ?>
-                                            </span>
-                                        </td>
-                                        <td style="white-space: nowrap;">
-                                            <a href="usuarios.php?accion=editar&id=<?= $user['id'] ?>" class="btn-action btn-edit">
-                                                <i class="fa fa-edit"></i> Editar
-                                            </a>
-                                            <a href="usuarios.php?accion=editar_password&id=<?= $user['id'] ?>" class="btn-action btn-password">
-                                                <i class="fa fa-key"></i> Contraseña
-                                            </a>
-                                            <?php
-                                            // Mostrar Eliminar solo si es superadmin y NO para el usuario admin
-                                            if (
-                                                isset($currentUserId, $_SESSION['usuario'], $user['username']) &&
-                                                $currentUserId == 1 &&
-                                                $_SESSION['usuario'] === 'admin' &&
-                                                $user['username'] !== 'admin'
-                                            ):
-                                            ?>
-                                                <a href="usuarios.php?accion=eliminar&id=<?= $user['id'] ?>" 
-                                                   class="btn-action btn-delete" 
-                                                   onclick="return confirm('¿Estás seguro de eliminar este usuario?')">
-                                                    <i class="fa fa-trash"></i> Eliminar
+                                    <?php foreach ($listaUsuarios as $user): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($user['username'] ?? '') ?></td>
+                                            <td><?= htmlspecialchars($user['email'] ?? '') ?></td>
+                                            <td>
+                                                <span class="role-badge <?= $user['rol'] ?>">
+                                                    <?= htmlspecialchars($user['rol'] ?? '') ?>
+                                                </span>
+                                            </td>
+                                            <td style="white-space: nowrap;">
+                                                <a href="usuarios.php?accion=editar&id=<?= $user['id'] ?>"
+                                                    class="btn-action btn-edit">
+                                                    <i class="fa fa-edit"></i> Editar
                                                 </a>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
+                                                <a href="usuarios.php?accion=editar_password&id=<?= $user['id'] ?>"
+                                                    class="btn-action btn-password">
+                                                    <i class="fa fa-key"></i> Contraseña
+                                                </a>
+                                                <?php
+                                                // Mostrar Eliminar solo si es superadmin y NO para el usuario admin
+                                                if (
+                                                    isset($currentUserId, $_SESSION['usuario'], $user['username']) &&
+                                                    $currentUserId == 1 &&
+                                                    $_SESSION['usuario'] === 'admin' &&
+                                                    $user['username'] !== 'admin'
+                                                ):
+                                                    ?>
+                                                    <a href="usuarios.php?accion=eliminar&id=<?= $user['id'] ?>"
+                                                        class="btn-action btn-delete"
+                                                        onclick="return confirm('¿Estás seguro de eliminar este usuario?')">
+                                                        <i class="fa fa-trash"></i> Eliminar
+                                                    </a>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
@@ -522,66 +514,67 @@ if ($accion == "eliminar" && $id) {
                     <?php if ($accion === "crear" || $accion === "editar" || $accion === "editar_password"): ?>
                         <div class="form-container">
                             <h3>
-                                <?php if($accion === "crear"): ?>
+                                <?php if ($accion === "crear"): ?>
                                     <i class="fa fa-user-plus"></i> Nuevo Usuario
-                                <?php elseif($accion === "editar"): ?>
+                                <?php elseif ($accion === "editar"): ?>
                                     <i class="fa fa-edit"></i> Editar: <?= htmlspecialchars($datosFormulario['username']) ?>
-                                <?php elseif($accion === "editar_password"): ?>
-                                    <i class="fa fa-key"></i> Cambiar Contraseña: <?= htmlspecialchars($datosFormulario['username']) ?>
+                                <?php elseif ($accion === "editar_password"): ?>
+                                    <i class="fa fa-key"></i> Cambiar Contraseña:
+                                    <?= htmlspecialchars($datosFormulario['username']) ?>
                                 <?php endif; ?>
                             </h3>
-                            
+
                             <form method="post">
                                 <?php if ($accion === "crear" || $accion === "editar"): ?>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Username *</label>
-                                            <input type="text" name="username" class="form-control" 
-                                                   value="<?= htmlspecialchars($datosFormulario['username'] ?? '') ?>" 
-                                                   placeholder="Ej: juanperez">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Username *</label>
+                                                <input type="text" name="username" class="form-control"
+                                                    value="<?= htmlspecialchars($datosFormulario['username'] ?? '') ?>"
+                                                    placeholder="Ej: juanperez">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Email *</label>
+                                                <input type="email" name="email" class="form-control"
+                                                    value="<?= htmlspecialchars($datosFormulario['email'] ?? '') ?>"
+                                                    placeholder="Ej: usuario@email.com">
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Email *</label>
-                                            <input type="email" name="email" class="form-control" 
-                                                   value="<?= htmlspecialchars($datosFormulario['email'] ?? '') ?>" 
-                                                   placeholder="Ej: usuario@email.com">
-                                        </div>
+                                    <div class="form-group">
+                                        <label>Rol *</label>
+                                        <select name="rol" class="form-select">
+                                            <option value="">Seleccionar rol</option>
+                                            <option value="admin" <?= (isset($datosFormulario['rol']) && $datosFormulario['rol'] === 'admin') ? 'selected' : '' ?>>Administrador</option>
+                                            <option value="usuario" <?= (isset($datosFormulario['rol']) && $datosFormulario['rol'] === 'usuario') ? 'selected' : '' ?>>Usuario</option>
+                                        </select>
                                     </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Rol *</label>
-                                    <select name="rol" class="form-select">
-                                        <option value="">Seleccionar rol</option>
-                                        <option value="admin" <?= (isset($datosFormulario['rol']) && $datosFormulario['rol'] === 'admin') ? 'selected' : '' ?>>Administrador</option>
-                                        <option value="usuario" <?= (isset($datosFormulario['rol']) && $datosFormulario['rol'] === 'usuario') ? 'selected' : '' ?>>Usuario</option>
-                                    </select>
-                                </div>
                                 <?php endif; ?>
 
                                 <?php if ($accion === "crear" || $accion === "editar_password"): ?>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Nueva Contraseña *</label>
-                                            <input type="password" name="password" class="form-control" 
-                                                   placeholder="Mínimo 6 caracteres">
-                                            <small class="form-hint">La contraseña debe tener al menos 6 caracteres</small>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Nueva Contraseña *</label>
+                                                <input type="password" name="password" class="form-control"
+                                                    placeholder="Mínimo 6 caracteres">
+                                                <small class="form-hint">La contraseña debe tener al menos 6 caracteres</small>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Repetir Contraseña *</label>
-                                            <input type="password" name="password_confirm" class="form-control" 
-                                                   placeholder="Repite la contraseña">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Repetir Contraseña *</label>
+                                                <input type="password" name="password_confirm" class="form-control"
+                                                    placeholder="Repite la contraseña">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 <?php endif; ?>
 
                                 <div class="form-group" style="margin-top: 30px;">
@@ -625,4 +618,5 @@ if ($accion == "eliminar" && $id) {
     <script src="../anime-main/js/owl.carousel.min.js"></script>
     <script src="../anime-main/js/main.js"></script>
 </body>
+
 </html>

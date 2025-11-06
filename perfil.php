@@ -91,6 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
     <link rel="stylesheet" href="anime-main/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/style.css" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./logobutaca.png">
+
 </head>
 
 <body>
@@ -209,7 +211,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
 
                         <div style="margin-top: 20px;">
                             <a href="admin/includes/logout.php" class="btn btn-outline-danger btn-block"
-                                style="display: block; text-align: center; padding: 12px; border: 1px solid #dc3545; color: #dc3545; border-radius: 5px; text-decoration: none; transition: all 0.3s;">
+                                style="display: block; text-align: center; padding: 12px; border: 1px solid #dc3545; color: #white; border-radius: 5px; text-decoration: none; transition: all 0.3s;">
                                 <i class="fa fa-sign-out"></i> Cerrar Sesión
                             </a>
                         </div>

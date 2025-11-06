@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Login La Butaca">
@@ -35,7 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="anime-main/css/bootstrap.min.css" type="text/css">
@@ -46,6 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="anime-main/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/style.css" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./logobutaca.png">
+
 </head>
 
 <body>
@@ -54,9 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="loader"></div>
     </div>
 
-<?php
-  include 'head.php'; 
-?>
+    <?php
+    include 'head.php';
+    ?>
 
     <!-- Normal Breadcrumb Begin -->
     <section class="normal-breadcrumb set-bg" data-setbg="imagenes/header.png">
@@ -80,16 +84,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>Iniciar Sesión</h3>
-                        
+
                         <?php if (!empty($error)): ?>
                             <div class="alert alert-danger" role="alert">
-                                <i class="fa fa-exclamation-triangle"></i> <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
                             </div>
                         <?php endif; ?>
 
                         <form method="POST" action="login.php">
                             <div class="input__item">
-                                <input type="text" name="username" id="username" placeholder="Nombre de usuario" required>
+                                <input type="text" name="username" id="username" placeholder="Nombre de usuario"
+                                    required>
                                 <span class="icon_profile"></span>
                             </div>
                             <div class="input__item">
@@ -112,9 +118,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </section>
     <!-- Login Section End -->
 
-<?php
-  include 'footer.php'; 
-?>
+    <?php
+    include 'footer.php';
+    ?>
 
     <!-- Search model Begin -->
     <div class="search-model">
@@ -138,4 +144,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="anime-main/js/main.js"></script>
 
 </body>
+
 </html>

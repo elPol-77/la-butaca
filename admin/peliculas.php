@@ -169,13 +169,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    // Si hay errores, mostrar mensaje
     if (!empty($errores)) {
         $mensaje = implode('<br>', $errores);
+
+        // Mantener los valores introducidos
+        $datosFormulario['titulo'] = $titulo;
+        $datosFormulario['descripcion'] = $descripcion;
+        $datosFormulario['anio'] = $anio;
+        $datosFormulario['duracion'] = $duracion;
+        $datosFormulario['director_id'] = $director_id;
+        $datosFormulario['plataforma_id'] = $plataforma_id;
+        $datosFormulario['fecha_estreno'] = $fecha_estreno;
+        $datosFormulario['LINK'] = $link;
+        // El campo imagen se queda vacío si falló la subida
+        // En edición, lo anterior ya te mantiene la imagen
+
+        // Para los checkboxes
+        $generosSeleccionados = $generos;
+        $actoresSeleccionados = $actores;
     } else {
-        // No hay errores, proceder a guardar
+        // No hay errores, guardar en BD (igual que tenías)
         if ($accion === "crear" && !empty($nombreImagen)) {
-            $nuevoId = $peliculasObj->insertarPelicula($titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $nombreImagen, $fecha_estreno,$link);
+            $nuevoId = $peliculasObj->insertarPelicula($titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $nombreImagen, $fecha_estreno, $link);
             if ($nuevoId) {
                 $peliculasObj->asociarGeneros($nuevoId, $generos);
                 $peliculasObj->asociarActores($nuevoId, $actores);
@@ -185,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $mensaje = "Error al insertar la película. Verifica los datos.";
             }
         } elseif ($accion === "editar" && $id) {
-            $exito = $peliculasObj->actualizarPelicula($id, $titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $nombreImagen, $fecha_estreno,$link);
+            $exito = $peliculasObj->actualizarPelicula($id, $titulo, $descripcion, $anio, $duracion, $director_id, $plataforma_id, $nombreImagen, $fecha_estreno, $link);
             if ($exito) {
                 $peliculasObj->asociarGeneros($id, $generos);
                 $peliculasObj->asociarActores($id, $actores);

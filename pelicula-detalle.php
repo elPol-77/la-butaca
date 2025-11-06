@@ -58,11 +58,9 @@ $director = [
     'nombre' => $pelicula['director'] ?? 'Desconocido'
 ];
 
-// NUEVO: Procesar envío de reseña usando CRUD
 $mensaje_exito = '';
 $mensaje_error = '';
 
-// CAMBIO AQUÍ: Usar $_SESSION['id'] en lugar de $_SESSION['usuario_id']
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_resena']) && isset($_SESSION['id'])) {
     $usuario_id = (int) $_SESSION['id']; // CAMBIO: de 'usuario_id' a 'id'
     $pelicula_id = $id;
@@ -97,9 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_resena']) && i
     }
 }
 
-// NUEVO: Obtener datos de reseñas usando CRUD
+// Obtener datos de reseñas usando CRUD
 $resena_usuario = null;
-// CAMBIO AQUÍ: Usar $_SESSION['id']
 if (isset($_SESSION['id'])) {
     $resena_usuario = $resenaObj->getResenaUsuarioPelicula($_SESSION['id'], $id);
 }
@@ -152,8 +149,9 @@ function getColorClase($puntuacion)
     <link rel="stylesheet" href="anime-main/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="anime-main/css/style.css" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./logobutaca.png">
 
-    <!-- Estilos personalizados -->
+
     <style>
         /* ESTILOS PARA VALORACIÓN - BADGE SIDEBAR */
         .valoracion-badge-sidebar {
@@ -189,7 +187,7 @@ function getColorClase($puntuacion)
             border-color: #999;
         }
 
-        /* Contenedor de imágenes en "También te puede gustar" y "Más Vistas" */
+        
         .product__sidebar__view__item {
             cursor: pointer;
             transition: transform 0.3s ease;
@@ -248,7 +246,6 @@ function getColorClase($puntuacion)
             z-index: 2;
         }
 
-        /* Espaciado para la sección "También te puede gustar" */
         .anime__details__sidebar {
             margin-top: 20px;
         }

@@ -67,24 +67,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Procesar subida de imagen
     $nombreImagen = '';
     $imagenSubidaExitosa = false;
-    
+
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $archivoTemporal = $_FILES['imagen']['tmp_name'];
         $nombreOriginal = $_FILES['imagen']['name'];
         $extension = pathinfo($nombreOriginal, PATHINFO_EXTENSION);
-        
+
         $nombreLimpio = strtolower(str_replace(' ', '', $nombre));
         $nombreLimpio = preg_replace('/[^a-z0-9]/', '', $nombreLimpio);
         $nombreImagen = $nombreLimpio . '.' . $extension;
         $rutaDestino = "../imagenes/actores/" . $nombreImagen;
-        
+
         // Validar que sea imagen
         $tiposPermitidos = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         if (in_array(strtolower($extension), $tiposPermitidos)) {
             if (move_uploaded_file($archivoTemporal, $rutaDestino)) {
                 // Imagen subida correctamente
                 $imagenSubidaExitosa = true;
-                
+
                 if ($accion === "editar" && !empty($datosFormulario['imagen']) && $datosFormulario['imagen'] !== $nombreImagen) {
                     $rutaImagenAntigua = "../imagenes/actores/" . $datosFormulario['imagen'];
                     if (file_exists($rutaImagenAntigua)) {
@@ -100,12 +100,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $nombreImagen = '';
         }
     }
-    
+
     // Si no se subió nueva imagen en edición, mantener la existente
     if ($accion === "editar" && !$imagenSubidaExitosa) {
         $nombreImagen = $datosFormulario['imagen'];
     }
-    
+
     // Si es creación y no hay imagen
     if ($accion === "crear" && !$imagenSubidaExitosa) {
         $errores[] = "Debes seleccionar una imagen del actor.";
@@ -123,8 +123,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Si hay errores, mostrar mensaje
     if (!empty($errores)) {
         $mensaje = implode('<br>', $errores);
+
+        // Mantener los datos introducidos para no perderlos
+        $datosFormulario['nombre'] = $nombre;
+        $datosFormulario['fecha_nacimiento'] = $fecha_nacimiento;
+        $datosFormulario['biografia'] = $biografia;
+        $datosFormulario['imagen'] = $nombreImagen;
     } else {
-        // No hay errores, proceder a guardar
         if ($accion === "crear" && !empty($nombreImagen)) {
             $nuevoId = $actoresObj->insertarActor($nombre, $fecha_nacimiento, $biografia, $nombreImagen);
             if ($nuevoId) {
@@ -149,10 +154,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 if ($accion == "eliminar" && $id) {
     // Obtener datos del actor antes de eliminar
     $actorAEliminar = $actoresObj->getActorById($id);
-    
+
     // Eliminar el actor de la base de datos
     $eliminado = $actoresObj->eliminarActor($id);
-    
+
     // Si se eliminó correctamente, borrar la imagen del servidor
     if ($eliminado && !empty($actorAEliminar['imagen'])) {
         $rutaImagen = "../imagenes/actores/" . $actorAEliminar['imagen'];
@@ -160,13 +165,14 @@ if ($accion == "eliminar" && $id) {
             unlink($rutaImagen);
         }
     }
-    
+
     header("Location: actores.php");
     exit();
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Gestión de Actores - Admin">
@@ -176,7 +182,8 @@ if ($accion == "eliminar" && $id) {
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="../anime-main/css/bootstrap.min.css" type="text/css">
@@ -222,7 +229,7 @@ if ($accion == "eliminar" && $id) {
             background: #1a1d3a;
             border-radius: 10px;
             padding: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             overflow-x: auto;
         }
 
@@ -246,7 +253,7 @@ if ($accion == "eliminar" && $id) {
         }
 
         .actor-table tbody tr {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s;
         }
 
@@ -270,7 +277,7 @@ if ($accion == "eliminar" && $id) {
             height: 50px;
             object-fit: cover;
             border-radius: 50%;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
         }
 
         .btn-action {
@@ -310,7 +317,7 @@ if ($accion == "eliminar" && $id) {
             border-radius: 10px;
             padding: 40px;
             margin-top: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
 
         .form-container h3 {
@@ -336,7 +343,7 @@ if ($accion == "eliminar" && $id) {
 
         .form-control {
             background: #0b0c2a;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #fff;
             border-radius: 5px;
             transition: all 0.3s;
@@ -350,7 +357,7 @@ if ($accion == "eliminar" && $id) {
         }
 
         .form-control::placeholder {
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
         }
 
         textarea.form-control {
@@ -441,7 +448,7 @@ if ($accion == "eliminar" && $id) {
         }
 
         .form-hint {
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 12px;
             margin-top: 5px;
             font-style: italic;
@@ -450,7 +457,7 @@ if ($accion == "eliminar" && $id) {
         .current-image-preview {
             margin-top: 10px;
             padding: 10px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 5px;
         }
 
@@ -459,11 +466,11 @@ if ($accion == "eliminar" && $id) {
             height: 100px;
             object-fit: cover;
             border-radius: 50%;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
         }
 
         .current-image-preview p {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 13px;
             margin-top: 8px;
             margin-bottom: 0;
@@ -518,33 +525,34 @@ if ($accion == "eliminar" && $id) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach($listaActores as $actor): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($actor['nombre'] ?? '') ?></td>
-                                        <td><?= htmlspecialchars($actor['fecha_nacimiento'] ?? '') ?></td>
-                                        <td class="biografia-cell" title="<?= htmlspecialchars($actor['biografia'] ?? '') ?>">
-                                            <?= htmlspecialchars($actor['biografia'] ?? '') ?>
-                                        </td>
-                                        <td>
-                                            <?php if (!empty($actor['imagen'])): ?>
-                                                <img src="../imagenes/actores/<?= htmlspecialchars($actor['imagen']) ?>" 
-                                                     alt="<?= htmlspecialchars($actor['nombre']) ?>" 
-                                                     class="actor-img">
-                                            <?php else: ?>
-                                                <span style="color: rgba(255,255,255,0.5);">Sin imagen</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td style="white-space: nowrap;">
-                                            <a href="actores.php?accion=editar&id=<?= $actor['id'] ?>" class="btn-action btn-edit">
-                                                <i class="fa fa-edit"></i> Editar
-                                            </a>
-                                            <a href="actores.php?accion=eliminar&id=<?= $actor['id'] ?>" 
-                                               class="btn-action btn-delete" 
-                                               onclick="return confirm('¿Estás seguro de eliminar este actor?')">
-                                                <i class="fa fa-trash"></i> Eliminar
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    <?php foreach ($listaActores as $actor): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($actor['nombre'] ?? '') ?></td>
+                                            <td><?= htmlspecialchars($actor['fecha_nacimiento'] ?? '') ?></td>
+                                            <td class="biografia-cell"
+                                                title="<?= htmlspecialchars($actor['biografia'] ?? '') ?>">
+                                                <?= htmlspecialchars($actor['biografia'] ?? '') ?>
+                                            </td>
+                                            <td>
+                                                <?php if (!empty($actor['imagen'])): ?>
+                                                    <img src="../imagenes/actores/<?= htmlspecialchars($actor['imagen']) ?>"
+                                                        alt="<?= htmlspecialchars($actor['nombre']) ?>" class="actor-img">
+                                                <?php else: ?>
+                                                    <span style="color: rgba(255,255,255,0.5);">Sin imagen</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td style="white-space: nowrap;">
+                                                <a href="actores.php?accion=editar&id=<?= $actor['id'] ?>"
+                                                    class="btn-action btn-edit">
+                                                    <i class="fa fa-edit"></i> Editar
+                                                </a>
+                                                <a href="actores.php?accion=eliminar&id=<?= $actor['id'] ?>"
+                                                    class="btn-action btn-delete"
+                                                    onclick="return confirm('¿Estás seguro de eliminar este actor?')">
+                                                    <i class="fa fa-trash"></i> Eliminar
+                                                </a>
+                                            </td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
@@ -554,37 +562,37 @@ if ($accion == "eliminar" && $id) {
                     <?php if ($accion === "crear" || $accion === "editar"): ?>
                         <div class="form-container">
                             <h3>
-                                <?php if($accion === "crear"): ?>
+                                <?php if ($accion === "crear"): ?>
                                     <i class="fa fa-plus-circle"></i> Nuevo Actor
                                 <?php else: ?>
                                     <i class="fa fa-edit"></i> Editar: <?= htmlspecialchars($datosFormulario['nombre']) ?>
                                 <?php endif; ?>
                             </h3>
-                            
+
                             <form method="post" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Nombre Completo *</label>
-                                            <input type="text" name="nombre" class="form-control" 
-                                                   value="<?= htmlspecialchars($datosFormulario['nombre'] ?? '') ?>" 
-                                                   placeholder="Ej: Tom Hanks">
+                                            <input type="text" name="nombre" class="form-control"
+                                                value="<?= htmlspecialchars($datosFormulario['nombre'] ?? '') ?>"
+                                                placeholder="Ej: Tom Hanks">
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Fecha de Nacimiento *</label>
-                                            <input type="date" name="fecha_nacimiento" class="form-control" 
-                                                   value="<?= htmlspecialchars($datosFormulario['fecha_nacimiento'] ?? '') ?>">
+                                            <input type="date" name="fecha_nacimiento" class="form-control"
+                                                value="<?= htmlspecialchars($datosFormulario['fecha_nacimiento'] ?? '') ?>">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Biografía *</label>
-                                    <textarea name="biografia" class="form-control" 
-                                              placeholder="Escribe una biografía detallada del actor..."><?= htmlspecialchars($datosFormulario['biografia'] ?? '') ?></textarea>
+                                    <textarea name="biografia" class="form-control"
+                                        placeholder="Escribe una biografía detallada del actor..."><?= htmlspecialchars($datosFormulario['biografia'] ?? '') ?></textarea>
                                     <small class="form-hint">Incluye información relevante sobre su carrera y logros</small>
                                 </div>
 
@@ -592,12 +600,12 @@ if ($accion == "eliminar" && $id) {
                                     <label>Imagen del Actor *</label>
                                     <input type="file" name="imagen" class="form-control" accept="image/*">
                                     <small class="form-hint">Formatos: JPG, JPEG, PNG, GIF, WEBP</small>
-                                    
-                                    <?php if($accion === "editar" && !empty($datosFormulario['imagen'])): ?>
+
+                                    <?php if ($accion === "editar" && !empty($datosFormulario['imagen'])): ?>
                                         <div class="current-image-preview">
                                             <p><strong>Imagen actual:</strong></p>
-                                            <img src="../imagenes/actores/<?= htmlspecialchars($datosFormulario['imagen']) ?>" 
-                                                 alt="Imagen actual">
+                                            <img src="../imagenes/actores/<?= htmlspecialchars($datosFormulario['imagen']) ?>"
+                                                alt="Imagen actual">
                                             <p><?= htmlspecialchars($datosFormulario['imagen']) ?></p>
                                         </div>
                                     <?php endif; ?>
@@ -644,4 +652,5 @@ if ($accion == "eliminar" && $id) {
     <script src="../anime-main/js/owl.carousel.min.js"></script>
     <script src="../anime-main/js/main.js"></script>
 </body>
+
 </html>
