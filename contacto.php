@@ -6,6 +6,7 @@ $error = "";
 
 // Procesar formulario de contacto
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Usar isset (con el operador ?? para valores por defecto vacíos)
     $nombre = trim($_POST['nombre'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $asunto = trim($_POST['asunto'] ?? '');
@@ -17,9 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "El correo electrónico no es válido";
     } else {
-
         $success = "¡Gracias por contactarnos! Te responderemos pronto.";
-
         // Limpiar campos después del envío exitoso
         $nombre = $email = $asunto = $mensaje = "";
     }
@@ -193,27 +192,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <form method="POST" action="contacto.php">
                             <div class="input__item">
                                 <input type="text" name="nombre" placeholder="Tu Nombre"
-                                    value="<?= htmlspecialchars($nombre ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                                    value="<?= htmlspecialchars($nombre ?? '', ENT_QUOTES, 'UTF-8') ?>">
                                 <span class="icon_profile"></span>
                             </div>
-
                             <div class="input__item">
                                 <input type="email" name="email" placeholder="Tu Correo Electrónico"
-                                    value="<?= htmlspecialchars($email ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                                    value="<?= htmlspecialchars($email ?? '', ENT_QUOTES, 'UTF-8') ?>">
                                 <span class="icon_mail"></span>
                             </div>
-
                             <div class="input__item">
                                 <input type="text" name="asunto" placeholder="Asunto"
-                                    value="<?= htmlspecialchars($asunto ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                                    value="<?= htmlspecialchars($asunto ?? '', ENT_QUOTES, 'UTF-8') ?>">
                                 <span class="icon_comment"></span>
                             </div>
-
                             <div style="position: relative; margin-bottom: 20px;">
-                                <textarea name="mensaje" placeholder="Tu Mensaje"
-                                    required><?= htmlspecialchars($mensaje ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                                <textarea name="mensaje"
+                                    placeholder="Tu Mensaje"><?= htmlspecialchars($mensaje ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                             </div>
-
                             <button type="submit" class="site-btn">Enviar Mensaje</button>
                         </form>
                     </div>

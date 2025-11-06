@@ -4,22 +4,28 @@ $sesion = new Sessions();
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $usuario = $_POST['username'];
-    $clave = $_POST['password'];
-    $datos = $sesion->comprobarCredenciales($usuario, $clave);
+    // Verifica existencia de ambos campos con isset antes de usarlos
+    if (isset($_POST['username']) && isset($_POST['password'])) {
+        $usuario = $_POST['username'];
+        $clave = $_POST['password'];
+        $datos = $sesion->comprobarCredenciales($usuario, $clave);
 
-    if ($datos) {
-        $sesion->crearSesion($datos);
+        if ($datos) {
+            $sesion->crearSesion($datos);
 
-        // Redirigir según el rol
-        if (isset($datos['rol']) && $datos['rol'] == 'admin') {
-            header("Location: admin/index.php");
+            // Redirigir según el rol
+            if (isset($datos['rol']) && $datos['rol'] == 'admin') {
+                header("Location: admin/index.php");
+            } else {
+                header("Location: index.php");
+            }
+            exit();
         } else {
-            header("Location: index.php");
+            $error = "Usuario o contraseña incorrectos";
         }
-        exit();
     } else {
-        $error = "Usuario o contraseña incorrectos";
+        // Error si algún campo falta
+        $error = "Por favor completa todos los campos";
     }
 }
 ?>
@@ -94,12 +100,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <form method="POST" action="login.php">
                             <div class="input__item">
-                                <input type="text" name="username" id="username" placeholder="Nombre de usuario"
-                                    required>
+                                <input type="text" name="username" id="username" placeholder="Nombre de usuario">
                                 <span class="icon_profile"></span>
                             </div>
                             <div class="input__item">
-                                <input type="password" name="password" id="password" placeholder="Contraseña" required>
+                                <input type="password" name="password" id="password" placeholder="Contraseña" >
                                 <span class="icon_lock"></span>
                             </div>
                             <button type="submit" class="site-btn">Entrar Ahora</button>
@@ -127,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form" action="buscar.php" method="GET">
-                <input type="text" name="q" id="search-input" placeholder="Buscar películas....." required>
+                <input type="text" name="q" id="search-input" placeholder="Buscar películas....." >
             </form>
         </div>
     </div>

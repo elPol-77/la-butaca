@@ -61,12 +61,16 @@ $director = [
 $mensaje_exito = '';
 $mensaje_error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_resena']) && isset($_SESSION['id'])) {
-    $usuario_id = (int) $_SESSION['id']; // CAMBIO: de 'usuario_id' a 'id'
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    isset($_POST['enviar_resena'], $_POST['puntuacion_estrellas'], $_POST['puntuacion_imdb']) && 
+    isset($_SESSION['id'])
+) {
+    $usuario_id = (int) $_SESSION['id'];
     $pelicula_id = $id;
     $puntuacion_estrellas = (int) $_POST['puntuacion_estrellas'];
     $puntuacion_imdb = (int) $_POST['puntuacion_imdb'];
-    $comentario = trim($_POST['comentario']);
+    $comentario = isset($_POST['comentario']) ? trim($_POST['comentario']) : '';
 
     // Validación
     if (

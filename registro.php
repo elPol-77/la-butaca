@@ -8,7 +8,7 @@ $usuariosObj = new Usuarios();
 
 $mensaje = "";
 
-// Inicializa las variables para los campos del formulario
+// Inicializa las variables para los campos del formulario (usa el operador ??)
 $username = $_POST['username'] ?? '';
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
@@ -16,7 +16,7 @@ $password_confirm = $_POST['password_confirm'] ?? '';
 $rol = $_POST['rol'] ?? 'usuario';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Validación
+    // Validación backend (sin required en HTML)
     if ($password !== $password_confirm) {
         $mensaje = "Las contraseñas no coinciden.";
     } elseif (empty($username) || empty($email) || empty($password)) {
@@ -27,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header("Location: login.php?registro=ok");
             exit();
         } catch (mysqli_sql_exception $e) {
-            // Error de clave duplicada
             if ($e->getCode() == 1062) {
                 if (strpos($e->getMessage(), 'username') !== false) {
                     $mensaje = "El nombre de usuario ya está registrado.";
@@ -39,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             } else {
                 $mensaje = "Ha ocurrido un error al registrar el usuario.";
             }
-            // Los datos se conservan en los campos gracias a las variables
+
         }
     }
 }
@@ -82,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         </div>
     </section>
-    <section class="signup spad">
+        <section class="signup spad">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-8 col-sm-10">
@@ -95,22 +94,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <?php endif; ?>
                         <form method="POST" action="registro.php">
                             <div class="input__item">
-                                <input type="email" name="email" id="email" placeholder="Correo electrónico" required
+                                <input type="email" name="email" id="email" placeholder="Correo electrónico"
                                     value="<?= htmlspecialchars($email ?? '', ENT_QUOTES, 'UTF-8') ?>">
                                 <span class="icon_mail"></span>
                             </div>
                             <div class="input__item">
                                 <input type="text" name="username" id="username" placeholder="Nombre de usuario"
-                                    required value="<?= htmlspecialchars($username ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                                    value="<?= htmlspecialchars($username ?? '', ENT_QUOTES, 'UTF-8') ?>">
                                 <span class="icon_profile"></span>
                             </div>
                             <div class="input__item">
-                                <input type="password" name="password" id="password" placeholder="Contraseña" required>
+                                <input type="password" name="password" id="password" placeholder="Contraseña">
                                 <span class="icon_lock"></span>
                             </div>
                             <div class="input__item">
                                 <input type="password" name="password_confirm" id="password_confirm"
-                                    placeholder="Repetir Contraseña" required>
+                                    placeholder="Repetir Contraseña">
                                 <span class="icon_lock"></span>
                             </div>
                             <button type="submit" class="site-btn">Registrarse Ahora</button>
@@ -126,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form" action="buscar.php" method="GET">
-                <input type="text" name="q" id="search-input" placeholder="Buscar películas....." required>
+                <input type="text" name="q" id="search-input" placeholder="Buscar películas....." >
             </form>
         </div>
     </div>

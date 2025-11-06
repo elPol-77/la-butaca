@@ -229,7 +229,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form" action="buscar.php" method="GET">
-                <input type="text" name="q" id="search-input" placeholder="Buscar películas....." required>
+                <input type="text" name="q" id="search-input" placeholder="Buscar películas....." >
             </form>
         </div>
     </div>

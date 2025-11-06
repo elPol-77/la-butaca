@@ -430,7 +430,7 @@ if ($accion == "eliminar" && $id) {
                                     <label>Nombre de la Plataforma *</label>
                                     <input type="text" name="nombre" class="form-control"
                                         value="<?= htmlspecialchars($datosFormulario['nombre'] ?? '') ?>"
-                                        placeholder="Ej: Netflix, HBO Max, Disney+" required>
+                                        placeholder="Ej: Netflix, HBO Max, Disney+">
                                     <small class="form-hint">El nombre debe ser único</small>
                                 </div>
 
