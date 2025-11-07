@@ -52,66 +52,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="icon" type="image/x-icon" href="./logobutaca.png">
 
     <style>
-        .contact-info-box {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 30px;
-            margin-bottom: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
+    .contact-info-box {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 30px;
+        margin-bottom: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
 
-        .contact-info-box:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
+    .contact-info-box:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }
 
-        .contact-info-box i {
-            font-size: 40px;
-            color: #e50914;
-            margin-bottom: 15px;
-        }
+    .contact-info-box i {
+        font-size: 40px;
+        color: #e50914;
+        margin-bottom: 15px;
+    }
 
-        .contact-info-box h5 {
-            color: #fff;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
+    .contact-info-box h5 {
+        color: #fff;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
 
-        .contact-info-box p {
-            color: #b7b7b7;
-            margin: 0;
-        }
+    .contact-info-box p {
+        color: #b7b7b7;
+        margin: 0;
+    }
 
-        .contact-info-box a {
-            color: #b7b7b7;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
+    .contact-info-box a {
+        color: #b7b7b7;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
 
-        .contact-info-box a:hover {
-            color: #e50914;
-        }
+    .contact-info-box a:hover {
+        color: #e50914;
+    }
 
-        .login__form textarea {
-            width: 100%;
-            background: transparent;
-            border: 1px solid #b7b7b7;
-            padding: 15px 55px 15px 20px;
-            color: #b7b7b7;
-            font-size: 14px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            resize: vertical;
-            min-height: 150px;
-        }
+    .login__form textarea {
+        width: 100%;
+        background: transparent;
+        border: 1px solid #b7b7b7;
+        padding: 15px 55px 15px 20px;
+        color: #b7b7b7;
+        font-size: 14px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        resize: vertical;
+        min-height: 150px;
+    }
 
-        .login__form textarea:focus {
-            border-color: #e50914;
-            outline: none;
-        }
+    .login__form textarea:focus {
+        border-color: #e50914;
+        outline: none;
+    }
     </style>
 </head>
 
@@ -175,18 +175,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <h3>Envíanos un Mensaje</h3>
 
                         <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger" role="alert"
-                                style="background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; color: #dc3545; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
-                                <i class="fa fa-exclamation-triangle"></i>
-                                <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
-                            </div>
+                        <div class="alert alert-danger" role="alert"
+                            style="background-color: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; color: #dc3545; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+                        </div>
                         <?php endif; ?>
 
                         <?php if (!empty($success)): ?>
-                            <div class="alert alert-success" role="alert"
-                                style="background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; color: #28a745; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
-                                <i class="fa fa-check-circle"></i> <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
-                            </div>
+                        <div class="alert alert-success" role="alert"
+                            style="background-color: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; color: #28a745; padding: 12px; border-radius: 5px; margin-bottom: 20px;">
+                            <i class="fa fa-check-circle"></i> <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
+                        </div>
                         <?php endif; ?>
 
                         <form method="POST" action="contacto.php">
@@ -209,6 +209,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <textarea name="mensaje"
                                     placeholder="Tu Mensaje"><?= htmlspecialchars($mensaje ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                             </div>
+
                             <button type="submit" class="site-btn">Enviar Mensaje</button>
                         </form>
                     </div>
