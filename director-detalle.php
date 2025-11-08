@@ -14,7 +14,7 @@ $id = (int)$_GET['id'];
 // Instanciar la clase
 $directorObj = new Directores();
 
-// Obtener datos del director usando CRUD
+// Obtener datos del director
 $director = $directorObj->getDirectorById($id);
 
 if (!$director) {
@@ -22,7 +22,7 @@ if (!$director) {
     exit();
 }
 
-// Obtener películas del director usando CRUD
+// Obtener películas del director 
 $peliculas = $directorObj->getPeliculasDirector($id);
 
 // Función auxiliar para calcular edad
@@ -65,7 +65,7 @@ $directoresDestacados = $directorObj->getDirectoresAlAzarExcluyendo($id, 5);
 
     <!-- Estilos personalizados -->
     <style>
-        /* FOTO DEL DIRECTOR - Estilo similar a portada de película */
+        /* FOTO DEL DIRECTOR */
         .director__details__pic {
             position: relative;
             overflow: hidden;

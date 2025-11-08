@@ -8,7 +8,7 @@ $usuariosObj = new Usuarios();
 
 $mensaje = "";
 
-// Inicializa las variables para los campos del formulario (usa el operador ??)
+// Inicializa las variables para los campos del formulario
 $username = $_POST['username'] ?? '';
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
@@ -16,7 +16,7 @@ $password_confirm = $_POST['password_confirm'] ?? '';
 $rol = $_POST['rol'] ?? 'usuario';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Validación backend (sin required en HTML)
+    // Validación backend 
     if ($password !== $password_confirm) {
         $mensaje = "Las contraseñas no coinciden.";
     } elseif (empty($username) || empty($email) || empty($password)) {

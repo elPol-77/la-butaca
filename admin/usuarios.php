@@ -595,7 +595,7 @@ if ($accion == "eliminar" && $id) {
     </section>
     <!-- Admin Section End -->
 
-    <?php include("../footer.php"); ?>
+    <?php include("./footer_privado.php"); ?>
 
     <!-- Search model Begin -->
     <div class="search-model">

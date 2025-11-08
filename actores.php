@@ -510,6 +510,7 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form" action="buscar.php" method="GET">
                 <input type="text" name="q" id="search-input" placeholder="Buscar actores.....">
+                <input type="hidden" name="tipo" value="actores">
             </form>
         </div>
     </div>

@@ -56,7 +56,7 @@ function getLetrasDisponibles($directores)
     return $letras;
 }
 
-$todosParaLetras = $directoresObj->getAll(); // Sin filtrar para el alfabeto
+$todosParaLetras = $directoresObj->getAll(); 
 $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
 ?>
 <!DOCTYPE html>
@@ -515,6 +515,7 @@ $letrasDisponibles = getLetrasDisponibles($todosParaLetras);
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form" action="buscar.php" method="GET">
                 <input type="text" name="q" id="search-input" placeholder="Buscar directores.....">
+                <input type="hidden" name="tipo" value="directores">
             </form>
         </div>
     </div>

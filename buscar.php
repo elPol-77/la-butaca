@@ -9,12 +9,25 @@ $conn = $db->getConnection();
 $resenasObj = new Resenas();
 
 $busqueda = isset($_GET['q']) ? trim($_GET['q']) : '';
+$tipo = isset($_GET['tipo']) ? $_GET['tipo'] : 'peliculas'; // Valor por defecto: películas
 $resultados = [];
 $busqueda_wildcard = "%{$busqueda}%";
 
 if ($busqueda !== '') {
-    $stmt = $conn->prepare("SELECT * FROM peliculas WHERE titulo LIKE ? OR descripcion LIKE ?");
-    $stmt->bind_param("ss", $busqueda_wildcard, $busqueda_wildcard);
+    if ($tipo === 'peliculas') {
+        $stmt = $conn->prepare("SELECT * FROM peliculas WHERE titulo LIKE ? OR descripcion LIKE ?");
+        $stmt->bind_param("ss", $busqueda_wildcard, $busqueda_wildcard);
+    } elseif ($tipo === 'actores') {
+        $stmt = $conn->prepare("SELECT * FROM actores WHERE nombre LIKE ? OR biografia LIKE ?");
+        $stmt->bind_param("ss", $busqueda_wildcard, $busqueda_wildcard);
+    } elseif ($tipo === 'directores') {
+        $stmt = $conn->prepare("SELECT * FROM directores WHERE nombre LIKE ? OR biografia LIKE ?");
+        $stmt->bind_param("ss", $busqueda_wildcard, $busqueda_wildcard);
+    } else {
+        // Por defecto, buscar películas
+        $stmt = $conn->prepare("SELECT * FROM peliculas WHERE titulo LIKE ? OR descripcion LIKE ?");
+        $stmt->bind_param("ss", $busqueda_wildcard, $busqueda_wildcard);
+    }
     $stmt->execute();
     $result = $stmt->get_result();
     while ($row = $result->fetch_assoc()) {
@@ -31,6 +44,7 @@ function getColorClase($puntuacion) {
     if ($puntuacion < 70) return 'valoracion-amarilla';
     return 'valoracion-verde';
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -178,33 +192,62 @@ function getColorClase($puntuacion) {
                             </div>
                         <?php else: ?>
                             <div class="row">
-                                <?php foreach ($resultados as $pelicula): 
-                                    // Obtener estadísticas de reseñas
-                                    $estadisticas = $resenasObj->getEstadisticasPelicula($pelicula['id']);
-                                    $valoracion = $estadisticas['promedio_imdb'] ? round($estadisticas['promedio_imdb']) : null;
-                                    $colorClase = getColorClase($valoracion);
-                                ?>
-                                <div class="col-lg-4 col-md-6 col-sm-6">
-                                    <div class="product__item">
-                                        <div class="product__item__pic set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
-                                            <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>" class="imagen-enlace"></a>
-                                            <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
-                                            <div class="comment"><i class="fa fa-calendar"></i> <?= htmlspecialchars($pelicula['anio'] ?? 'N/A') ?></div>
-                                            
-                                            <!-- VALORACIÓN -->
-                                            <div class="valoracion-badge <?= $colorClase ?>">
-                                                <?= $valoracion !== null ? $valoracion : 'N/A' ?>
+                                <?php if ($tipo === 'peliculas'): ?>
+                                    <?php foreach ($resultados as $pelicula): ?>
+                                        <!-- ... Tarjeta de película como ya tienes ... -->
+                                        <div class="col-lg-4 col-md-6 col-sm-6">
+                                            <div class="product__item">
+                                                <div class="product__item__pic set-bg" data-setbg="imagenes/portadas_pelis/<?= htmlspecialchars($pelicula['imagen']) ?>">
+                                                    <a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>" class="imagen-enlace"></a>
+                                                    <div class="ep"><?= htmlspecialchars($pelicula['duracion'] ?? '0') ?> min</div>
+                                                    <div class="comment"><i class="fa fa-calendar"></i> <?= htmlspecialchars($pelicula['anio'] ?? 'N/A') ?></div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="product__item__text">
+                                                    <ul>
+                                                        <li>Película</li>
+                                                    </ul>
+                                                    <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="product__item__text">
-                                            <ul>
-                                                <li>Película</li>
-                                            </ul>
-                                            <h5><a href="pelicula-detalle.php?id=<?= $pelicula['id'] ?>"><?= htmlspecialchars($pelicula['titulo']) ?></a></h5>
+                                    <?php endforeach; ?>
+
+                                <?php elseif ($tipo === 'actores'): ?>
+                                    <?php foreach ($resultados as $actor): ?>
+                                        <div class="col-lg-4 col-md-6 col-sm-6">
+                                            <div class="product__item">
+                                                <div class="product__item__pic set-bg" data-setbg="imagenes/actores/<?= htmlspecialchars($actor['imagen'] ?? 'default.jpg') ?>">
+                                                    <a href="actor-detalle.php?id=<?= $actor['id'] ?>" class="imagen-enlace"></a>
+                                                </div>
+                                                <div class="product__item__text">
+                                                    <ul>
+                                                        <li>Actor</li>
+                                                    </ul>
+                                                    <h5><a href="actor-detalle.php?id=<?= $actor['id'] ?>"><?= htmlspecialchars($actor['nombre']) ?></a></h5>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
+
+                                <?php elseif ($tipo === 'directores'): ?>
+                                    <?php foreach ($resultados as $director): ?>
+                                        <div class="col-lg-4 col-md-6 col-sm-6">
+                                            <div class="product__item">
+                                                <div class="product__item__pic set-bg" data-setbg="imagenes/directores/<?= htmlspecialchars($director['imagen'] ?? 'default.jpg') ?>">
+                                                    <a href="director-detalle.php?id=<?= $director['id'] ?>" class="imagen-enlace"></a>
+                                                </div>
+                                                <div class="product__item__text">
+                                                    <ul>
+                                                        <li>Director</li>
+                                                    </ul>
+                                                    <h5><a href="director-detalle.php?id=<?= $director['id'] ?>"><?= htmlspecialchars($director['nombre']) ?></a></h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
                     </div>

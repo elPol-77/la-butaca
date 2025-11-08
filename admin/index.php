@@ -12,7 +12,7 @@ $usuario = $_SESSION['usuario'];
 require_once "./includes/crudPeliculas.php";
 require_once "./includes/crudUsuarios.php";
 require_once "./includes/crudGeneros.php";
-require_once "./includes/crudValoraciones.php";
+require_once "./includes/crudResenas.php";
 
 
 // Verificar que el usuario sea administrador
@@ -30,7 +30,7 @@ $totalPeliculas = count($peliculasObj->getAll());
 $totalUsuarios = count($usuariosObj->showUsuarios());
 $totalGeneros = count($generosObj->getAll());
 
-$valoracionesObj = new Valoraciones();
+$valoracionesObj = new Resenas();
 $totalValoraciones = count($valoracionesObj->getAll());
 ?>
 <!DOCTYPE html>
@@ -309,7 +309,7 @@ $totalValoraciones = count($valoracionesObj->getAll());
                         </div>
                         <h4>Ver Valoraciones</h4>
                         <p>Revisa las valoraciones de los usuarios</p>
-                        <a href="./valoraciones.php" class="btn-admin">
+                        <a href="./resenas.php" class="btn-admin">
                             <i class="fa fa-arrow-right"></i> Ir a Valoraciones
                         </a>
                     </div>
@@ -331,7 +331,7 @@ $totalValoraciones = count($valoracionesObj->getAll());
         </div>
     </section>
 
-    <?php include("../footer.php"); ?>
+    <?php include("./footer_privado.php"); ?>
 
     <!-- Js Plugins -->
     <script src="../anime-main/js/jquery-3.3.1.min.js"></script>

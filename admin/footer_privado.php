@@ -15,8 +15,8 @@
                     <ul>
                         <li><a href="./index.php">Home</a></li>
                         <li><a href="./peliculas.php">Películas</a></li>
-                        <li><a href="./about.php">About Me</a></li>
-                        <li><a href="./contacto.php">Contacto</a></li>
+                        <li><a href="./generos.php">Generos</a></li>
+                        <li><a href="./usuarios.php">Usuarios</a></li>
                     </ul>
                 </div>
             </div>

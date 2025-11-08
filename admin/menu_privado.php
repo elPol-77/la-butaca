@@ -12,7 +12,6 @@ $usuario = $_SESSION['usuario'] ?? 'Admin';
     }
     
     
-    /* Hover con línea roja en el menú */
     .header__menu ul li {
         position: relative;
     }
@@ -60,9 +59,11 @@ $usuario = $_SESSION['usuario'] ?? 'Admin';
                                     <li><a href="./peliculas.php">Películas</a></li>
                                     <li><a href="./actores.php">Actores</a></li>
                                     <li><a href="./directores.php">Directores</a></li>
-                                    <li><a href="./generos.php">Géneros</a></li>
+                                    <li><a href="./generos.php">Géneros</a></li>    
                                     <li><a href="./usuarios.php">Usuarios</a></li>
                                     <li><a href="./plataformas.php">Plataformas</a></li>
+                                    <li><a href="./resenas.php">Valoraciones</a></li>
+
                                 </ul>
                             </li>
                             <li><a href="../index.php">Ver Sitio Público</a></li>

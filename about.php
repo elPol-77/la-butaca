@@ -4,7 +4,8 @@ session_start();
 require_once "./admin/includes/crudPeliculas.php";
 require_once "./admin/includes/crudUsuarios.php";
 require_once "./admin/includes/crudGeneros.php";
-require_once "./admin/includes/crudValoraciones.php";
+require_once('admin/includes/crudResenas.php');
+
 
 
 
@@ -17,7 +18,7 @@ $totalPeliculas = count($peliculasObj->getAll());
 $totalUsuarios = count($usuariosObj->showUsuarios());
 $totalGeneros = count($generosObj->getAll());
 
-$valoracionesObj = new Valoraciones();
+$valoracionesObj = new Resenas();
 $totalValoraciones = count($valoracionesObj->getAll());
 ?>
 <!DOCTYPE html>

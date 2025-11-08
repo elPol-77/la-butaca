@@ -83,7 +83,6 @@ function getColorClase($puntuacion)
 
 
     <!-- Estilos personalizados -->
-    <!-- Estilos personalizados -->
     <style>
         .product__item__pic {
             cursor: pointer;
@@ -185,7 +184,7 @@ function getColorClase($puntuacion)
             background: rgba(0, 0, 0, 0.7);
         }
 
-        /* Contenedor de imágenes en "Más Vistas" */
+        /* Contenedor de imágenes */
         .product__sidebar__view__item {
             cursor: pointer;
             transition: transform 0.3s ease;
@@ -218,7 +217,7 @@ function getColorClase($puntuacion)
             z-index: 1;
         }
 
-        /* Título posicionado abajo */
+
         .product__sidebar__view__item h5 {
             position: absolute;
             bottom: 0;
@@ -234,7 +233,7 @@ function getColorClase($puntuacion)
             line-height: 1.3;
         }
 
-        /* Duración en la parte superior */
+
         .product__sidebar__view__item .ep {
             position: absolute;
             top: 10px;
@@ -288,7 +287,6 @@ function getColorClase($puntuacion)
             font-weight: bold;
         }
 
-        /* ESTILOS PARA FILTROS DE TIEMPO - Botones horizontales */
         .time-filters {
             list-style: none;
             padding: 0;
@@ -315,7 +313,6 @@ function getColorClase($puntuacion)
             color: white;
         }
 
-        /* Asegurar que no haya conflictos */
         .product__sidebar__view {
             clear: both;
             overflow: hidden;
@@ -601,6 +598,7 @@ function getColorClase($puntuacion)
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form" action="buscar.php" method="GET">
                 <input type="text" name="q" id="search-input" placeholder="Buscar películas.....">
+                <input type="hidden" name="tipo" value="peliculas">
             </form>
         </div>
     </div>

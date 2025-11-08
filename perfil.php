@@ -15,7 +15,7 @@ $error = "";
 $success = "";
 $usuario_id = $sesion->getUserId();
 
-// Obtener datos del usuario usando CRUD
+// Obtener datos del usuario 
 $usuario = $crudUsuarios->getById($usuario_id);
 
 // Procesar actualización de información
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cambiar_password'])) {
     if (empty($password_actual) || empty($password_nueva) || empty($password_confirmar)) {
         $error = "Todos los campos de contraseña son obligatorios";
     } else {
-        // Verificar contraseña actual usando CRUD
+        // Verificar contraseña actual
         $password_correcta = $crudUsuarios->verificarPassword($usuario_id, $password_actual);
 
         if (!$password_correcta) {

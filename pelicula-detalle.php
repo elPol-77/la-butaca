@@ -16,7 +16,7 @@ $id = (int) $_GET['id'];
 $peliculaObj = new Peliculas();
 $resenaObj = new Resenas();
 
-// Obtener datos de la película usando el CRUD
+// Obtener datos de la película 
 $pelicula = $peliculaObj->getPeliculaById($id);
 
 if (!$pelicula) {
@@ -24,11 +24,11 @@ if (!$pelicula) {
     exit();
 }
 
-// Obtener géneros relacionados usando el CRUD
+// Obtener géneros relacionados 
 $generosArray = $peliculaObj->getNombresGenerosByPelicula($id);
 $pelicula['generos'] = !empty($generosArray) ? implode(', ', $generosArray) : 'Sin género';
 
-// Obtener actores relacionados CON IDs usando el CRUD
+// Obtener actores relacionados CON IDs 
 $actoresIds = $peliculaObj->getActoresByPelicula($id);
 $actores = [];
 
@@ -52,7 +52,7 @@ if (!empty($actoresIds)) {
     $db->closeConnection($conn);
 }
 
-// Obtener director con ID (ya viene en getPeliculaById)
+// Obtener director con ID 
 $director = [
     'id' => $pelicula['director_id'] ?? null,
     'nombre' => $pelicula['director'] ?? 'Desconocido'
@@ -78,7 +78,7 @@ if (
         $puntuacion_imdb >= 0 && $puntuacion_imdb <= 100
     ) {
 
-        // Verificar si ya existe una reseña usando CRUD
+        // Verificar si ya existe una reseña
         if ($resenaObj->usuarioYaReseño($usuario_id, $pelicula_id)) {
             // Actualizar reseña existente
             if ($resenaObj->updateResena($usuario_id, $pelicula_id, $puntuacion_estrellas, $puntuacion_imdb, $comentario)) {
@@ -99,7 +99,7 @@ if (
     }
 }
 
-// Obtener datos de reseñas usando CRUD
+// Obtener datos de reseñas 
 $resena_usuario = null;
 if (isset($_SESSION['id'])) {
     $resena_usuario = $resenaObj->getResenaUsuarioPelicula($_SESSION['id'], $id);
@@ -111,7 +111,7 @@ $estadisticas = $resenaObj->getEstadisticasPelicula($id);
 // Obtener películas relacionadas del mismo género
 $peliculasRelacionadas = $peliculaObj->getPeliculasMismoGenero($id, 3);
 
-// Si no hay películas del mismo género, usar populares como fallback
+// Si no hay películas del mismo género, usar populares 
 if (empty($peliculasRelacionadas)) {
     $peliculasRelacionadas = $peliculaObj->getPopulares(3);
 }
@@ -226,7 +226,6 @@ function getColorClase($puntuacion)
             z-index: 1;
         }
 
-        /* Título posicionado abajo */
         .product__sidebar__view__item h5 {
             position: absolute;
             bottom: 0;
@@ -242,7 +241,6 @@ function getColorClase($puntuacion)
             line-height: 1.3;
         }
 
-        /* Duración en la parte superior izquierda */
         .product__sidebar__view__item .ep {
             position: absolute;
             top: 10px;

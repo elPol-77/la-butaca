@@ -85,7 +85,7 @@ $actoresDestacados = $actorObj->getActoresAlAzarExcluyendo($id, 5);
 
     <!-- Estilos personalizados -->
     <style>
-        /* FOTO DEL ACTOR - Estilo similar a portada de película */
+        /* FOTO DEL ACTOR */
         .actor__details__pic {
             position: relative;
             overflow: hidden;
@@ -129,7 +129,7 @@ $actoresDestacados = $actorObj->getActoresAlAzarExcluyendo($id, 5);
             font-size: 0.85rem;
         }
 
-        /* PELÍCULAS DEL ACTOR - Grid estilo catálogo */
+        /* PELÍCULAS DEL ACTOR  */
         .actor__movies__grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
